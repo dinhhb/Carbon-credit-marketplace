@@ -4,6 +4,12 @@ import DropdownMessage from "./DropdownMessage";
 import DropdownNotification from "./DropdownNotification";
 import DropdownUser from "./DropdownUser";
 import Image from "next/image";
+import { ConnectButton } from "thirdweb/react";
+import { createWallet } from "thirdweb/wallets";
+import { client } from "@/app/client";
+import { myChain } from "@/app/chains";
+
+const wallet = createWallet("io.metamask");
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -109,17 +115,23 @@ const Header = (props: {
             {/* <!-- Dark Mode Toggler --> */}
 
             {/* <!-- Notification Menu Area --> */}
-            <DropdownNotification />
+            {/* <DropdownNotification /> */}
             {/* <!-- Notification Menu Area --> */}
 
             {/* <!-- Chat Notification Area --> */}
-            <DropdownMessage />
+            {/* <DropdownMessage /> */}
             {/* <!-- Chat Notification Area --> */}
           </ul>
 
           {/* <!-- User Area --> */}
-          <DropdownUser />
+          {/* <DropdownUser /> */}
           {/* <!-- User Area --> */}
+          <ConnectButton
+            client={client}
+            wallets={[wallet]}
+            theme={"dark"}
+            chain={myChain}
+          />
         </div>
       </div>
     </header>
