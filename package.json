@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^4.5.0",
     "apexcharts": "^3.45.2",
     "dropzone": "^6.0.0-beta.2",
     "flatpickr": "^4.6.13",
@@ -21,7 +22,9 @@
     "react-dom": "^18",
     "react-table": "^7.8.0",
     "swiper": "^11.0.5",
-    "thirdweb": "^5.2.0"
+    "swr": "^2.2.5",
+    "thirdweb": "0.0.0-dev-20ec56b0196286c0703a6d94f5d38892ce8cc258-20240412152145",
+    "web3": "^4.7.0"
   },
   "devDependencies": {
     "@types/node": "^20",

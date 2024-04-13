@@ -3,16 +3,31 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import TabOne from "@/components/Tabs/TabOne";
 import TabTwo from "@/components/Tabs/TabTwo";
 import TabThree from "@/components/Tabs/TabThree";
+import MyCreditsTab from "./MyCreditsTab";
 
-const Tabs: React.FC = () => {
+interface TabsProps {
+  type: "my-credits";
+}
+
+const Tabs: React.FC<TabsProps> = ({ type }) => {
+  let tabComponent;
+  switch (type) {
+    case "my-credits":
+      tabComponent = <MyCreditsTab />;
+      break;
+    default:
+      tabComponent = (
+        <>
+          <TabOne /> <TabTwo /> <TabThree />
+        </>
+      );
+  }
+
   return (
     <>
-      <Breadcrumb pageName="Tabs" />
-
+      <Breadcrumb pageName={type === "my-credits" ? "My credits" : "Tabs"} />
       <div className="flex flex-col gap-9">
-        <TabOne />
-        <TabTwo />
-        <TabThree />
+        {tabComponent}
       </div>
     </>
   );

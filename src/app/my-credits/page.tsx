@@ -1,17 +1,18 @@
 ;import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import DataTables from "@/components/DataTables";
+import Tabs from "@/components/Tabs";
+
 
 export const metadata: Metadata = {
-  title: "Marketplace"
+  title: "My-credits"
 };
 
-const MarketplacePage = () => {
+const MyCreditsPage = () => {
   return (
     <DefaultLayout>
-      <DataTables type="marketplace"/>
+      <Tabs type="my-credits" />
     </DefaultLayout>
   );
 };
 
-export default MarketplacePage;
+export default MyCreditsPage;
