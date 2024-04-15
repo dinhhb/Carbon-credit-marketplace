@@ -7,8 +7,29 @@ import ChatCard from "../Chat/ChatCard";
 import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
 import MapOne from "../Maps/MapOne";
+import { useWeb3 } from "@providers/web3";
 
 const ECommerce: React.FC = () => {
+  const { provider, contract } = useWeb3();
+
+  // const getCreditInfo = async () => {
+  //   console.log(contract!.name());
+  //   console.log(contract!.symbol());
+  // }
+
+  // if (contract){
+  //   getCreditInfo();
+  // }
+
+  // const getAccounts = async () => {
+  //   const accounts = await provider!.listAccounts();
+  //   console.log(accounts[0]);
+  // };
+
+  // if (provider) {
+  //   getAccounts();
+  // }
+
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">

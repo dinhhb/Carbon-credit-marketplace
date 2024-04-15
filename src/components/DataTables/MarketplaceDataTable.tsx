@@ -380,11 +380,11 @@ const MarketplaceDataTable = () => {
       >
         <thead>
           {headerGroups.map((headerGroup, key) => (
-            <tr {...headerGroup.getHeaderGroupProps()} key={key}>
+            <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
               {headerGroup.headers.map((column, key) => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  key={key}
+                  key={column.id}
                 >
                   <div className="flex items-center">
                     <span> {column.render("Header")}</span>
@@ -429,10 +429,10 @@ const MarketplaceDataTable = () => {
           {page.map((row, key) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()} key={key}>
+              <tr {...row.getRowProps()} key={row.id}>
                 {row.cells.map((cell, key) => {
                   return (
-                    <td {...cell.getCellProps()} key={key}>
+                    <td {...cell.getCellProps()} key={`${row.id}-${key}`}>
                       {cell.render("Cell")}
                     </td>
                   );

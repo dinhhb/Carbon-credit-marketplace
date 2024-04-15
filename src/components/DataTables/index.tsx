@@ -4,7 +4,6 @@ import DataTableOne from "@/components/DataTables/DataTableOne";
 import DataTableTwo from "@/components/DataTables/DataTableTwo";
 import React from "react";
 import MarketplaceDataTable from "./MarketplaceDataTable";
-import MyCreditsDataTable from "./MyListedCreditsDataTable";
 
 interface DataTablesProps {
   type: "marketplace";

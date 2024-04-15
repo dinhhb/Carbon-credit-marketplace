@@ -8,7 +8,7 @@ import "@/css/simple-datatables.css";
 import "@/css/style.css";
 import React, { useEffect, useState } from "react";
 import Loader from "@/components/common/Loader";
-import { ThirdwebProvider } from "thirdweb/react";
+import { Web3Provider } from "@providers";
 
 export default function RootLayout({
   children,
@@ -27,11 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <ThirdwebProvider>
+        <Web3Provider>
           <div className="dark:bg-boxdark-2 dark:text-bodydark">
             {loading ? <Loader /> : children}
           </div>
-        </ThirdwebProvider>
+        </Web3Provider>
       </body>
     </html>
   );
