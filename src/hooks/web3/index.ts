@@ -15,3 +15,11 @@ export const useNetwork = () => {
     network: swrRes,
   };
 }
+
+export const useListedCredits = () => {
+  const hooks = useHooks();
+  const swrRes = hooks.useListedCredits();
+  return {
+    credits: swrRes,
+  };
+}

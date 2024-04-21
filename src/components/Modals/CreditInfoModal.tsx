@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import ConfirmBuyCreditsModal from "../Modals/ConfirmBuyCreditsModal";
+import { Credit } from "@/types/credit";
 
-const CreditInfoModal: React.FC = () => {
+interface CreditProps {
+  credit: Credit;
+}
+
+const CreditInfoModal: React.FC<CreditProps> = ({ credit }) => {
+  console.log(credit);
   const [modalOpen, setModalOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -38,7 +44,7 @@ const CreditInfoModal: React.FC = () => {
       <button
         ref={trigger}
         onClick={() => setModalOpen(!modalOpen)}
-        className="rounded-md bg-body px-2 py-1 font-medium text-white mr-1"
+        className="mr-1 rounded-md bg-body px-2 py-1 font-medium text-white"
       >
         Details
       </button>
@@ -55,59 +61,62 @@ const CreditInfoModal: React.FC = () => {
           style={{ maxHeight: "90vh" }}
         >
           <h3 className="pb-2 text-left text-xl font-bold text-black dark:text-white sm:text-2xl">
-            VIET NAM IMPROVED COOKSTOVE PROJECT BY KCM – IMPROVED COOKSTOVE
-            PROJECT IN YEN BAI PROVINCE – CPA 008
+            {credit.metadata["project-name"]}
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-full rounded bg-primary"></span>
           <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Project ID:</p>
-            <p className="flex-1">2595</p>
+            <p className="flex-1">{credit.metadata["project-id"]}</p>
           </div>
           <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Vintage:</p>
-            <p className="flex-1">2021</p>
+            <p className="flex-1">{credit.metadata.vintage}</p>
           </div>
           <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Project developer:</p>
-            <p className="flex-1">Korea Carbon Management Ltd</p>
+            <p className="flex-1">{credit.metadata["project-developer"]}</p>
           </div>
           <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Methodology:</p>
-            <p className="flex-1">AMS-II.G.</p>
+            <p className="flex-1">{credit.metadata.methodology}</p>
           </div>
           <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Region:</p>
-            <p className="flex-1">Asia</p>
+            <p className="flex-1">{credit.metadata.region}</p>
           </div>
           <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Project type:</p>
-            <p className="flex-1">Agriculture Forestry and Other Land Use</p>
+            <p className="flex-1">{credit.metadata["project-type"]}</p>
           </div>
           <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Standard:</p>
-            <p className="flex-1">VCS</p>
+            <p className="flex-1">{credit.metadata.standard}</p>
           </div>
           <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Crediting period start:</p>
-            <p className="flex-1">26/12/2002</p>
-          </div>
-          <div className="mb-4 flex items-start text-left">
-            <p className="flex-1">Crediting period end:</p>
-            <p className="flex-1">26/12/2002</p>
-          </div>
-          <div className="mb-4 flex items-start text-left">
-            <p className="flex-1">Issuance date:</p>
-            <p className="flex-1">26/12/2002</p>
-          </div>
-          <div className="mb-4 flex items-start text-left">
-            <p className="flex-1">Credits serial number:</p>
             <p className="flex-1">
-              16570-773911996-773948920-VCS-VCU-1423-VER-VN-3-2595-01012021-31122021-0
+              {credit.metadata["crediting-period-start"].toString()}
             </p>
           </div>
           <div className="mb-4 flex items-start text-left">
+            <p className="flex-1">Crediting period end:</p>
+            <p className="flex-1">
+              {credit.metadata["crediting-period-end"].toString()}
+            </p>
+          </div>
+          <div className="mb-4 flex items-start text-left">
+            <p className="flex-1">Issuance date:</p>
+            <p className="flex-1">
+              {credit.metadata["issuance-date"].toString()}
+            </p>
+          </div>
+          <div className="mb-4 flex items-start text-left">
+            <p className="flex-1">Credits serial number:</p>
+            <p className="flex-1">{credit.metadata["credits-serial-number"]}</p>
+          </div>
+          <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Quantity issued:</p>
-            <p className="flex-1">36925</p>
+            <p className="flex-1">?</p>
           </div>
           <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Registry reference link:</p>
@@ -118,7 +127,7 @@ const CreditInfoModal: React.FC = () => {
                 rel="noopener noreferrer"
                 className="hover:text-primary-dark overflow-hidden break-all text-primary"
               >
-                https://registry.verra.org/app/projectDetail/VCS/2595
+                {credit.metadata["registry-reference-link"]}
               </a>
             </p>
           </div>

@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract CarbonCreditMarketplace is
+contract CarbonMarket is
     ERC1155URIStorage,
     ERC1155Burnable,
     Ownable
@@ -61,7 +61,7 @@ contract CarbonCreditMarketplace is
 
     constructor()
         ERC1155(
-            "https://ipfs.io/ipfs/QmdsFvho7K1GtSCLbSaqhtVz6EASFKPkfhNA5NXLsZZ1ch/{id}.json"
+            "https://ipfs.io/ipfs/QmRaNxZouFunnDnds57VGmtrtA2EBEFLeszaXAo8GZfZ8e/{id}.json"
         )
     {}
 
@@ -77,7 +77,7 @@ contract CarbonCreditMarketplace is
         return
             string(
                 abi.encodePacked(
-                    "https://ipfs.io/ipfs/QmdsFvho7K1GtSCLbSaqhtVz6EASFKPkfhNA5NXLsZZ1ch/",
+                    "https://gateway.pinata.cloud/ipfs/QmRaNxZouFunnDnds57VGmtrtA2EBEFLeszaXAo8GZfZ8e/",
                     Strings.toString(tokenId),
                     ".json"
                 )
@@ -137,7 +137,7 @@ contract CarbonCreditMarketplace is
     function approveProject(uint256 tokenId) public payable onlyOwner {
         require(
             idToCarbonCredit[tokenId].status == ApprovalStatus.Pending,
-            "Project cannot be approved"
+            "Project cannot be approved as it is not pending."
         );
         idToCarbonCredit[tokenId].status = ApprovalStatus.Approved;
         _mint(

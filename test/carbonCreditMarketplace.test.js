@@ -1,10 +1,10 @@
-const CarbonCreditMarketplace = artifacts.require("CarbonCreditMarketplace");
+const CarbonMarket = artifacts.require("CarbonMarket");
 
-contract("CarbonCreditMarketplace", async accounts => {
+contract("CarbonMarket", async accounts => {
     let _contract = null;
 
     beforeEach(async () => {
-        _contract = await CarbonCreditMarketplace.new();
+        _contract = await CarbonMarket.new();
         // console.log(accounts);
     });
 
@@ -53,7 +53,7 @@ contract("CarbonCreditMarketplace", async accounts => {
     });
 
     describe("Token URI Mapping", async () => {
-        const tokenURI = "https://ipfs.io/ipfs/QmdsFvho7K1GtSCLbSaqhtVz6EASFKPkfhNA5NXLsZZ1ch/1.json";
+        const tokenURI = "https://gateway.pinata.cloud/ipfs/QmRaNxZouFunnDnds57VGmtrtA2EBEFLeszaXAo8GZfZ8e/1.json";
 
         it("should map token ID to correct token URI", async () => {
             await _contract.registerProject(100);

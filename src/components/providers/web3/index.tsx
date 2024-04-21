@@ -13,6 +13,7 @@ import {
 } from "./utils";
 import { ethers } from "ethers";
 import { MetaMaskInpageProvider } from "@metamask/providers";
+import { CarbonMarketContract } from "@/types/carbonMarketContract";
 
 const pageReload = () => {
   window.location.reload();
@@ -51,16 +52,19 @@ const Web3Provider: FunctionComponent<Props> = ({ children }) => {
           window.ethereum as any,
         );
         const contract = await loadContract(
-          "CarbonCreditMarketplace",
+          "CarbonMarket",
           provider,
         );
+
+        const singer = provider.getSigner();
+        const signedContract = contract.connect(singer);
 
         setGlobalListener(window.ethereum);
         setWeb3Api(
           createWeb3State({
             ethereum: window.ethereum as any,
             provider,
-            contract,
+            contract: signedContract as unknown as CarbonMarketContract,
             isLoading: false,
           }),
         );

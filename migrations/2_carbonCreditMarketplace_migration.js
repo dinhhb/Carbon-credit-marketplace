@@ -1,5 +1,5 @@
-const CarbonCreditMarketplace = artifacts.require("CarbonCreditMarketplace");
+const CarbonMarket = artifacts.require("CarbonMarket");
 
 module.exports = function (deployer) {
-  deployer.deploy(CarbonCreditMarketplace);
+  deployer.deploy(CarbonMarket);
 };
