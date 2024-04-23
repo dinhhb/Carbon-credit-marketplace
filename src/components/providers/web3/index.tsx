@@ -56,8 +56,8 @@ const Web3Provider: FunctionComponent<Props> = ({ children }) => {
           provider,
         );
 
-        const singer = provider.getSigner();
-        const signedContract = contract.connect(singer);
+        const signer = provider.getSigner();
+        const signedContract = contract.connect(signer);
 
         setGlobalListener(window.ethereum);
         setWeb3Api(

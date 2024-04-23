@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useMemo } from "react";
+import React, { FunctionComponent, useMemo } from "react";
 import {
   useTable,
   useSortBy,
@@ -11,87 +11,43 @@ import {
 import CreditInfoModal from "../Modals/CreditInfoModal";
 import OwnersModal from "../Modals/OwnersModal";
 import UnlistModal from "../Modals/UnlistModal";
-
-interface Credit {
-  creditId: string;
-  projectName: string;
-  numberOfOwners: number;
-  quantityListed: number;
-  quantitySold: number;
-}
-
-const dataTwo: Credit[] = [
-  {
-    creditId: "1",
-    projectName: "Brielle Kuphal",
-    numberOfOwners: 1,
-    quantityListed: 10,
-    quantitySold: 5,
-  },
-  {
-    creditId: "2",
-    projectName: "Barney Murray",
-    numberOfOwners: 2,
-    quantityListed: 15,
-    quantitySold: 10,
-  },
-  {
-    creditId: "3",
-    projectName: "Ressie Ruecker",
-    numberOfOwners: 1,
-    quantityListed: 20,
-    quantitySold: 15,
-  },
-  {
-    creditId: "4",
-    projectName: "Teresa Mertz",
-    numberOfOwners: 2,
-    quantityListed: 25,
-    quantitySold: 20,
-  },
-  {
-    creditId: "5",
-    projectName: "Chelsey Hackett",
-    numberOfOwners: 1,
-    quantityListed: 30,
-    quantitySold: 25,
-  },
-  {
-    creditId: "6",
-    projectName: "Tatyana Metz",
-    numberOfOwners: 2,
-    quantityListed: 35,
-    quantitySold: 30,
-  },
-];
+import { Credit } from "@/types/credit";
 
 // table header
 const columns: Column<Credit>[] = [
   {
     Header: "Credit ID",
-    accessor: "creditId",
+    accessor: "tokenId",
   },
   {
-    Header: "Project Name",
-    accessor: "projectName",
+    Header: "Project name",
+    accessor: (data) => data.metadata["project-name"],
+    Cell: ({ value }: { value: string }) =>
+      value.length > 25 ? `${value.substring(0, 25)}...` : value,
   },
   {
     Header: "Numbers of owners",
-    accessor: "numberOfOwners",
+    accessor: undefined,
     Cell: ({ value }) => <OwnersModal numberOfOwners={value} />,
   },
   {
     Header: "Quantity Listed",
-    accessor: "quantityListed",
+    accessor: undefined,
   },
   {
     Header: "Quantity Sold",
-    accessor: "quantitySold",
+    accessor: undefined,
   },
 ];
 
-const MyListedCreditsDataTable = () => {
-  const data = useMemo(() => dataTwo, []);
+type CreditListProps = {
+  credits: Credit[];
+};
+
+const MyListedCreditsDataTable: FunctionComponent<CreditListProps> = ({
+  credits,
+}) => {
+  const data = useMemo(() => credits, [credits]);
 
   const tableInstance = useTable(
     {
@@ -218,7 +174,7 @@ const MyListedCreditsDataTable = () => {
                 <td>
                   <div className="flex">
                     <div>
-                      <CreditInfoModal />
+                      <CreditInfoModal credit={row.original} />
                     </div>
                     <div>
                       <UnlistModal />

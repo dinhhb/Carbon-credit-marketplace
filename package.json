@@ -26,6 +26,7 @@
     "react-table": "^7.8.0",
     "swiper": "^11.0.5",
     "swr": "^2.2.5",
+    "truffle-contract-size": "^2.0.1",
     "web3": "^4.7.0"
   },
   "devDependencies": {

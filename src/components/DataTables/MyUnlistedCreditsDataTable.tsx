@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useMemo } from "react";
+import React, { FunctionComponent, useMemo } from "react";
 import {
   useTable,
   useSortBy,
@@ -13,59 +13,27 @@ import OwnersModal from "../Modals/OwnersModal";
 import UnlistModal from "../Modals/UnlistModal";
 import ResubmitProjectModal from "../Modals/ResubmitProjectModal";
 import ListModal from "../Modals/ListModal";
-
-interface Credit {
-  projectName: string;
-  quantity: number;
-  status: string;
-}
-
-const dataTwo: Credit[] = [
-  {
-    projectName: "Brielle Kuphal",
-    quantity: 10,
-    status: "Pending",
-  },
-  {
-    projectName: "Barney Murray",
-    quantity: 15,
-    status: "Approved",
-  },
-  {
-    projectName: "Ressie Ruecker",
-    quantity: 20,
-    status: "Pending",
-  },
-  {
-    projectName: "Teresa Mertz",
-    quantity: 25,
-    status: "Declined",
-  },
-  {
-    projectName: "Chelsey Hackett",
-    quantity: 30,
-    status: "Approved",
-  },
-  {
-    projectName: "Tatyana Metz",
-    quantity: 35,
-    status: "Pending",
-  },
-];
+import { Credit } from "@/types/credit";
 
 // table header
 const columns: Column<Credit>[] = [
   {
-    Header: "Project Name",
-    accessor: "projectName",
+    Header: "Credit ID",
+    accessor: "tokenId",
+  },
+  {
+    Header: "Project name",
+    accessor: (data) => data.metadata["project-name"],
+    Cell: ({ value }: { value: string }) =>
+      value.length > 25 ? `${value.substring(0, 25)}...` : value,
   },
   {
     Header: "Quantity",
-    accessor: "quantity",
+    accessor: undefined,
   },
   {
     Header: "Status",
-    accessor: "status",
+    accessor: "approvalStatus",
     Cell: ({ value }) => {
       if (value === "Pending") {
         return (
@@ -90,8 +58,12 @@ const columns: Column<Credit>[] = [
   },
 ];
 
-const MyUnlistedCreditsDataTable = () => {
-  const data = useMemo(() => dataTwo, []);
+type CreditListProps = {
+  credits: Credit[];
+};
+
+const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({ credits }) => {
+  const data = useMemo(() => credits, [credits]);
 
   const tableInstance = useTable(
     {
@@ -206,7 +178,7 @@ const MyUnlistedCreditsDataTable = () => {
         <tbody {...getTableBodyProps()}>
           {page.map((row, key) => {
             prepareRow(row);
-            const status = row.original.status;
+            const status = row.original.approvalStatus;
 
             return (
               <tr {...row.getRowProps()} key={key}>
@@ -220,7 +192,7 @@ const MyUnlistedCreditsDataTable = () => {
                 <td>
                   <div className="flex">
                     <div>
-                      <CreditInfoModal />
+                      <CreditInfoModal credit={row.original} />
                     </div>
                     {/* Conditionally render based on the status */}
                     <div>

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import MyListedCreditsDataTable from "../DataTables/MyListedCreditsDataTable";
 import MyUnlistedCreditsDataTable from "../DataTables/MyUnlistedCreditsDataTable";
+import { useOwnedCredits } from "@/hooks/web3";
+import { Credit } from "@/types/credit";
 
 
 const MyCreditsTab: React.FC = () => {
@@ -9,6 +11,12 @@ const MyCreditsTab: React.FC = () => {
 
   const activeClasses = "bg-primary text-white";
   const inactiveClasses = "bg-gray dark:bg-meta-4 text-black dark:text-white";
+
+  const { credits } = useOwnedCredits();
+  // console.log(credits.data);
+
+  const listedCredits = credits.data?.filter((credit) => credit.isListed) as Credit[];
+  const unlistedCredits = credits.data?.filter((credit) => !credit.isListed) as Credit[];
 
   return (
     <div className="rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -37,12 +45,12 @@ const MyCreditsTab: React.FC = () => {
         <div
           className={`leading-relaxed ${openTab === 1 ? "block" : "hidden"}`}
         >
-          <MyListedCreditsDataTable />
+          <MyListedCreditsDataTable credits={listedCredits} />
         </div>
         <div
           className={`leading-relaxed ${openTab === 2 ? "block" : "hidden"}`}
         >
-          <MyUnlistedCreditsDataTable />
+          <MyUnlistedCreditsDataTable credits={unlistedCredits}/>
         </div>
         
       </div>

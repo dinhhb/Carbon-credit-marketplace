@@ -116,8 +116,8 @@ contract("CarbonMarket", async accounts => {
 
     describe("Buying Credits", async () => {
         const tokenSupply = 100;
-        const salePrice =  web3.utils.toWei("0.001", "ether");
-        const buyAmount = 50; 
+        const salePrice = web3.utils.toWei("0.001", "ether");
+        const buyAmount = 50;
         const buyer = accounts[1];
         const seller = accounts[0];
 
@@ -327,7 +327,7 @@ contract("CarbonMarket", async accounts => {
             assert.equal(ownedTypesBuyer.toNumber(), 1, "Buyer should have 1 type of token listed in enumeration after purchase");
         });
     });
-    
+
     describe("Retiring Credits", async () => {
         const tokenSupply = 100;
 
@@ -376,21 +376,52 @@ contract("CarbonMarket", async accounts => {
     });
 
     describe("All Tokens Enumeration Removal", async () => {
-        const tokenSupply = 100; 
+        const tokenSupply = 100;
         const retireAmount = 100;
-    
+
         beforeEach(async () => {
             await _contract.registerProject(tokenSupply);
-            await _contract.approveProject(1, { from: accounts[0] }); 
+            await _contract.approveProject(1, { from: accounts[0] });
         });
-    
+
         it("should remove the token from all tokens enumeration when all units are burned", async () => {
             await _contract.retireCredits(1, retireAmount, { from: accounts[0] });  // retire all credits
-    
+
             const totalTokens = await _contract.getTotalTokensCount();
             assert.equal(totalTokens.toNumber(), 0, "The total tokens count should be zero after burning all tokens of a type");
             const ownedTokens = await _contract.getOwnedTokensCount(accounts[0]);
             assert.equal(ownedTokens.toNumber(), 0, "The owned tokens count should be zero after burning all tokens of a type");
+        });
+    });
+
+    describe("Token Supply and Burn Operations", async () => {
+        const tokenSupply = 100;
+        const burnAmount = 20;
+        const tokenId = 1;
+
+        beforeEach(async () => {
+            await _contract.registerProject(tokenSupply, { from: accounts[0] });
+            await _contract.approveProject(tokenId, { from: accounts[0] });
+        });
+
+        it("should return the correct initial token supply", async () => {
+            const supply = await _contract.getTokenSupply(tokenId);
+            assert.equal(supply.toNumber(), tokenSupply, "The initial token supply is incorrect.");
+        });
+
+        it("should decrease the token supply after burning tokens", async () => {
+            await _contract.retireCredits(tokenId, burnAmount, { from: accounts[0] });
+            const supplyAfterBurn = await _contract.getTokenSupply(tokenId);
+            assert.equal(supplyAfterBurn.toNumber(), tokenSupply - burnAmount, "The token supply did not decrease correctly after burning tokens.");
+        });
+
+        it("should not allow burning more tokens than the supply", async () => {
+            try {
+                await _contract.retireCredits(tokenId, tokenSupply + 1, { from: accounts[0] });
+                assert.fail("The transaction should have failed but didn't.");
+            } catch (error) {
+                assert.include(error.message, "Burn amount exceeds supply", "Expected burn supply error but got another error.");
+            }
         });
     });
 

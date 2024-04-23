@@ -23,3 +23,11 @@ export const useListedCredits = () => {
     credits: swrRes,
   };
 }
+
+export const useOwnedCredits = () => {
+  const hooks = useHooks();
+  const swrRes = hooks.useOwnedCredits();
+  return {
+    credits: swrRes,
+  };
+}

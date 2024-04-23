@@ -3,23 +3,23 @@ import useSWR from "swr";
 import { Credit } from "@/types/credit";
 import { ethers } from "ethers";
 
-type UseListedCreditsResponse = {};
-type ListedCreditsHookFactory = CryptoHookFactory<
+type UseOwnedCreditsResponse = {};
+type OwnedCreditsHookFactory = CryptoHookFactory<
   Credit[],
-  UseListedCreditsResponse
+  UseOwnedCreditsResponse
 >;
 
-export type UseListedCreditsHook = ReturnType<ListedCreditsHookFactory>;
+export type UseOwnedCreditsHook = ReturnType<OwnedCreditsHookFactory>;
 
-export const hookFactory: ListedCreditsHookFactory =
+export const hookFactory: OwnedCreditsHookFactory =
   ({ contract }) =>
   () => {
     const { data, ...swrRes } = useSWR(
-      contract ? "web3/useListedCredits" : null,
+      contract ? "web3/useOwnedCredits" : null,
       async () => {
 
         const credits = [] as Credit[];
-        const coreCredits = await contract!.getAllListedCredits();
+        const coreCredits = await contract!.getOwnedCredits();
 
         for (let i = 0; i < coreCredits.length; i++) {
           const credit = coreCredits[i];
@@ -33,7 +33,6 @@ export const hookFactory: ListedCreditsHookFactory =
             approvalStatus: credit.status.toString(),   // may cause error
             pricePerCredit: parseFloat(ethers.utils.formatEther(credit.pricePerCredit)),
             isListed: credit.isListed,
-            // quantity:,
             metadata
           });
         }

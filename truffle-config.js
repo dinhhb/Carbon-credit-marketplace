@@ -1,5 +1,6 @@
 module.exports = {
   contracts_build_directory: "./public/contracts",
+  plugins: ["truffle-contract-size"],
   networks: {
     development: {
       host: "127.0.0.1",     // Localhost (default: none)
