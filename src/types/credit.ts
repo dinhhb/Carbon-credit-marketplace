@@ -21,7 +21,10 @@ export type CreditCore = {
   approvalStatus: string;
   pricePerCredit: number;
   isListed: boolean;
-  // quantity: number;
+  quantity: number;
+  quantitySold: number;
+  ownerCount: number;
+  owners: string[];
 }
 
 export type Credit = {

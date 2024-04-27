@@ -8,10 +8,10 @@ import {
 import { EthersContractContextV5 } from 'ethereum-abi-types-generator';
 
 export type ContractContext = EthersContractContextV5<
-  CarbonMarketContract,
-  CarbonMarketContractMethodNames,
-  CarbonMarketContractEventsContext,
-  CarbonMarketContractEvents
+  ProjectManagementContract,
+  ProjectManagementContractMethodNames,
+  ProjectManagementContractEventsContext,
+  ProjectManagementContractEvents
 >;
 
 export declare type EventFilter = {
@@ -54,7 +54,7 @@ export interface ContractCallOverrides {
    */
   gasLimit?: number;
 }
-export type CarbonMarketContractEvents =
+export type ProjectManagementContractEvents =
   | 'ApprovalForAll'
   | 'CarbonCreditCreated'
   | 'CarbonCreditListed'
@@ -63,7 +63,7 @@ export type CarbonMarketContractEvents =
   | 'TransferBatch'
   | 'TransferSingle'
   | 'URI';
-export interface CarbonMarketContractEventsContext {
+export interface ProjectManagementContractEventsContext {
   ApprovalForAll(...parameters: any): EventFilter;
   CarbonCreditCreated(...parameters: any): EventFilter;
   CarbonCreditListed(...parameters: any): EventFilter;
@@ -73,7 +73,7 @@ export interface CarbonMarketContractEventsContext {
   TransferSingle(...parameters: any): EventFilter;
   URI(...parameters: any): EventFilter;
 }
-export type CarbonMarketContractMethodNames =
+export type ProjectManagementContractMethodNames =
   | 'new'
   | 'balanceOf'
   | 'balanceOfBatch'
@@ -88,11 +88,9 @@ export type CarbonMarketContractMethodNames =
   | 'supportsInterface'
   | 'transferOwnership'
   | 'uri'
-  | 'getListedTokensCount'
-  | 'listCreditsForSale'
-  | 'getAllListedCredits'
-  | 'buyCredits'
-  | 'retireCredits'
+  | 'registerProject'
+  | 'approveProject'
+  | 'declineProject'
   | 'getTokenAddress';
 export interface ApprovalForAllEventEmittedResponse {
   account: string;
@@ -141,19 +139,7 @@ export interface URIEventEmittedResponse {
   value: string;
   id: BigNumberish;
 }
-export interface CarboncreditResponse {
-  tokenId: BigNumber;
-  0: BigNumber;
-  initialOwner: string;
-  1: string;
-  status: number;
-  2: number;
-  pricePerCredit: BigNumber;
-  3: BigNumber;
-  isListed: boolean;
-  4: boolean;
-}
-export interface CarbonMarketContract {
+export interface ProjectManagementContract {
   /**
    * Payable: false
    * Constant: false
@@ -336,44 +322,24 @@ export interface CarbonMarketContract {
   ): Promise<string>;
   /**
    * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   */
-  getListedTokensCount(overrides?: ContractCallOverrides): Promise<BigNumber>;
-  /**
-   * Payable: false
    * Constant: false
    * StateMutability: nonpayable
    * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   * @param price Type: uint256, Indexed: false
+   * @param tokenSupply Type: uint256, Indexed: false
    */
-  listCreditsForSale(
-    tokenId: BigNumberish,
-    price: BigNumberish,
+  registerProject(
+    tokenSupply: BigNumberish,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   */
-  getAllListedCredits(
-    overrides?: ContractCallOverrides
-  ): Promise<CarboncreditResponse[]>;
   /**
    * Payable: true
    * Constant: false
    * StateMutability: payable
    * Type: function
    * @param tokenId Type: uint256, Indexed: false
-   * @param amount Type: uint256, Indexed: false
    */
-  buyCredits(
+  approveProject(
     tokenId: BigNumberish,
-    amount: BigNumberish,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
   /**
@@ -382,11 +348,9 @@ export interface CarbonMarketContract {
    * StateMutability: nonpayable
    * Type: function
    * @param tokenId Type: uint256, Indexed: false
-   * @param amount Type: uint256, Indexed: false
    */
-  retireCredits(
+  declineProject(
     tokenId: BigNumberish,
-    amount: BigNumberish,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
   /**

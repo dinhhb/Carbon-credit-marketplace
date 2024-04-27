@@ -27,16 +27,16 @@ const columns: Column<Credit>[] = [
   },
   {
     Header: "Numbers of owners",
-    accessor: undefined,
-    Cell: ({ value }) => <OwnersModal numberOfOwners={value} />,
+    accessor: "ownerCount",
+    Cell: ({ row }) => <OwnersModal owners={row.original.owners} numberOfOwners={row.original.ownerCount} />,
   },
   {
     Header: "Quantity Listed",
-    accessor: undefined,
+    accessor: "quantity",
   },
   {
     Header: "Quantity Sold",
-    accessor: undefined,
+    accessor: "quantitySold",
   },
 ];
 

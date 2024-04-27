@@ -1,11 +1,15 @@
 import { MetaMaskInpageProvider } from "@metamask/providers";
 import { Contract, providers } from "ethers";
 import { SWRResponse } from "swr";
-import { CarbonMarketContract } from "./carbonMarketContract";
+import { CarbonMarketContract } from "./CarbonMarketContract";
+import { CarbonTokenContract } from "./CarbonTokenContract";
+import { ProjectManagementContract } from "./ProjectManagementContract";
 
 export type Web3Dependencies = {
   provider: providers.Web3Provider;
-  contract: CarbonMarketContract;
+  tokenContract: CarbonTokenContract;
+  projectContract: ProjectManagementContract;
+  marketContract: CarbonMarketContract;
   ethereum: MetaMaskInpageProvider;
   isLoading: boolean;
 };

@@ -1,13 +1,14 @@
-// const _contract = await CarbonMarket.deployed();
-// await _contract.registerProject(100);
-// await _contract.approveProject(1, { from: accounts[0] });
+// const tokenContract = await CarbonToken.deployed();
+// const projectContract = await ProjectManagement.deployed(tokenContract.address);
+// const marketContract = await CarbonMarket.deployed(tokenContract.address);
+
+// await projectContract.registerProject(100, {from: accounts[0]});
+// await projectContract.approveProject(1, { from: accounts[0] });
 // const salePrice = web3.utils.toWei('1', 'ether');
-// await _contract.listCreditsForSale(1, salePrice);
+// await tokenContract.setApprovalForAll(marketContract.address, true);
+// await marketContract.listCreditsForSale(1, salePrice, {from: accounts[0]});
 
-// await _contract.getOwnedCredits()
+// await marketContract.buyCredits(1, 10, { from: accounts[1], value: salePrice * 10 });
 
-// await _contract.registerProject(200);
-// await _contract.approveProject(2, { from: accounts[0] });
-
-// await _contract.registerProject(300);
-// await _contract.declineProject(3, { from: accounts[0] });
+// await projectContract.registerProject(200);
+// await projectContract.approveProject(2, { from: accounts[0] });

@@ -12,20 +12,24 @@ type ListedCreditsHookFactory = CryptoHookFactory<
 export type UseListedCreditsHook = ReturnType<ListedCreditsHookFactory>;
 
 export const hookFactory: ListedCreditsHookFactory =
-  ({ contract }) =>
+  ({ tokenContract, projectContract, marketContract }) =>
   () => {
     const { data, ...swrRes } = useSWR(
-      contract ? "web3/useListedCredits" : null,
+      marketContract ? "web3/useListedCredits" : null,
       async () => {
 
         const credits = [] as Credit[];
-        const coreCredits = await contract!.getAllListedCredits();
+        const coreCredits = await marketContract!.getAllListedCredits();
 
         for (let i = 0; i < coreCredits.length; i++) {
           const credit = coreCredits[i];
-          const tokenURI = await contract!.uri(credit.tokenId);
+          const tokenURI = await tokenContract!.uri(credit.tokenId);
           const metadataRes = await fetch(tokenURI);
           const metadata = await metadataRes.json();
+          const ownerCount = await tokenContract!.getOwnerCount(i+1);
+          const owners = await tokenContract!.getTokenOwners(i+1)
+          const quantity = await tokenContract!.getTokenSupply(credit.tokenId);
+          const quanitySold = await tokenContract!.getTokenSold(credit.tokenId);
 
           credits.push({
             tokenId: credit.tokenId.toNumber(),
@@ -33,12 +37,15 @@ export const hookFactory: ListedCreditsHookFactory =
             approvalStatus: credit.status.toString(),   // may cause error
             pricePerCredit: parseFloat(ethers.utils.formatEther(credit.pricePerCredit)),
             isListed: credit.isListed,
-            // quantity:,
+            ownerCount: ownerCount.toNumber(),
+            owners: owners,
+            quantity: quantity.toNumber(),
+            quantitySold: quanitySold.toNumber(),
             metadata
           });
         }
         
-        // debugger;
+        debugger;
         return credits;
       },
     );

@@ -22,7 +22,9 @@ export const createDefaultState = () => {
   return {
     ethereum: null,
     provider: null,
-    contract: null,
+    tokenContract: null,
+    projectContract: null,
+    marketContract: null,
     isLoading: true,
     hooks: setupHooks({isLoading: true} as any),
   };
@@ -31,18 +33,24 @@ export const createDefaultState = () => {
 export const createWeb3State = ({
   ethereum,
   provider,
-  contract,
+  tokenContract,
+  projectContract,
+  marketContract,
   isLoading,
 }: Web3Dependencies) => {
   return {
     ethereum: null,
     provider: null,
-    contract: null,
+    tokenContract: null,
+    projectContract: null,
+    marketContract: null,
     isLoading: true,
     hooks: setupHooks({
       ethereum,
       provider,
-      contract,
+      tokenContract,
+      projectContract,
+      marketContract,
       isLoading,
     }),
   };

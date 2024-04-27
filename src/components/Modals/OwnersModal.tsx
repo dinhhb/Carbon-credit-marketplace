@@ -2,10 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import ConfirmBuyCreditsModal from "../Modals/ConfirmBuyCreditsModal";
 
 interface OwnersModalProps {
-  numberOfOwners: number; // Add any other props you need
+  numberOfOwners: number;
+  owners: string[];
 }
 
-const OwnersModal: React.FC<OwnersModalProps> = ({ numberOfOwners }) => {
+const OwnersModal: React.FC<OwnersModalProps> = ({
+  owners,
+  numberOfOwners,
+}) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -42,7 +46,7 @@ const OwnersModal: React.FC<OwnersModalProps> = ({ numberOfOwners }) => {
       <a
         ref={trigger}
         onClick={() => setModalOpen(!modalOpen)}
-        className="cursor-pointer  text-primary dark:text-primary-dark hover:text-primary-dark dark:hover:text-primary"
+        className="dark:text-primary-dark hover:text-primary-dark cursor-pointer text-primary dark:hover:text-primary"
       >
         {numberOfOwners}
       </a>
@@ -62,14 +66,19 @@ const OwnersModal: React.FC<OwnersModalProps> = ({ numberOfOwners }) => {
             Owners
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-full rounded bg-primary"></span>
-          <div className="mb-4 flex items-start text-left">
+          {/* <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Address</p>
             <p className="flex-1">Quantity</p>
           </div>
           <div className="mb-4 flex items-start text-left">
             <p className="flex-1">0x902a...</p>
             <p className="flex-1">2595</p>
-          </div>
+          </div> */}
+          {owners.map((owner, index) => (
+            <div key={index} className="mb-4 flex items-start text-left">
+              <p className="flex-1">{owner}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -13,7 +13,9 @@ import {
 } from "./utils";
 import { ethers } from "ethers";
 import { MetaMaskInpageProvider } from "@metamask/providers";
-import { CarbonMarketContract } from "@/types/carbonMarketContract";
+import { CarbonTokenContract } from "@/types/CarbonTokenContract";
+import { ProjectManagementContract } from "@/types/ProjectManagementContract";
+import { CarbonMarketContract } from "@/types/CarbonMarketContract";
 
 const pageReload = () => {
   window.location.reload();
@@ -51,20 +53,19 @@ const Web3Provider: FunctionComponent<Props> = ({ children }) => {
         const provider = new ethers.providers.Web3Provider(
           window.ethereum as any,
         );
-        const contract = await loadContract(
-          "CarbonMarket",
-          provider,
-        );
-
         const signer = provider.getSigner();
-        const signedContract = contract.connect(signer);
+        const tokenContract = await loadContract("CarbonToken", provider);
+        const projectContract = await loadContract("ProjectManagement", provider);
+        const marketContract = await loadContract("CarbonMarket", provider);
 
         setGlobalListener(window.ethereum);
         setWeb3Api(
           createWeb3State({
             ethereum: window.ethereum as any,
             provider,
-            contract: signedContract as unknown as CarbonMarketContract,
+            tokenContract: tokenContract.connect(signer) as unknown as CarbonTokenContract,
+            projectContract: projectContract.connect(signer) as unknown as ProjectManagementContract,
+            marketContract: marketContract.connect(signer) as unknown as CarbonMarketContract,
             isLoading: false,
           }),
         );

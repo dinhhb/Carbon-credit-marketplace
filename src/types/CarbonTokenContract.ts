@@ -8,10 +8,10 @@ import {
 import { EthersContractContextV5 } from 'ethereum-abi-types-generator';
 
 export type ContractContext = EthersContractContextV5<
-  CarbonMarketContract,
-  CarbonMarketContractMethodNames,
-  CarbonMarketContractEventsContext,
-  CarbonMarketContractEvents
+  CarbonTokenContract,
+  CarbonTokenContractMethodNames,
+  CarbonTokenContractEventsContext,
+  CarbonTokenContractEvents
 >;
 
 export declare type EventFilter = {
@@ -54,7 +54,7 @@ export interface ContractCallOverrides {
    */
   gasLimit?: number;
 }
-export type CarbonMarketContractEvents =
+export type CarbonTokenContractEvents =
   | 'ApprovalForAll'
   | 'CarbonCreditCreated'
   | 'CarbonCreditListed'
@@ -63,7 +63,7 @@ export type CarbonMarketContractEvents =
   | 'TransferBatch'
   | 'TransferSingle'
   | 'URI';
-export interface CarbonMarketContractEventsContext {
+export interface CarbonTokenContractEventsContext {
   ApprovalForAll(...parameters: any): EventFilter;
   CarbonCreditCreated(...parameters: any): EventFilter;
   CarbonCreditListed(...parameters: any): EventFilter;
@@ -73,8 +73,7 @@ export interface CarbonMarketContractEventsContext {
   TransferSingle(...parameters: any): EventFilter;
   URI(...parameters: any): EventFilter;
 }
-export type CarbonMarketContractMethodNames =
-  | 'new'
+export type CarbonTokenContractMethodNames =
   | 'balanceOf'
   | 'balanceOfBatch'
   | 'burn'
@@ -88,12 +87,25 @@ export type CarbonMarketContractMethodNames =
   | 'supportsInterface'
   | 'transferOwnership'
   | 'uri'
-  | 'getListedTokensCount'
-  | 'listCreditsForSale'
-  | 'getAllListedCredits'
-  | 'buyCredits'
-  | 'retireCredits'
-  | 'getTokenAddress';
+  | 'mint'
+  | 'setURI'
+  | 'getTokenSold'
+  | 'updateTokenSold'
+  | 'getTotalTokensCount'
+  | 'getTokenByIndex'
+  | 'getCarbonCredit'
+  | 'setCarbonCredit'
+  | 'updateStatus'
+  | 'updatePrice'
+  | 'updateListed'
+  | 'setTokenSupply'
+  | 'getTokenSupply'
+  | 'getOwnedTokensCount'
+  | 'getOwnerTokenByIndex'
+  | 'getOwnedCredits'
+  | 'getTokenOwners'
+  | 'getOwnerCount'
+  | 'getAddTokenToAllTokensEnumeration';
 export interface ApprovalForAllEventEmittedResponse {
   account: string;
   operator: string;
@@ -153,18 +165,7 @@ export interface CarboncreditResponse {
   isListed: boolean;
   4: boolean;
 }
-export interface CarbonMarketContract {
-  /**
-   * Payable: false
-   * Constant: false
-   * StateMutability: nonpayable
-   * Type: constructor
-   * @param _tokenAddress Type: address, Indexed: false
-   */
-  'new'(
-    _tokenAddress: string,
-    overrides?: ContractTransactionOverrides
-  ): Promise<ContractTransaction>;
+export interface CarbonTokenContract {
   /**
    * Payable: false
    * Constant: true
@@ -336,11 +337,117 @@ export interface CarbonMarketContract {
   ): Promise<string>;
   /**
    * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param account Type: address, Indexed: false
+   * @param id Type: uint256, Indexed: false
+   * @param amount Type: uint256, Indexed: false
+   * @param data Type: bytes, Indexed: false
+   */
+  mint(
+    account: string,
+    id: BigNumberish,
+    amount: BigNumberish,
+    data: Arrayish,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   */
+  setURI(
+    tokenId: BigNumberish,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   */
+  getTokenSold(
+    tokenId: BigNumberish,
+    overrides?: ContractCallOverrides
+  ): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   * @param amount Type: uint256, Indexed: false
+   */
+  updateTokenSold(
+    tokenId: BigNumberish,
+    amount: BigNumberish,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
+  /**
+   * Payable: false
    * Constant: true
    * StateMutability: view
    * Type: function
    */
-  getListedTokensCount(overrides?: ContractCallOverrides): Promise<BigNumber>;
+  getTotalTokensCount(overrides?: ContractCallOverrides): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   * @param index Type: uint256, Indexed: false
+   */
+  getTokenByIndex(
+    index: BigNumberish,
+    overrides?: ContractCallOverrides
+  ): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   */
+  getCarbonCredit(
+    tokenId: BigNumberish,
+    overrides?: ContractCallOverrides
+  ): Promise<CarboncreditResponse>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   * @param owner Type: address, Indexed: false
+   * @param status Type: uint8, Indexed: false
+   * @param pricePerCredit Type: uint256, Indexed: false
+   * @param isListed Type: bool, Indexed: false
+   */
+  setCarbonCredit(
+    tokenId: BigNumberish,
+    owner: string,
+    status: BigNumberish,
+    pricePerCredit: BigNumberish,
+    isListed: boolean,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   * @param status Type: uint8, Indexed: false
+   */
+  updateStatus(
+    tokenId: BigNumberish,
+    status: BigNumberish,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
   /**
    * Payable: false
    * Constant: false
@@ -349,31 +456,9 @@ export interface CarbonMarketContract {
    * @param tokenId Type: uint256, Indexed: false
    * @param price Type: uint256, Indexed: false
    */
-  listCreditsForSale(
+  updatePrice(
     tokenId: BigNumberish,
     price: BigNumberish,
-    overrides?: ContractTransactionOverrides
-  ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   */
-  getAllListedCredits(
-    overrides?: ContractCallOverrides
-  ): Promise<CarboncreditResponse[]>;
-  /**
-   * Payable: true
-   * Constant: false
-   * StateMutability: payable
-   * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   * @param amount Type: uint256, Indexed: false
-   */
-  buyCredits(
-    tokenId: BigNumberish,
-    amount: BigNumberish,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
   /**
@@ -382,11 +467,24 @@ export interface CarbonMarketContract {
    * StateMutability: nonpayable
    * Type: function
    * @param tokenId Type: uint256, Indexed: false
-   * @param amount Type: uint256, Indexed: false
+   * @param isListed Type: bool, Indexed: false
    */
-  retireCredits(
+  updateListed(
     tokenId: BigNumberish,
-    amount: BigNumberish,
+    isListed: boolean,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   * @param supply Type: uint256, Indexed: false
+   */
+  setTokenSupply(
+    tokenId: BigNumberish,
+    supply: BigNumberish,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
   /**
@@ -394,6 +492,76 @@ export interface CarbonMarketContract {
    * Constant: true
    * StateMutability: view
    * Type: function
+   * @param tokenId Type: uint256, Indexed: false
    */
-  getTokenAddress(overrides?: ContractCallOverrides): Promise<string>;
+  getTokenSupply(
+    tokenId: BigNumberish,
+    overrides?: ContractCallOverrides
+  ): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   * @param owner Type: address, Indexed: false
+   */
+  getOwnedTokensCount(
+    owner: string,
+    overrides?: ContractCallOverrides
+  ): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   * @param owner Type: address, Indexed: false
+   * @param index Type: uint256, Indexed: false
+   */
+  getOwnerTokenByIndex(
+    owner: string,
+    index: BigNumberish,
+    overrides?: ContractCallOverrides
+  ): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   */
+  getOwnedCredits(
+    overrides?: ContractCallOverrides
+  ): Promise<CarboncreditResponse[]>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   */
+  getTokenOwners(
+    tokenId: BigNumberish,
+    overrides?: ContractCallOverrides
+  ): Promise<string[]>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   */
+  getOwnerCount(
+    tokenId: BigNumberish,
+    overrides?: ContractCallOverrides
+  ): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   */
+  getAddTokenToAllTokensEnumeration(
+    tokenId: BigNumberish,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
 }
