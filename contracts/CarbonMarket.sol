@@ -35,7 +35,6 @@ contract CarbonMarket is CarbonBase {
         );
         require(!credit.isListed, "Already listed.");
         require(price > 0, "Price must be greater than zero.");
-        reu
         require(
             _token.isApprovedForAll(msg.sender, address(this)),
             "Marketplace not authorized to manage this token."

@@ -3,6 +3,7 @@ import useSWR from "swr";
 import { Credit } from "@/types/credit";
 import { ethers } from "ethers";
 import { useAccount } from ".";
+import { useCallback } from "react";
 
 type UseListedCreditsResponse = {
   buyCredit: (tokenId: number, value: number) => Promise<void>;
@@ -63,9 +64,11 @@ export const hookFactory: ListedCreditsHookFactory =
       },
     );
 
-    const buyCredit = async (tokenId: number, value: number) => {
+    const _marketContract = marketContract;
+
+    const buyCredit = useCallback(async (tokenId: number, value: number) => {
       try {
-        const result = await marketContract?.buyCredits(tokenId, value, {
+        const result = await _marketContract!.buyCredits(tokenId, value, {
           value: ethers.utils.parseEther(value.toString()),
         });
         result?.wait();
@@ -73,7 +76,7 @@ export const hookFactory: ListedCreditsHookFactory =
       } catch (e: any) {
         console.log(e.message);
       }
-    };
+    }, [_marketContract]);
 
     return {
       data: data || EMPTY_ARRAY,

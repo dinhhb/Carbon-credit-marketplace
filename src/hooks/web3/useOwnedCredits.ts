@@ -3,6 +3,7 @@ import useSWR from "swr";
 import { Credit } from "@/types/credit";
 import { Contract, ethers } from "ethers";
 import { useAccount } from ".";
+import { useCallback } from "react";
 
 type UseOwnedCreditsResponse = {
   listCredit: (tokenId: number, price: number) => Promise<void>;
@@ -22,8 +23,9 @@ export const hookFactory: OwnedCreditsHookFactory =
   () => {
     const { account } = useAccount();
 
-    const tokenContractAddress = tokenContract ? (tokenContract as unknown as Contract).address : undefined;
-    // console.log(tokenContractAddress);
+    const marketContractAddress = marketContract
+      ? (marketContract as unknown as Contract).address
+      : undefined;
 
     const { data, ...swrRes } = useSWR(
       tokenContract ? "web3/useOwnedCredits" : null,
@@ -67,12 +69,19 @@ export const hookFactory: OwnedCreditsHookFactory =
       },
     );
 
-    const listCredit = async (tokenId: number, price: number) => {
+    const _tokenContract = tokenContract;
+    const _marketContract = marketContract;
+
+    const listCredit = useCallback(async (tokenId: number, price: number) => {
+      console.log(marketContractAddress);
       try {
-        const result1 = await tokenContract?.setApprovalForAll(tokenContractAddress || "", true);
+        const result1 = await _tokenContract!.setApprovalForAll(
+          marketContractAddress || "",
+          true,
+        );
         await result1?.wait();
         alert("Approval granted");
-        const result2 = await marketContract?.listCreditsForSale(
+        const result2 = await _marketContract!.listCreditsForSale(
           tokenId,
           ethers.utils.parseEther(price.toString()),
         );
@@ -81,7 +90,7 @@ export const hookFactory: OwnedCreditsHookFactory =
       } catch (e: any) {
         console.log(e.message);
       }
-    };
+    }, [marketContractAddress, _tokenContract, _marketContract]);
 
     return {
       data: data || EMPTY_ARRAY,
