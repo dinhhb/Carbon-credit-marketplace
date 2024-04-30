@@ -25,6 +25,7 @@ export type CreditCore = {
   quantitySold: number;
   ownerCount: number;
   owners: string[];
+  quantityOwned: number;
 }
 
 export type Credit = {

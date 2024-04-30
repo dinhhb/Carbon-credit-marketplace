@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Link from "next/link";
 import MyListedCreditsDataTable from "../DataTables/MyListedCreditsDataTable";
 import MyUnlistedCreditsDataTable from "../DataTables/MyUnlistedCreditsDataTable";
-import { useOwnedCredits } from "@/hooks/web3";
+import { useAccount, useOwnedCredits } from "@/hooks/web3";
 import { Credit } from "@/types/credit";
-
+import MyPurchasedCreditsDataTable from "../DataTables/MyPurchasedCreditsDataTable";
 
 const MyCreditsTab: React.FC = () => {
   const [openTab, setOpenTab] = useState(1);
@@ -14,9 +14,19 @@ const MyCreditsTab: React.FC = () => {
 
   const { credits } = useOwnedCredits();
   // console.log(credits.data);
+  const { account } = useAccount();
+  // console.log(account.data);
+  const listCredit = credits.listCredit;
 
-  const listedCredits = credits.data?.filter((credit) => credit.isListed) as Credit[];
-  const unlistedCredits = credits.data?.filter((credit) => !credit.isListed) as Credit[];
+  const listedCredits = credits.data?.filter(
+    (credit) => credit.isListed && credit.initialOwner == account.data,
+  ) as Credit[];
+  const unlistedCredits = credits.data?.filter(
+    (credit) => !credit.isListed  && credit.initialOwner == account.data,
+  ) as Credit[];
+  const purchasedCredits = credits.data?.filter(
+    (credit) => credit.initialOwner != account.data,
+  ) as Credit[];
 
   return (
     <div className="rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -39,6 +49,15 @@ const MyCreditsTab: React.FC = () => {
         >
           Unlisted credits
         </Link>
+        <Link
+          href="#"
+          className={`rounded-md px-4 py-3 text-sm font-medium hover:bg-primary hover:text-white dark:hover:bg-primary md:text-base lg:px-6 ${
+            openTab === 3 ? activeClasses : inactiveClasses
+          }`}
+          onClick={() => setOpenTab(3)}
+        >
+          Purchased credits
+        </Link>
       </div>
 
       <div>
@@ -50,9 +69,13 @@ const MyCreditsTab: React.FC = () => {
         <div
           className={`leading-relaxed ${openTab === 2 ? "block" : "hidden"}`}
         >
-          <MyUnlistedCreditsDataTable credits={unlistedCredits}/>
+          <MyUnlistedCreditsDataTable listCredit={listCredit} credits={unlistedCredits} />
         </div>
-        
+        <div
+          className={`leading-relaxed ${openTab === 3 ? "block" : "hidden"}`}
+        >
+          <MyPurchasedCreditsDataTable credits={purchasedCredits} />
+        </div>
       </div>
     </div>
   );

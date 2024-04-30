@@ -4,10 +4,9 @@ import { Credit } from "@/types/credit";
 
 interface CreditProps {
   credit: Credit;
-  buyCredit: (tokenId: number, value: number) => Promise<void>;
 }
 
-const CreditInfoModal: React.FC<CreditProps> = ({ buyCredit, credit }) => {
+const CreditInfoModal: React.FC<CreditProps> = ({ credit }) => {
   // console.log(credit);
   const [creditInfoModalOpen, setCreditInfoModalOpen] = useState(false);
 
@@ -132,7 +131,7 @@ const CreditInfoModal: React.FC<CreditProps> = ({ buyCredit, credit }) => {
               </a>
             </p>
           </div>
-          <div className="-mx-3 flex flex-wrap gap-y-4">
+          {/* <div className="-mx-3 flex flex-wrap gap-y-4">
             <div className="w-full px-3 2xsm:w-1/2">
               <button
               onClick={() => setCreditInfoModalOpen(false)}
@@ -144,7 +143,7 @@ const CreditInfoModal: React.FC<CreditProps> = ({ buyCredit, credit }) => {
             <div className="w-full px-3 2xsm:w-1/2">
               <ConfirmBuyCreditsModal buyCredit={buyCredit} credit={credit}/>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

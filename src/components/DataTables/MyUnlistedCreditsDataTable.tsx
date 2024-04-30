@@ -8,12 +8,10 @@ import {
   usePagination,
   Column,
 } from "react-table";
-import CreditInfoModal from "../Modals/CreditInfoModal";
-import OwnersModal from "../Modals/OwnersModal";
-import UnlistModal from "../Modals/UnlistModal";
 import ResubmitProjectModal from "../Modals/ResubmitProjectModal";
 import ListModal from "../Modals/ListModal";
 import { Credit } from "@/types/credit";
+import MyCreditInfoModal from "../Modals/MyCreditInfoModal";
 
 // table header
 const columns: Column<Credit>[] = [
@@ -28,29 +26,35 @@ const columns: Column<Credit>[] = [
       value.length > 25 ? `${value.substring(0, 25)}...` : value,
   },
   {
-    Header: "Quantity",
+    Header: "Quantity Issued",
     accessor: undefined,
   },
   {
     Header: "Status",
     accessor: "approvalStatus",
     Cell: ({ value }) => {
-      if (value === "Pending") {
+      if (value === "0" ) {
         return (
           <button className="inline-flex rounded-full bg-warning px-3 py-1 text-sm font-medium text-white hover:bg-opacity-90">
             Pending
           </button>
         );
-      } else if (value === "Approved") {
+      } else if (value === "1") {
         return (
           <button className="inline-flex rounded-full bg-success px-3 py-1 text-sm font-medium text-white hover:bg-opacity-90">
             Approved
           </button>
         );
-      } else {
+      } else if (value === "2") {
         return (
           <button className="inline-flex rounded-full bg-danger px-3 py-1 text-sm font-medium text-white hover:bg-opacity-90">
             Declined
+          </button>
+        );
+      } else {
+        return (
+          <button className="inline-flex rounded-full bg-primary px-3 py-1 text-sm font-medium text-white hover:bg-opacity-90">
+            {value}
           </button>
         );
       }
@@ -60,9 +64,10 @@ const columns: Column<Credit>[] = [
 
 type CreditListProps = {
   credits: Credit[];
+  listCredit: (tokenId: number, price: number) => Promise<void>;
 };
 
-const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({ credits }) => {
+const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({ listCredit, credits }) => {
   const data = useMemo(() => credits, [credits]);
 
   const tableInstance = useTable(
@@ -192,12 +197,12 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({ credit
                 <td>
                   <div className="flex">
                     <div>
-                      <CreditInfoModal credit={row.original} />
+                      <MyCreditInfoModal credit={row.original} />
                     </div>
                     {/* Conditionally render based on the status */}
                     <div>
-                      {status === "Declined" && <ResubmitProjectModal />}
-                      {status === "Approved" && <ListModal />}
+                      {status === "2" && <ResubmitProjectModal />}
+                      {status === "1" && <ListModal listCredit={listCredit} credit={row.original}/>}
                     </div>
                   </div>
                 </td>

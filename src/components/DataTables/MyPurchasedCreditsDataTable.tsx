@@ -32,12 +32,12 @@ const columns: Column<Credit>[] = [
     Cell: ({ row }) => <OwnersModal owners={row.original.owners} numberOfOwners={row.original.ownerCount} />,
   },
   {
-    Header: "Quantity Listed",
-    accessor: "quantity",
+    Header: "Quantity Purchased",
+    accessor: data => data.quantityOwned,
   },
   {
-    Header: "Quantity Sold",
-    accessor: "quantitySold",
+    Header: "Price",
+    accessor: "pricePerCredit",
   },
 ];
 
@@ -45,7 +45,7 @@ type CreditListProps = {
   credits: Credit[];
 };
 
-const MyListedCreditsDataTable: FunctionComponent<CreditListProps> = ({
+const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
   credits,
 }) => {
   const data = useMemo(() => credits, [credits]);
@@ -252,4 +252,4 @@ const MyListedCreditsDataTable: FunctionComponent<CreditListProps> = ({
   );
 };
 
-export default MyListedCreditsDataTable;
+export default MyPurchasedCreditsDataTable;

@@ -11,6 +11,7 @@ import {
 import CreditInfoModal from "../Modals/CreditInfoModal";
 import OwnersModal from "../Modals/OwnersModal";
 import { Credit } from "../../types/credit";
+import { useListedCredits } from "@/hooks/web3";
 
 // table header
 const columns: Column<Credit>[] = [
@@ -38,27 +39,24 @@ const columns: Column<Credit>[] = [
   },
   {
     Header: "Quantity",
-    accessor: "quantity",
+    accessor: (data) => data.quantity - data.quantitySold,
   },
   {
-    Header: "Price/credit",
+    Header: "Price",
     accessor: "pricePerCredit",
   },
   {
-    Header: "Numbers of owners",
+    Header: "Owners",
     accessor: "ownerCount",
     Cell: ({ row }) => <OwnersModal owners={row.original.owners} numberOfOwners={row.original.ownerCount} />,
   },
 ];
 
-type CreditListProps = {
-  credits: Credit[];
-};
-
-const MarketplaceDataTable: FunctionComponent<CreditListProps> = ({
-  credits,
-}) => {
-  const data = useMemo(() => credits, [credits]);
+const MarketplaceDataTable: FunctionComponent= () => {
+  const { credits } = useListedCredits();
+  // console.log(credits.data);
+  const creditData = credits.data;
+  const data = useMemo(() => creditData || [], [creditData]);
 
   const tableInstance = useTable(
     {
@@ -183,7 +181,7 @@ const MarketplaceDataTable: FunctionComponent<CreditListProps> = ({
                   );
                 })}
                 <td className="items-center justify-center">
-                  <CreditInfoModal credit={row.original} />
+                  <CreditInfoModal buyCredit={credits.buyCredit} credit={row.original} />
                 </td>
               </tr>
             );

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import ConfirmBuyCreditsModal from "../Modals/ConfirmBuyCreditsModal";
 
 interface OwnersModalProps {
   numberOfOwners: number;
