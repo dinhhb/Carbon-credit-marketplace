@@ -1,7 +1,7 @@
 export type CreditMetadata = {
   "project-name": string;
   "project-id": string;
-  vintage: number;
+  vintage: string;
   "project-developer": string;
   methodology: string;
   region: string;
@@ -11,8 +11,9 @@ export type CreditMetadata = {
   "crediting-period-end": Date;
   "issuance-date": Date;
   "credits-serial-number": string;
-  "quantity-issue": number;
+  "quantity-issue": string;
   "registry-reference-link": string;
+  document: string;
 };
 
 export type CreditCore = {
@@ -31,3 +32,16 @@ export type CreditCore = {
 export type Credit = {
   metadata: CreditMetadata;
 } & CreditCore;
+
+// export type FileReq = {
+//   bytes: Uint8Array;
+//   fileName: string;
+//   contentType: string;
+// };
+
+export type PinataRes = {
+  IpfsHash: string;
+  PinSize: number;
+  Timestamp: string;
+  isDuplicate: boolean;
+};

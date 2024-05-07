@@ -1,4 +1,3 @@
-import { useCredit } from "@/common/CreditContext";
 import { Credit } from "@/types/credit";
 import React, { useState, useEffect, useRef } from "react";
 

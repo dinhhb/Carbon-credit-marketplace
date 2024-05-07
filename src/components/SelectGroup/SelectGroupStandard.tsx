@@ -1,7 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import { CreditMetadata } from "@/types/credit";
+import React, { ChangeEvent, useState } from "react";
 
-const SelectGroupOne: React.FC = () => {
+interface CreditMetaProps {
+  handleChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+}
+
+const SelectGroupStandard: React.FC<CreditMetaProps> = ({
+  handleChange,
+}) => {
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
@@ -18,7 +25,9 @@ const SelectGroupOne: React.FC = () => {
       <div className="relative z-20 bg-transparent dark:bg-form-input">
         <select
           value={selectedOption}
+          name="standard"
           onChange={(e) => {
+            handleChange(e); // Using the passed handleChange which needs to handle select elements
             setSelectedOption(e.target.value);
             changeTextColor();
           }}
@@ -27,7 +36,7 @@ const SelectGroupOne: React.FC = () => {
           }`}
         >
           <option value="" disabled className="text-body dark:text-bodydark">
-            Select your standard
+            Select standard
           </option>
           <option value="VCS" className="text-body dark:text-bodydark">
             Verified Carbon Standard (VCS)
@@ -64,4 +73,4 @@ const SelectGroupOne: React.FC = () => {
   );
 };
 
-export default SelectGroupOne;
+export default SelectGroupStandard;

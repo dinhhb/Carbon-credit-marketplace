@@ -4,9 +4,6 @@ import DataTableOne from "@/components/DataTables/DataTableOne";
 import DataTableTwo from "@/components/DataTables/DataTableTwo";
 import React from "react";
 import MarketplaceDataTable from "./MarketplaceDataTable";
-import { useListedCredits } from "@/hooks/web3";
-import { Credit } from "@/types/credit";
-import { CreditProvider } from "@/common/CreditContext";
 
 interface DataTablesProps {
   type: "marketplace";

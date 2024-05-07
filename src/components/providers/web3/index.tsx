@@ -61,7 +61,7 @@ const Web3Provider: FunctionComponent<Props> = ({ children }) => {
         setGlobalListener(window.ethereum);
         setWeb3Api(
           createWeb3State({
-            ethereum: window.ethereum as any,
+            ethereum: window.ethereum,
             provider,
             tokenContract: tokenContract.connect(signer) as unknown as CarbonTokenContract,
             projectContract: projectContract.connect(signer) as unknown as ProjectManagementContract,
