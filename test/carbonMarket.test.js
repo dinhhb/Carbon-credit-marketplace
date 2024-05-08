@@ -35,6 +35,14 @@ contract("CarbonMarket Suite", async accounts => {
       assert.equal(Number(carbonCredit.pricePerCredit), 0, "Price per credit is not correct");
       assert.equal(carbonCredit.isListed, false, "Is listed is not correct");
     });
+
+    it("should mint tokens correctly", async () => {
+      await projectContract.registerProject(tokenSupply, { from: accounts[0] });
+
+      const initialBalance = await tokenContract.balanceOf(accounts[0], 1);
+
+      assert.equal(initialBalance.toNumber(), tokenSupply, "The initial balance is not correct");
+    });
   });
 
   describe("Project Approval", async () => {
@@ -59,20 +67,7 @@ contract("CarbonMarket Suite", async accounts => {
         assert(error.message.includes("Ownable: caller is not the owner"), "Expected an error but got a different one");
       }
     });
-
-    it("should mint tokens correctly", async () => {
-      await projectContract.registerProject(tokenSupply, { from: accounts[0] });
-      await projectContract.approveProject(1, { from: accounts[0] });
-
-      const initialBalance = await tokenContract.balanceOf(accounts[0], 1);
-
-      // console.log("Token Contract Address:", tokenContract.address);
-      // console.log("Project Management Address:", projectContract.address);
-      // console.log("Token Contract via Project Management:", await projectContract.getTokenAddress());
-      // console.log("Token Contract via Market Contract:", await marketContract.getTokenAddress());
-
-      assert.equal(initialBalance.toNumber(), tokenSupply, "The initial balance is not correct");
-    });
+  });
 
     describe("Token URI Mapping", async () => {
       const tokenURI = "https://gateway.pinata.cloud/ipfs/QmRaNxZouFunnDnds57VGmtrtA2EBEFLeszaXAo8GZfZ8e/1.json";
@@ -508,6 +503,4 @@ contract("CarbonMarket Suite", async accounts => {
       });
 
     });
-
-  });
 });

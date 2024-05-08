@@ -15,17 +15,22 @@ contract ProjectManagement is Ownable, CarbonBase {
 
     function registerProject(uint256 tokenSupply) public {
         uint256 currentId = ++_tokenIds; // tokenID starts from 1
-
-        _token.setCarbonCredit(
+         _token.setCarbonCredit(
             currentId,
             msg.sender,
             ApprovalStatus.Pending,
             0,
             false
         );
-
-        _token.setTokenSupply(currentId, tokenSupply);
-        _token.getAddTokenToAllTokensEnumeration(currentId);
+        _token.mint(msg.sender, currentId, tokenSupply, "");
+        _token.setURI(currentId);
+        emit CarbonCreditCreated(
+            currentId,
+            msg.sender,
+            ApprovalStatus.Pending,
+            0,
+            false
+        );
     }
 
     function approveProject(uint256 tokenId) public payable onlyOwner {
@@ -37,16 +42,6 @@ contract ProjectManagement is Ownable, CarbonBase {
         );
 
         _token.updateStatus(tokenId, ApprovalStatus.Approved);
-        _token.mint(credit.initialOwner, tokenId, _token.getTokenSupply(tokenId), "");
-        _token.setURI(tokenId);
-
-        emit CarbonCreditCreated(
-            tokenId,
-            credit.initialOwner,
-            ApprovalStatus.Approved,
-            0,
-            false
-        );
     }
 
     function declineProject(uint256 tokenId) public onlyOwner {

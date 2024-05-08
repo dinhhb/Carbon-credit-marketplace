@@ -84,10 +84,6 @@ contract CarbonToken is CarbonBase {
         _idToCarbonCredit[tokenId].isListed = isListed;
     }
 
-    function setTokenSupply(uint256 tokenId, uint256 supply) public {
-        _idToTokenSupply[tokenId] = supply;
-    }
-
     function getTokenSupply(uint256 tokenId) public view returns (uint256) {
         return _idToTokenSupply[tokenId];
     }
@@ -141,6 +137,11 @@ contract CarbonToken is CarbonBase {
 
         for (uint256 i = 0; i < ids.length; i++) {
             uint256 tokenId = ids[i];
+            if (from == address(0)) {
+                // This implies the token is being minted
+                _addTokenToAllTokensEnumeration(tokenId);
+                _idToTokenSupply[tokenId] = amounts[i];
+            }
             if (from != address(0) && balanceOf(from, tokenId) == amounts[i]) {
                 // checking before transfer
                 // This implies the sender is transferring all their units of this token type
@@ -148,7 +149,7 @@ contract CarbonToken is CarbonBase {
                 _removeTokenOwner(tokenId, from);
             }
             if (to != address(0) && balanceOf(to, tokenId) == 0) {
-                // checking before mint
+                // identify the first time tokens are transferred to a new holder.
                 // This implies the recipient did not previously own any units of this token type
                 _addTokenToOwnerEnumeration(to, tokenId);
                 _addTokenOwner(tokenId, to);
@@ -240,9 +241,5 @@ contract CarbonToken is CarbonBase {
         // Remove the last token's data (since it's now either removed or moved)
         _allTokenIds.pop();
         delete _idToTokensIndex[tokenId]; // Remove the deleted token's index
-    }
-
-    function getAddTokenToAllTokensEnumeration(uint256 tokenId) public {
-        _addTokenToAllTokensEnumeration(tokenId);
     }
 }

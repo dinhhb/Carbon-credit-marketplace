@@ -98,14 +98,12 @@ export type CarbonTokenContractMethodNames =
   | 'updateStatus'
   | 'updatePrice'
   | 'updateListed'
-  | 'setTokenSupply'
   | 'getTokenSupply'
   | 'getOwnedTokensCount'
   | 'getOwnerTokenByIndex'
   | 'getOwnedCredits'
   | 'getTokenOwners'
-  | 'getOwnerCount'
-  | 'getAddTokenToAllTokensEnumeration';
+  | 'getOwnerCount';
 export interface ApprovalForAllEventEmittedResponse {
   account: string;
   operator: string;
@@ -476,19 +474,6 @@ export interface CarbonTokenContract {
   ): Promise<ContractTransaction>;
   /**
    * Payable: false
-   * Constant: false
-   * StateMutability: nonpayable
-   * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   * @param supply Type: uint256, Indexed: false
-   */
-  setTokenSupply(
-    tokenId: BigNumberish,
-    supply: BigNumberish,
-    overrides?: ContractTransactionOverrides
-  ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
    * Constant: true
    * StateMutability: view
    * Type: function
@@ -553,15 +538,4 @@ export interface CarbonTokenContract {
     tokenId: BigNumberish,
     overrides?: ContractCallOverrides
   ): Promise<BigNumber>;
-  /**
-   * Payable: false
-   * Constant: false
-   * StateMutability: nonpayable
-   * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   */
-  getAddTokenToAllTokensEnumeration(
-    tokenId: BigNumberish,
-    overrides?: ContractTransactionOverrides
-  ): Promise<ContractTransaction>;
 }

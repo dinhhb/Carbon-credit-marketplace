@@ -27,7 +27,7 @@ const columns: Column<Credit>[] = [
   },
   {
     Header: "Quantity Issued",
-    accessor: undefined,
+    accessor: "quantity",
   },
   {
     Header: "Status",
