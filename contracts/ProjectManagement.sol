@@ -13,7 +13,7 @@ contract ProjectManagement is Ownable, CarbonBase {
         _token = CarbonToken(_tokenAddress);
     }
 
-    function registerProject(uint256 tokenSupply) public {
+    function registerProject(uint256 tokenSupply, string memory tokenURI) public {
         uint256 currentId = ++_tokenIds; // tokenID starts from 1
          _token.setCarbonCredit(
             currentId,
@@ -23,7 +23,7 @@ contract ProjectManagement is Ownable, CarbonBase {
             false
         );
         _token.mint(msg.sender, currentId, tokenSupply, "");
-        _token.setURI(currentId);
+        _token.setURI(currentId, tokenURI);
         emit CarbonCreditCreated(
             currentId,
             msg.sender,
@@ -52,7 +52,6 @@ contract ProjectManagement is Ownable, CarbonBase {
             "Project cannot be declined"
         );
         _token.updateStatus(tokenId, ApprovalStatus.Declined);
-        _token.setURI(tokenId);
     }
 
     function getTokenAddress() public view returns (address) {

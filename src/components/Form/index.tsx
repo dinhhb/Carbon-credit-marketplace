@@ -152,7 +152,7 @@ const RegisterProjectForm: React.FC = () => {
         }
       });
 
-      const tx = await projectContract?.registerProject(creditMeta["quantity-issue"]);
+      const tx = await projectContract?.registerProject(creditMeta["quantity-issue"], creditURI);
       const result = await tx?.wait();
  
       if (result && result.logs) {

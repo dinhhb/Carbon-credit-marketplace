@@ -326,7 +326,7 @@ export interface CarbonMarketContract {
   /**
    * Payable: false
    * Constant: true
-   * StateMutability: pure
+   * StateMutability: view
    * Type: function
    * @param tokenId Type: uint256, Indexed: false
    */

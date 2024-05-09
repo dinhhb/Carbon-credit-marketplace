@@ -312,7 +312,7 @@ export interface ProjectManagementContract {
   /**
    * Payable: false
    * Constant: true
-   * StateMutability: pure
+   * StateMutability: view
    * Type: function
    * @param tokenId Type: uint256, Indexed: false
    */
@@ -326,9 +326,11 @@ export interface ProjectManagementContract {
    * StateMutability: nonpayable
    * Type: function
    * @param tokenSupply Type: uint256, Indexed: false
+   * @param tokenURI Type: string, Indexed: false
    */
   registerProject(
     tokenSupply: BigNumberish,
+    tokenURI: string,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
   /**

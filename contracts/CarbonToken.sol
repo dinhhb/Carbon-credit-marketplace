@@ -28,8 +28,8 @@ contract CarbonToken is CarbonBase {
         _mint(account, id, amount, data);
     }
 
-    function setURI(uint256 tokenId) public {
-        _setURI(tokenId, uri(tokenId));
+    function setURI(uint256 tokenId, string memory newURI) public {
+        _setURI(tokenId, newURI);
     }
 
     function getTokenSold(uint256 tokenId) public view returns (uint256) {

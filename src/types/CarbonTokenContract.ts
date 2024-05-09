@@ -325,7 +325,7 @@ export interface CarbonTokenContract {
   /**
    * Payable: false
    * Constant: true
-   * StateMutability: pure
+   * StateMutability: view
    * Type: function
    * @param tokenId Type: uint256, Indexed: false
    */
@@ -356,9 +356,11 @@ export interface CarbonTokenContract {
    * StateMutability: nonpayable
    * Type: function
    * @param tokenId Type: uint256, Indexed: false
+   * @param newURI Type: string, Indexed: false
    */
   setURI(
     tokenId: BigNumberish,
+    newURI: string,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
   /**

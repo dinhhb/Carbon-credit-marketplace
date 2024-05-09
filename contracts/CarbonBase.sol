@@ -43,18 +43,11 @@ contract CarbonBase is ERC1155URIStorage, ERC1155Burnable, Ownable {
         uint256 amount
     );
 
-    constructor() ERC1155("https://gateway.pinata.cloud/ipfs/{id}.json") {}
+    constructor() ERC1155("") {}
 
     function uri(
         uint256 tokenId
-    ) public pure override(ERC1155, ERC1155URIStorage) returns (string memory) {
-        return
-            string(
-                abi.encodePacked(
-                    "https://gateway.pinata.cloud/ipfs/QmRaNxZouFunnDnds57VGmtrtA2EBEFLeszaXAo8GZfZ8e/",
-                    Strings.toString(tokenId),
-                    ".json"
-                )
-            );
+    ) public view override(ERC1155, ERC1155URIStorage) returns (string memory) {
+        return super.uri(tokenId);
     }
 }
