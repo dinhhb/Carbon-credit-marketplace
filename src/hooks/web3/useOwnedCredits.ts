@@ -4,6 +4,7 @@ import { Credit } from "@/types/credit";
 import { Contract, ethers } from "ethers";
 import { useAccount } from ".";
 import { useCallback } from "react";
+import { toast } from "react-toastify";
 
 type UseOwnedCreditsResponse = {
   listCredit: (tokenId: number, price: number) => Promise<void>;
@@ -85,8 +86,11 @@ export const hookFactory: OwnedCreditsHookFactory =
           tokenId,
           ethers.utils.parseEther(price.toString()),
         );
-        result2?.wait();
-        alert("Credit has been listed");
+        await toast.promise(result2!.wait(), {
+          pending: "Listing credit...",
+          success: "Credit listed successfully!",
+          error: "Failed to list credit",
+        });
       } catch (e: any) {
         console.log(e.message);
       }

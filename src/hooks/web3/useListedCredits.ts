@@ -4,6 +4,7 @@ import { Credit } from "@/types/credit";
 import { ethers } from "ethers";
 import { useAccount } from ".";
 import { useCallback } from "react";
+import {toast} from "react-toastify";
 
 type UseListedCreditsResponse = {
   buyCredit: (tokenId: number, value: number) => Promise<void>;
@@ -71,8 +72,11 @@ export const hookFactory: ListedCreditsHookFactory =
         const result = await _marketContract!.buyCredits(tokenId, value, {
           value: ethers.utils.parseEther(value.toString()),
         });
-        result?.wait();
-        alert("Credit bought successfully");
+        await toast.promise(result!.wait(), {
+          pending: "Buying credit...",
+          success: "Credit bought successfully!",
+          error: "Failed to buy credit",
+        });
       } catch (e: any) {
         console.log(e.message);
       }

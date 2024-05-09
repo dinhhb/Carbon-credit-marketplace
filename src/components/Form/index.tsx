@@ -9,6 +9,7 @@ import { CreditMetadata, PinataRes } from "@/types/credit";
 import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { useWeb3 } from "../providers/web3";
+import { toast } from "react-toastify";
 
 const ALLOW_FIELDS = [
   "project-name",
@@ -49,6 +50,35 @@ const RegisterProjectForm: React.FC = () => {
     "registry-reference-link": "",
     document: "",
   });
+
+  const getRandomString = (length = 6) =>
+    Math.random().toString(20).substr(2, length);
+
+  const getRandomNumber = (min: number, max: number) =>
+    Math.floor(Math.random() * (max - min + 1) + min).toString();
+
+  const autofillForm = () => {
+    const randomCreditMeta = {
+      "project-name": `Project ${getRandomString()}`,
+      "project-id": `PID${getRandomNumber(10000, 99999)}`,
+      vintage: getRandomNumber(1990, 2025),
+      "project-developer": `Developer ${getRandomString()}`,
+      methodology: `Method ${getRandomString()}`,
+      region: `Region ${getRandomString()}`,
+      "project-type": `Type ${getRandomString()}`,
+      standard: "",
+      "crediting-period-start": new Date(),
+      "crediting-period-end": new Date(),
+      "issuance-date": new Date(),
+      "credits-serial-number": `CSN${getRandomNumber(100000, 999999)}`,
+      "quantity-issue": getRandomNumber(1000, 5000),
+      "registry-reference-link": `http://example.com/${getRandomString()}`,
+      document: "", // Assuming this needs to be uploaded, leaving empty
+    };
+
+    setCreditMeta(randomCreditMeta);
+    setIsFormValid(checkIfFormIsValid());
+  };
 
   const checkIfFormIsValid = () => {
     return Object.values(creditMeta).every(
@@ -94,12 +124,18 @@ const RegisterProjectForm: React.FC = () => {
     try {
       const { signedData, account } = await getSignedData();
 
-      const res = await axios.post("/api/verify-file", {
+      const promise = axios.post("/api/verify-file", {
         address: account,
         signature: signedData,
         bytes,
         contentType: file.type,
         fileName: file.name.replace(/\.[^/.]+$/, ""),
+      });
+
+      const res = await toast.promise(promise, {
+        pending: "Uploading document...",
+        success: "Document uploaded successfully",
+        error: "Failed to upload document",
       });
 
       const data = res.data as PinataRes;
@@ -124,10 +160,16 @@ const RegisterProjectForm: React.FC = () => {
     try {
       const { signedData, account } = await getSignedData();
 
-      const res = await axios.post("/api/verify", {
+      const promise = axios.post("/api/verify", {
         address: account,
         signature: signedData,
         credit: creditMeta,
+      });
+
+      const res = await toast.promise(promise, {
+        pending: "Uploading metadata...",
+        success: "Metadata uploaded successfully",
+        error: "Failed to upload metadata",
       });
 
       const data = res.data as PinataRes;
@@ -142,8 +184,8 @@ const RegisterProjectForm: React.FC = () => {
   const registerProject = async () => {
     try {
       const creditRes = await axios.get(creditURI, {
-        headers: {"Accept": "text/plain"}
-       });
+        headers: { Accept: "text/plain" },
+      });
       const content = creditRes.data;
 
       Object.keys(content).forEach((key) => {
@@ -152,18 +194,27 @@ const RegisterProjectForm: React.FC = () => {
         }
       });
 
-      const tx = await projectContract?.registerProject(creditMeta["quantity-issue"], creditURI);
-      const result = await tx?.wait();
- 
+      const tx = await projectContract?.registerProject(
+        creditMeta["quantity-issue"],
+        creditURI,
+      );
+      const promise = tx?.wait();
+
+      const result = await toast.promise(promise!, {
+        pending: "Registering project...",
+        success: "Project registered successfully",
+        error: "Failed to register project",
+      });
+
       if (result && result.logs) {
         const carbonCreditCreatedLogEvent = result.events?.find(
-          (ev: any) => ev.event === 'CarbonCreditCreated'
+          (ev: any) => ev.event === "CarbonCreditCreated",
         );
         console.log(
-          'Token ID: ',
-          carbonCreditCreatedLogEvent?.args?.tokenId.toNumber()
+          "Token ID: ",
+          carbonCreditCreatedLogEvent?.args?.tokenId.toNumber(),
         );
-      };
+      }
       // alert("Project registered successfully");
     } catch (error: any) {
       console.error(error.message);
@@ -185,6 +236,15 @@ const RegisterProjectForm: React.FC = () => {
                 </h3>
               </div>
               <form action="#">
+                <div className="p-6.5">
+                  <button
+                    type="button"
+                    onClick={autofillForm}
+                    className="mt-4 block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+                  >
+                    Auto-Fill Form
+                  </button>
+                </div>
                 <div className="p-6.5">
                   <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                     <div className="w-full xl:w-1/2">
