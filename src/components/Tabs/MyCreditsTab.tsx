@@ -5,6 +5,7 @@ import MyUnlistedCreditsDataTable from "../DataTables/MyUnlistedCreditsDataTable
 import { useAccount, useOwnedCredits } from "@/hooks/web3";
 import { Credit } from "@/types/credit";
 import MyPurchasedCreditsDataTable from "../DataTables/MyPurchasedCreditsDataTable";
+import MySpinner from "../Spinners/MySpinner";
 
 const MyCreditsTab: React.FC = () => {
   const [openTab, setOpenTab] = useState(1);
@@ -13,16 +14,14 @@ const MyCreditsTab: React.FC = () => {
   const inactiveClasses = "bg-gray dark:bg-meta-4 text-black dark:text-white";
 
   const { credits } = useOwnedCredits();
-  // console.log(credits.data);
   const { account } = useAccount();
-  // console.log(account.data);
   const listCredit = credits.listCredit;
 
   const listedCredits = credits.data?.filter(
     (credit) => credit.isListed && credit.initialOwner == account.data,
   ) as Credit[];
   const unlistedCredits = credits.data?.filter(
-    (credit) => !credit.isListed  && credit.initialOwner == account.data,
+    (credit) => !credit.isListed && credit.initialOwner == account.data,
   ) as Credit[];
   const purchasedCredits = credits.data?.filter(
     (credit) => credit.initialOwner != account.data,
@@ -61,21 +60,30 @@ const MyCreditsTab: React.FC = () => {
       </div>
 
       <div>
-        <div
-          className={`leading-relaxed ${openTab === 1 ? "block" : "hidden"}`}
-        >
-          <MyListedCreditsDataTable credits={listedCredits} />
-        </div>
-        <div
-          className={`leading-relaxed ${openTab === 2 ? "block" : "hidden"}`}
-        >
-          <MyUnlistedCreditsDataTable listCredit={listCredit} credits={unlistedCredits} />
-        </div>
-        <div
-          className={`leading-relaxed ${openTab === 3 ? "block" : "hidden"}`}
-        >
-          <MyPurchasedCreditsDataTable credits={purchasedCredits} />
-        </div>
+        {credits.isLoading ? (
+          <MySpinner />
+        ) : (
+          <>
+            <div
+              className={`leading-relaxed ${openTab === 1 ? "block" : "hidden"}`}
+            >
+              <MyListedCreditsDataTable credits={listedCredits} />
+            </div>
+            <div
+              className={`leading-relaxed ${openTab === 2 ? "block" : "hidden"}`}
+            >
+              <MyUnlistedCreditsDataTable
+                listCredit={listCredit}
+                credits={unlistedCredits}
+              />
+            </div>
+            <div
+              className={`leading-relaxed ${openTab === 3 ? "block" : "hidden"}`}
+            >
+              <MyPurchasedCreditsDataTable credits={purchasedCredits} />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

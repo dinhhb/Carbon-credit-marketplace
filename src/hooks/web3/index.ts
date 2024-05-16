@@ -31,3 +31,11 @@ export const useOwnedCredits = () => {
     credits: swrRes,
   };
 }
+
+export const useAllCredits = () => {
+  const hooks = useHooks();
+  const swrRes = hooks.useAllCredits();
+  return {
+    credits: swrRes,
+  };
+}

@@ -70,11 +70,11 @@ const ListModal: React.FC<CreditProps> = ({ listCredit, credit }) => {
           <div className="flex flex-col py-6">
             <div>
               <label className="mb-3 block text-left text-sm font-medium text-black dark:text-white">
-                Enter price per credit to list for sale:
+                Enter price per credit (ETH) to list for sale:
               </label>
               <input
                 type="text"
-                placeholder="Price Per Credit"
+                placeholder="1 ETH"
                 className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
@@ -94,7 +94,7 @@ const ListModal: React.FC<CreditProps> = ({ listCredit, credit }) => {
               <button
                 onClick={() => {
                   if (price && listCredit) {
-                    listCredit(credit.tokenId, parseInt(price));
+                    listCredit(credit.tokenId, parseFloat(price));
                   } else if (!listCredit) {
                     alert("List credit function not available");
                   }
@@ -106,7 +106,7 @@ const ListModal: React.FC<CreditProps> = ({ listCredit, credit }) => {
                     : "block w-full cursor-not-allowed rounded border border-bodydark bg-bodydark p-3 text-center font-medium text-white transition hover:bg-opacity-90"
                 }
               >
-                Buy
+                List
               </button>
             </div>
           </div>

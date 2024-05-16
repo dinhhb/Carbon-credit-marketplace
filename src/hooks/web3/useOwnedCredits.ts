@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 
 type UseOwnedCreditsResponse = {
   listCredit: (tokenId: number, price: number) => Promise<void>;
+  isLoading: boolean;
 };
 
 type OwnedCreditsHookFactory = CryptoHookFactory<
@@ -64,7 +65,6 @@ export const hookFactory: OwnedCreditsHookFactory =
             quantityOwned: quantityOwned.toNumber(),
           });
         }
-
         // debugger;
         return credits;
       },
@@ -99,6 +99,7 @@ export const hookFactory: OwnedCreditsHookFactory =
     return {
       data: data || EMPTY_ARRAY,
       ...swrRes,
+      isLoading: !data,
       listCredit,
     };
   };

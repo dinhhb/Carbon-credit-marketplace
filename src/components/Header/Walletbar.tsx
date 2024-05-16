@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 import Link from "next/link";
 
 type WalletbarProps = {
+  isAdmin: boolean;
   isLoading: boolean;
   isInstalled: boolean;
   account: string | undefined;
@@ -13,6 +14,7 @@ type WalletbarProps = {
 };
 
 const Walletbar: FunctionComponent<WalletbarProps> = ({
+  isAdmin,
   isLoading,
   isInstalled,
   account,
@@ -54,7 +56,7 @@ const Walletbar: FunctionComponent<WalletbarProps> = ({
           )}
         </span>
         <div className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-3 text-center font-medium text-white">
-          Hello user
+          Hello {isAdmin ? "Admin" : "User"}
         </div>
       </>
     );

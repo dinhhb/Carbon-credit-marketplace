@@ -384,7 +384,7 @@ const RegisterProjectForm: React.FC = () => {
 
                   <div className="mb-4.5">
                     <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                      Registry reference link{" "}
+                      Registry reference{" "}
                       <span className="text-meta-1">*</span>
                     </label>
                     <input

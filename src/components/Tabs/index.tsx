@@ -4,9 +4,10 @@ import TabOne from "@/components/Tabs/TabOne";
 import TabTwo from "@/components/Tabs/TabTwo";
 import TabThree from "@/components/Tabs/TabThree";
 import MyCreditsTab from "./MyCreditsTab";
+import ManageProjectsTab from "./ManageProjectsTab";
 
 interface TabsProps {
-  type: "my-credits";
+  type: "my-credits" | "manage-projects";
 }
 
 const Tabs: React.FC<TabsProps> = ({ type }) => {
@@ -14,6 +15,9 @@ const Tabs: React.FC<TabsProps> = ({ type }) => {
   switch (type) {
     case "my-credits":
       tabComponent = <MyCreditsTab />;
+      break;
+    case "manage-projects":
+      tabComponent = <ManageProjectsTab />
       break;
     default:
       tabComponent = (
@@ -25,7 +29,7 @@ const Tabs: React.FC<TabsProps> = ({ type }) => {
 
   return (
     <>
-      <Breadcrumb pageName={type === "my-credits" ? "My credits" : "Tabs"} />
+      <Breadcrumb pageName={type === "my-credits" ? "My credits" : "Manage Projects"} />
       <div className="flex flex-col gap-9">
         {tabComponent}
       </div>

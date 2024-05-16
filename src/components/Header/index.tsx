@@ -122,7 +122,11 @@ const Header = (props: {
 
             {/* <!-- User Area --> */}
             {/* <DropdownUser /> */}
+            {/* <div>
+              <h1>Hi {account.isAdmin && "Admin"}</h1>
+            </div> */}
             <Walletbar
+              isAdmin={account.isAdmin}
               isLoading={account.isLoading}
               isInstalled={account.isInstalled}
               account={account.data}

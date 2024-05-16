@@ -4,7 +4,7 @@ import { Credit } from "@/types/credit";
 
 interface CreditProps {
   credit: Credit;
-  buyCredit: (tokenId: number, value: number) => Promise<void>;
+  buyCredit: (tokenId: number, amount: number, value: number) => Promise<void>;
 }
 
 const CreditInfoModal: React.FC<CreditProps> = ({ buyCredit, credit }) => {
@@ -120,7 +120,7 @@ const CreditInfoModal: React.FC<CreditProps> = ({ buyCredit, credit }) => {
             <p className="flex-1">{credit.quantity}</p>
           </div>
           <div className="mb-4 flex items-start text-left">
-            <p className="flex-1">Registry reference link:</p>
+            <p className="flex-1">Registry reference:</p>
             <p className="flex-1">
               <a
                 href="https://registry.verra.org/app/projectDetail/VCS/2595"
@@ -129,6 +129,19 @@ const CreditInfoModal: React.FC<CreditProps> = ({ buyCredit, credit }) => {
                 className="hover:text-primary-dark overflow-hidden break-all text-primary"
               >
                 {credit.metadata["registry-reference-link"]}
+              </a>
+            </p>
+          </div>
+          <div className="mb-4 flex items-start text-left">
+            <p className="flex-1">Certification document:</p>
+            <p className="flex-1">
+              <a
+                href={credit.metadata.document}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary-dark overflow-hidden break-all text-primary"
+              >
+                {credit.metadata.document}
               </a>
             </p>
           </div>

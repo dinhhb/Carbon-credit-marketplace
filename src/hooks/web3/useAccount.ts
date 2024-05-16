@@ -6,6 +6,11 @@ type UseAccountResponse = {
   connect: () => void;
   isLoading: boolean;
   isInstalled: boolean;
+  isAdmin: boolean;
+};
+
+const adminAddress: { [key: string]: boolean } = {
+  "0xd24cb09d1Ab3790EA83F1E6961abA3fa26b43fD5": true,
 };
 
 type AccountHookFactory = CryptoHookFactory<string, UseAccountResponse>;
@@ -16,7 +21,7 @@ export type UseAccountHook = ReturnType<AccountHookFactory>;
 export const hookFactory: AccountHookFactory =
   ({ provider, ethereum, isLoading }) =>
   () => {
-    const {data, mutate, isValidating, ...swr} = useSWR(
+    const { data, mutate, isValidating, ...swr } = useSWR(
       provider ? "web3/useAccount" : null,
       async () => {
         const accounts = await provider!.listAccounts();
@@ -38,22 +43,22 @@ export const hookFactory: AccountHookFactory =
       ethereum?.on("accountsChanged", handleAccountsChanged);
       return () => {
         ethereum?.removeListener("accountsChanged", handleAccountsChanged);
-      }
+      };
     });
-    
 
     const handleAccountsChanged = async (...args: unknown[]) => {
       const accounts = args[0] as string[];
       if (accounts.length === 0) {
         console.log("Please connect to MetaMask.");
-      } else if (accounts[0] !== data) {       // if account changed
-        mutate(accounts[0]); 
+      } else if (accounts[0] !== data) {
+        // if account changed
+        mutate(accounts[0]);
       }
-    }
+    };
 
     const connect = async () => {
       try {
-        ethereum?.request({ method: "eth_requestAccounts" });
+        await ethereum?.request({ method: "eth_requestAccounts" });
       } catch (error) {
         console.error(error);
       }
@@ -63,9 +68,10 @@ export const hookFactory: AccountHookFactory =
       ...swr,
       data,
       isValidating,
+      isAdmin: !!(data && adminAddress[data]) ?? false,
       isLoading: isLoading as boolean,
-      isInstalled: ethereum?.isMetaMask  || false,
+      isInstalled: ethereum?.isMetaMask || false,
       mutate,
-      connect
+      connect,
     };
   };

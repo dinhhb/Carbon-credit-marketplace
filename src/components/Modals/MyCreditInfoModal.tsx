@@ -119,7 +119,7 @@ const CreditInfoModal: React.FC<CreditProps> = ({ credit }) => {
             <p className="flex-1">{credit.quantity}</p>
           </div>
           <div className="mb-4 flex items-start text-left">
-            <p className="flex-1">Registry reference link:</p>
+            <p className="flex-1">Registry reference:</p>
             <p className="flex-1">
               <a
                 href={credit.metadata["registry-reference-link"]}
@@ -128,6 +128,19 @@ const CreditInfoModal: React.FC<CreditProps> = ({ credit }) => {
                 className="hover:text-primary-dark overflow-hidden break-all text-primary"
               >
                 {credit.metadata["registry-reference-link"]}
+              </a>
+            </p>
+          </div>
+          <div className="mb-4 flex items-start text-left">
+            <p className="flex-1">Certification document:</p>
+            <p className="flex-1">
+              <a
+                href={credit.metadata.document}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary-dark overflow-hidden break-all text-primary"
+              >
+                {credit.metadata.document}
               </a>
             </p>
           </div>

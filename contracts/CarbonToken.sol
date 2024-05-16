@@ -96,11 +96,21 @@ contract CarbonToken is CarbonBase {
         address owner,
         uint256 index
     ) public view returns (uint256) {
-        require(
-            index < balanceOf(owner, getTokenByIndex(index)),
-            "Index out of bounds."
-        );
+        // require(
+        //     index < balanceOf(owner, getTokenByIndex(index)),
+        //     "Index out of bounds."
+        // );
         return _ownerToTokenIds[owner][index];
+    }
+
+    function getAllCredits() public view returns (CarbonCredit[] memory) {
+        CarbonCredit[] memory credits = new CarbonCredit[](_allTokenIds.length);
+        for (uint i = 0; i < _allTokenIds.length; i++) {
+            uint tokenId = getTokenByIndex(i);
+            CarbonCredit storage credit = _idToCarbonCredit[tokenId];
+            credits[i] = credit;
+        }
+        return credits;
     }
 
     function getOwnedCredits() public view returns (CarbonCredit[] memory) {

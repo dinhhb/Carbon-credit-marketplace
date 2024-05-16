@@ -101,6 +101,7 @@ export type CarbonTokenContractMethodNames =
   | 'getTokenSupply'
   | 'getOwnedTokensCount'
   | 'getOwnerTokenByIndex'
+  | 'getAllCredits'
   | 'getOwnedCredits'
   | 'getTokenOwners'
   | 'getOwnerCount';
@@ -509,6 +510,15 @@ export interface CarbonTokenContract {
     index: BigNumberish,
     overrides?: ContractCallOverrides
   ): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   */
+  getAllCredits(
+    overrides?: ContractCallOverrides
+  ): Promise<CarboncreditResponse[]>;
   /**
    * Payable: false
    * Constant: true

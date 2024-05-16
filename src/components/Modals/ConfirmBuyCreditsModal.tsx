@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 interface CreditProps {
   credit: Credit;
-  buyCredit: (tokenId: number, value: number) => Promise<void>;
+  buyCredit: (tokenId: number, amount: number, value: number) => Promise<void>;
 }
 
 const ConfirmBuyCreditsModal: React.FC<CreditProps> = ({
@@ -100,8 +100,10 @@ const ConfirmBuyCreditsModal: React.FC<CreditProps> = ({
             <div className="w-full px-3 2xsm:w-1/2">
               <button
                 onClick={() => {
+                  const amount = parseInt(amountBuy);
                   if (amountBuy && buyCredit) {
-                    buyCredit(credit.tokenId, parseInt(amountBuy));
+                    console.log("Buying credits ID: ", credit.tokenId);
+                    buyCredit(credit.tokenId, amount, amount * credit.pricePerCredit);
                   } else if (!buyCredit) {
                     alert("Buy credit function not available");
                   }
