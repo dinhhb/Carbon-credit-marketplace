@@ -344,6 +344,7 @@ contract("CarbonMarket Suite", async accounts => {
 
   describe("Retiring Credits", async () => {
     const tokenSupply = 100;
+    const salePrice = web3.utils.toWei("0.001", "ether");
 
     beforeEach(async () => {
       await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
@@ -357,12 +358,9 @@ contract("CarbonMarket Suite", async accounts => {
     it("should allow a user to retire their credits if they have sufficient balance", async () => {
       const retireAmount = 50;
       const balanceBefore = await tokenContract.balanceOf(seller, 1);
-      // console.log(balanceBefore.toNumber());
 
-      // Retire some of the tokens from the first project
       await marketContract.retireCredits(1, retireAmount, { from: seller });
 
-      // Check the remaining balance
       const balanceAfter = await tokenContract.balanceOf(seller, 1);
       assert.equal(balanceAfter.toNumber(), tokenSupply - retireAmount, "The tokens were not retired correctly.");
     });
@@ -389,6 +387,19 @@ contract("CarbonMarket Suite", async accounts => {
       } catch (error) {
         assert.include(error.message, "Insufficient token balance to retire", "Expected token balance error but got another error.");
       }
+    });
+
+    it("should allow buyer to retire their credits", async () => {
+      const retireAmount = 10;
+      await marketContract.listCreditsForSale(1, salePrice, { from: seller });
+      await marketContract.buyCredits(1, retireAmount, { from: buyer, value: salePrice * retireAmount });
+      const balanceBefore = await tokenContract.balanceOf(buyer, 1);
+
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: buyer });
+      await marketContract.retireCredits(1, retireAmount, { from: buyer });
+
+      const balanceAfter = await tokenContract.balanceOf(buyer, 1);
+      assert.equal(balanceAfter.toNumber(), balanceBefore.toNumber() - retireAmount, "The tokens were not retired correctly.");
     });
   });
 

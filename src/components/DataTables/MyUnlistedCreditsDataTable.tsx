@@ -33,7 +33,7 @@ const columns: Column<Credit>[] = [
     Header: "Status",
     accessor: "approvalStatus",
     Cell: ({ value }) => {
-      if (value === "0" ) {
+      if (value === "0") {
         return (
           <button className="inline-flex rounded-full bg-warning px-3 py-1 text-sm font-medium text-white hover:bg-opacity-90">
             Pending
@@ -67,7 +67,10 @@ type CreditListProps = {
   listCredit: (tokenId: number, price: number) => Promise<void>;
 };
 
-const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({ listCredit, credits }) => {
+const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({
+  listCredit,
+  credits,
+}) => {
   const data = useMemo(() => credits, [credits]);
 
   const tableInstance = useTable(
@@ -106,7 +109,7 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({ listCr
         <div className="w-100">
           <input
             type="text"
-            value={globalFilter}
+            value={globalFilter || ""}
             onChange={(e) => setGlobalFilter(e.target.value)}
             className="w-full rounded-md border border-stroke px-5 py-2.5 outline-none focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:focus:border-primary"
             placeholder="Search..."
@@ -119,9 +122,9 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({ listCr
             onChange={(e) => setPageSize(Number(e.target.value))}
             className="bg-transparent pl-2"
           >
-            {[5, 10, 20, 50].map((page) => (
-              <option key={page} value={page}>
-                {page}
+            {[5, 10, 20, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
               </option>
             ))}
           </select>
@@ -134,15 +137,18 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({ listCr
         className="datatable-table w-full table-auto !border-collapse overflow-hidden break-words px-4 md:table-fixed md:overflow-auto md:px-8"
       >
         <thead>
-          {headerGroups.map((headerGroup, key) => (
-            <tr {...headerGroup.getHeaderGroupProps()} key={key}>
-              {headerGroup.headers.map((column, key) => (
+          {headerGroups.map((headerGroup, headerGroupIndex) => (
+            <tr
+              {...headerGroup.getHeaderGroupProps()}
+              key={`headerGroup-${headerGroupIndex}`}
+            >
+              {headerGroup.headers.map((column, columnIndex) => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  key={key}
+                  key={`column-${columnIndex}`}
                 >
                   <div className="flex items-center">
-                    <span> {column.render("Header")}</span>
+                    <span>{column.render("Header")}</span>
 
                     <div className="ml-2 inline-flex flex-col space-y-[2px]">
                       <span className="inline-block">
@@ -176,25 +182,28 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({ listCr
                   </div>
                 </th>
               ))}
-              <th></th>
+              <th key={`extra-${headerGroupIndex}`}></th>
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map((row, key) => {
+          {page.map((row, rowIndex) => {
             prepareRow(row);
             const status = row.original.approvalStatus;
 
             return (
-              <tr {...row.getRowProps()} key={key}>
-                {row.cells.map((cell, key) => {
+              <tr {...row.getRowProps()} key={`row-${rowIndex}`}>
+                {row.cells.map((cell) => {
                   return (
-                    <td {...cell.getCellProps()} key={key}>
+                    <td
+                      {...cell.getCellProps()}
+                      key={`cell-${cell.column.id}-${rowIndex}`}
+                    >
                       {cell.render("Cell")}
                     </td>
                   );
                 })}
-                <td>
+                <td key={`modal-${rowIndex}`}>
                   <div className="flex">
                     <div>
                       <MyCreditInfoModal credit={row.original} />
@@ -202,7 +211,9 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({ listCr
                     {/* Conditionally render based on the status */}
                     <div>
                       {status === "2" && <ResubmitProjectModal />}
-                      {status === "1" && <ListModal listCredit={listCredit} credit={row.original}/>}
+                      {status === "1" && (
+                        <ListModal listCredit={listCredit} credit={row.original} />
+                      )}
                     </div>
                   </div>
                 </td>
@@ -214,7 +225,7 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({ listCr
 
       <div className="flex justify-between border-t border-stroke px-8 pt-5 dark:border-strokedark">
         <p className="font-medium">
-          Showing {pageIndex + 1} 0f {pageOptions.length} pages
+          Showing {pageIndex + 1} of {pageOptions.length} pages
         </p>
         <div className="flex">
           <button
@@ -237,9 +248,9 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({ listCr
             </svg>
           </button>
 
-          {pageOptions.map((_page, index) => (
+          {pageOptions.map((_, index) => (
             <button
-              key={index}
+              key={`page-${index}`}
               onClick={() => {
                 gotoPage(index);
               }}

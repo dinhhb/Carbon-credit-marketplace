@@ -106,6 +106,7 @@ export const hookFactory: AllCreditsHookFactory =
     return {
       data: data || EMPTY_ARRAY,
       ...swrRes,
+      isLoading: !data,
       approveProject,
       declineProject,
     };

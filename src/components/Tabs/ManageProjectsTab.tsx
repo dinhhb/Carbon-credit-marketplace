@@ -5,6 +5,7 @@ import { Credit } from "@/types/credit";
 import ManagePendingProjectsDataTable from "../DataTables/ManagePendingProjectsDataTable";
 import ManageApprovedProjectsDataTable from "../DataTables/ManageApprovedProjectsDataTable";
 import ManageDeclinedProjectsDataTable from "../DataTables/ManageDeclinedProjectsDataTable";
+import MySpinner from "../Spinners/MySpinner";
 
 const ManageProjectsTab: React.FC = () => {
   const [openTab, setOpenTab] = useState(1);
@@ -60,28 +61,33 @@ const ManageProjectsTab: React.FC = () => {
           Declined projects
         </Link>
       </div>
-
-      <div>
-        <div
-          className={`leading-relaxed ${openTab === 1 ? "block" : "hidden"}`}
-        >
-          <ManagePendingProjectsDataTable
-            credits={pendingCredits}
-            approveProject={approveProject}
-            declineProject={declineProject}
-          />
-        </div>
-        <div
-          className={`leading-relaxed ${openTab === 2 ? "block" : "hidden"}`}
-        >
-          <ManageApprovedProjectsDataTable credits={approvedCredits} />
-        </div>
-        <div
-          className={`leading-relaxed ${openTab === 3 ? "block" : "hidden"}`}
-        >
-          <ManageDeclinedProjectsDataTable credits={declinedCredits} />
-        </div>
-      </div>
+      {credits.isLoading ? (
+        <MySpinner />
+      ) : (
+        <>
+          <div>
+            <div
+              className={`leading-relaxed ${openTab === 1 ? "block" : "hidden"}`}
+            >
+              <ManagePendingProjectsDataTable
+                credits={pendingCredits}
+                approveProject={approveProject}
+                declineProject={declineProject}
+              />
+            </div>
+            <div
+              className={`leading-relaxed ${openTab === 2 ? "block" : "hidden"}`}
+            >
+              <ManageApprovedProjectsDataTable credits={approvedCredits} />
+            </div>
+            <div
+              className={`leading-relaxed ${openTab === 3 ? "block" : "hidden"}`}
+            >
+              <ManageDeclinedProjectsDataTable credits={declinedCredits} />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

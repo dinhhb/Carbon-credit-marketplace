@@ -15,7 +15,6 @@ const MyCreditsTab: React.FC = () => {
 
   const { credits } = useOwnedCredits();
   const { account } = useAccount();
-  const listCredit = credits.listCredit;
 
   const listedCredits = credits.data?.filter(
     (credit) => credit.isListed && credit.initialOwner == account.data,
@@ -73,14 +72,14 @@ const MyCreditsTab: React.FC = () => {
               className={`leading-relaxed ${openTab === 2 ? "block" : "hidden"}`}
             >
               <MyUnlistedCreditsDataTable
-                listCredit={listCredit}
+                listCredit={credits.listCredit}
                 credits={unlistedCredits}
               />
             </div>
             <div
               className={`leading-relaxed ${openTab === 3 ? "block" : "hidden"}`}
             >
-              <MyPurchasedCreditsDataTable credits={purchasedCredits} />
+              <MyPurchasedCreditsDataTable credits={purchasedCredits} retireCredits={credits.retireCredits}/>
             </div>
           </>
         )}

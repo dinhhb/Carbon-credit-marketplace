@@ -132,12 +132,12 @@ const MarketplaceDataTable: FunctionComponent = () => {
             className="datatable-table w-full table-auto !border-collapse overflow-hidden break-words px-4 md:table-fixed md:overflow-auto md:px-8"
           >
             <thead>
-              {headerGroups.map((headerGroup) => (
-                <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
-                  {headerGroup.headers.map((column) => (
+              {headerGroups.map((headerGroup, headerGroupIndex) => (
+                <tr {...headerGroup.getHeaderGroupProps()} key={`headerGroup-${headerGroupIndex}`}>
+                  {headerGroup.headers.map((column, columnIndex) => (
                     <th
                       {...column.getHeaderProps(column.getSortByToggleProps())}
-                      key={column.id}
+                      key={`column-${columnIndex}`}
                       className="px-4 py-2"
                     >
                       <div className="flex items-center">
@@ -174,28 +174,29 @@ const MarketplaceDataTable: FunctionComponent = () => {
                       </div>
                     </th>
                   ))}
+                  <th key={`extra-${headerGroupIndex}`}></th>
                 </tr>
               ))}
             </thead>
             <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
+              {page.map((row, rowIndex) => {
                 prepareRow(row);
                 return (
-                  <tr {...row.getRowProps()} key={row.id}>
-                    {row.cells.map((cell) => (
-                      <td
-                        {...cell.getCellProps()}
-                        key={cell.row.id}
-                        className="px-4 py-2"
-                      >
-                        {cell.render("Cell")}
-                      </td>
-                    ))}
-                    <td className="items-center justify-center">
-                      <CreditInfoModal
-                        buyCredit={credits.buyCredit}
-                        credit={row.original}
-                      />
+                  <tr {...row.getRowProps()} key={`row-${rowIndex}`}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td {...cell.getCellProps()} key={`cell-${cell.column.id}-${rowIndex}`}>
+                          {cell.render("Cell")}
+                        </td>
+                      );
+                    })}
+                    <td key={`modal-${rowIndex}`}>
+                      <div className="flex">
+                        <CreditInfoModal
+                          buyCredit={credits.buyCredit}
+                          credit={row.original}
+                        />
+                      </div>
                     </td>
                   </tr>
                 );
@@ -228,9 +229,9 @@ const MarketplaceDataTable: FunctionComponent = () => {
                 </svg>
               </button>
 
-              {pageOptions.map((_page, index) => (
+              {pageOptions.map((_, index) => (
                 <button
-                  key={index}
+                  key={`page-${index}`}
                   onClick={() => gotoPage(index)}
                   className={`${
                     pageIndex === index && "bg-primary text-white"

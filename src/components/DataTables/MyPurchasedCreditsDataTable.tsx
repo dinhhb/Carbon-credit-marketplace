@@ -8,11 +8,10 @@ import {
   usePagination,
   Column,
 } from "react-table";
-import CreditInfoModal from "../Modals/CreditInfoModal";
 import OwnersModal from "../Modals/OwnersModal";
-import UnlistModal from "../Modals/UnlistModal";
 import { Credit } from "@/types/credit";
 import MyCreditInfoModal from "../Modals/MyCreditInfoModal";
+import RetireCreditsModal from "../Modals/RetireCreditsModal";
 
 // table header
 const columns: Column<Credit>[] = [
@@ -29,11 +28,16 @@ const columns: Column<Credit>[] = [
   {
     Header: "Owners",
     accessor: "ownerCount",
-    Cell: ({ row }) => <OwnersModal owners={row.original.owners} numberOfOwners={row.original.ownerCount} />,
+    Cell: ({ row }) => (
+      <OwnersModal
+        owners={row.original.owners}
+        numberOfOwners={row.original.ownerCount}
+      />
+    ),
   },
   {
-    Header: "Quantity Purchased",
-    accessor: data => data.quantityOwned,
+    Header: "Quantity Owned",
+    accessor: (data) => data.quantityOwned,
   },
   {
     Header: "Price",
@@ -43,10 +47,12 @@ const columns: Column<Credit>[] = [
 
 type CreditListProps = {
   credits: Credit[];
+  retireCredits: (tokenId: number, amount: number) => Promise<void>;
 };
 
 const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
   credits,
+  retireCredits,
 }) => {
   const data = useMemo(() => credits, [credits]);
 
@@ -86,7 +92,7 @@ const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
         <div className="w-100">
           <input
             type="text"
-            value={globalFilter}
+            value={globalFilter || ""}
             onChange={(e) => setGlobalFilter(e.target.value)}
             className="w-full rounded-md border border-stroke px-5 py-2.5 outline-none focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:focus:border-primary"
             placeholder="Search..."
@@ -99,9 +105,9 @@ const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
             onChange={(e) => setPageSize(Number(e.target.value))}
             className="bg-transparent pl-2"
           >
-            {[5, 10, 20, 50].map((page) => (
-              <option key={page} value={page}>
-                {page}
+            {[5, 10, 20, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
               </option>
             ))}
           </select>
@@ -114,15 +120,18 @@ const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
         className="datatable-table w-full table-auto !border-collapse overflow-hidden break-words px-4 md:table-fixed md:overflow-auto md:px-8"
       >
         <thead>
-          {headerGroups.map((headerGroup, key) => (
-            <tr {...headerGroup.getHeaderGroupProps()} key={key}>
-              {headerGroup.headers.map((column, key) => (
+          {headerGroups.map((headerGroup, headerGroupIndex) => (
+            <tr
+              {...headerGroup.getHeaderGroupProps()}
+              key={`headerGroup-${headerGroupIndex}`}
+            >
+              {headerGroup.headers.map((column, columnIndex) => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  key={key}
+                  key={`column-${columnIndex}`}
                 >
                   <div className="flex items-center">
-                    <span> {column.render("Header")}</span>
+                    <span>{column.render("Header")}</span>
 
                     <div className="ml-2 inline-flex flex-col space-y-[2px]">
                       <span className="inline-block">
@@ -156,29 +165,35 @@ const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
                   </div>
                 </th>
               ))}
-              <th></th>
+              <th key={`extra-${headerGroupIndex}`}></th>
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map((row, key) => {
+          {page.map((row, rowIndex) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()} key={key}>
-                {row.cells.map((cell, key) => {
+              <tr {...row.getRowProps()} key={`row-${rowIndex}`}>
+                {row.cells.map((cell) => {
                   return (
-                    <td {...cell.getCellProps()} key={key}>
+                    <td
+                      {...cell.getCellProps()}
+                      key={`cell-${cell.column.id}-${rowIndex}`}
+                    >
                       {cell.render("Cell")}
                     </td>
                   );
                 })}
-                <td>
+                <td key={`modal-${rowIndex}`}>
                   <div className="flex">
                     <div>
                       <MyCreditInfoModal credit={row.original} />
                     </div>
                     <div>
-                      <UnlistModal />
+                      <RetireCreditsModal
+                        credit={row.original}
+                        retireCredits={retireCredits}
+                      />
                     </div>
                   </div>
                 </td>
@@ -190,7 +205,7 @@ const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
 
       <div className="flex justify-between border-t border-stroke px-8 pt-5 dark:border-strokedark">
         <p className="font-medium">
-          Showing {pageIndex + 1} 0f {pageOptions.length} pages
+          Showing {pageIndex + 1} of {pageOptions.length} pages
         </p>
         <div className="flex">
           <button
@@ -213,9 +228,9 @@ const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
             </svg>
           </button>
 
-          {pageOptions.map((_page, index) => (
+          {pageOptions.map((_, index) => (
             <button
-              key={index}
+              key={`page-${index}`}
               onClick={() => {
                 gotoPage(index);
               }}

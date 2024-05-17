@@ -117,11 +117,10 @@ contract CarbonMarket is CarbonBase {
             _token.balanceOf(msg.sender, tokenId) >= amount,
             "Insufficient token balance to retire."
         );
-        // require(msg.sender != address(0), "Invalid address.");
-        // require(
-        //     _idToTokenSupply[tokenId] >= amount,
-        //     "Burn amount exceeds supply"
-        // );
+        require(
+            _token.isApprovedForAll(msg.sender, address(this)),
+            "Marketplace not authorized by token owner."
+        );
 
         _token.burn(msg.sender, tokenId, amount);
     }

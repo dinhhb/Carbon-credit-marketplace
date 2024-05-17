@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 
 type UseListedCreditsResponse = {
   buyCredit: (tokenId: number, amount: number, value: number) => Promise<void>;
-  isLoading: boolean;
 };
 
 type ListedCreditsHookFactory = CryptoHookFactory<
