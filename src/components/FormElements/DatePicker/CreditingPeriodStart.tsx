@@ -3,7 +3,11 @@
 import flatpickr from "flatpickr";
 import { useEffect } from "react";
 
-const DatePickerOne = () => {
+interface CreditMetaProps {
+  hasError: boolean;
+}
+
+const CreditingPeriodStart: React.FC<CreditMetaProps> = ({ hasError }) => {
   useEffect(() => {
     // Init flatpickr
     flatpickr(".form-datepicker", {
@@ -18,6 +22,12 @@ const DatePickerOne = () => {
     });
   }, []);
 
+  useEffect(() => {
+    console.log("Error status for date picker:", hasError);
+}, [hasError]);
+
+
+
   return (
     <div className="mb-4.5">
       <label className="mb-3 block text-sm font-medium text-black dark:text-white">
@@ -25,7 +35,11 @@ const DatePickerOne = () => {
       </label>
       <div className="relative">
         <input
-          className="form-datepicker w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          className={`form-datepicker w-full rounded border-[1.5px] bg-transparent px-5 py-3 font-normal outline-none transition dark:bg-form-input ${
+            hasError
+              ? "border-danger focus:border-danger active:border-danger dark:border-form-danger dark:focus:border-danger"
+              : "border-stroke focus:border-primary active:border-primary  dark:border-form-strokedark  dark:focus:border-primary"
+          }`}
           placeholder="mm/dd/yyyy"
           data-class="flatpickr-right"
         />
@@ -49,4 +63,4 @@ const DatePickerOne = () => {
   );
 };
 
-export default DatePickerOne;
+export default CreditingPeriodStart;

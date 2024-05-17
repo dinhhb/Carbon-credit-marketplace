@@ -3,7 +3,7 @@
 import flatpickr from "flatpickr";
 import { useEffect } from "react";
 
-const DatePickerOne = () => {
+const CreditingPeriodEnd = () => {
   useEffect(() => {
     // Init flatpickr
     flatpickr(".form-datepicker", {
@@ -49,4 +49,4 @@ const DatePickerOne = () => {
   );
 };
 
-export default DatePickerOne;
+export default CreditingPeriodEnd;

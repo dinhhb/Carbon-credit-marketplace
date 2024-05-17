@@ -1,8 +1,6 @@
 import Link from "next/link";
 import DarkModeSwitcher from "./DarkModeSwitcher";
-import Image from "next/image";
 import { useAccount, useNetwork } from "@/hooks/web3";
-import Walletbar from "./Walletbar";
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -10,12 +8,21 @@ const Header = (props: {
 }) => {
   const { account } = useAccount();
   const { network } = useNetwork();
+  const isAdmin = account.isAdmin;
+  const isLoading = account.isLoading;
+  const isInstalled = account.isInstalled;
+  const accountData = account.data;
+  const connect = account.connect;
+  const networkData = network.data;
+  const isSupported = network.isSupported;
+  const targetNetwork = network.targetNetwork;
+  const networkIsLoading = network.isLoading;
 
   return (
     <>
       <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
-        <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
-          <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
+        <div className="flex w-full items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
+          <div className="flex items-center gap-2 sm:gap-4">
             {/* <!-- Hamburger Toggle BTN --> */}
             <button
               aria-controls="sidebar"
@@ -57,85 +64,95 @@ const Header = (props: {
                 </span>
               </span>
             </button>
-            {/* <!-- Hamburger Toggle BTN --> */}
 
-            <Link className="block flex-shrink-0 lg:hidden" href="/">
-              <Image
-                width={32}
-                height={32}
-                src={"/images/logo/logo-icon.svg"}
-                alt="Logo"
-              />
-            </Link>
-          </div>
+            {!isLoading && accountData && (
+              <>
+                <div className="hidden flex-col items-start lg:flex">
+                  <span className="text-sm font-medium text-black dark:text-white">
+                    Account: {accountData}
+                  </span>
+                  {networkIsLoading ? (
+                    <span className="text-sm">Loading...</span>
+                  ) : networkData !== targetNetwork ? (
+                    <>
+                      <span className="text-sm">Network: {networkData}</span>
+                      <span className="text-sm text-danger">
+                        Wrong network, please switch to {targetNetwork}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-sm text-primary">
+                      Network: {networkData}
+                    </span>
+                  )}
+                </div>
+              </>
+            )}
 
-          <div className="hidden sm:block">
-            <form action="https://formbold.com/s/unique_form_id" method="POST">
-              <div className="relative">
-                <button className="absolute left-0 top-1/2 -translate-y-1/2">
-                  <svg
-                    className="fill-body hover:fill-primary dark:fill-bodydark dark:hover:fill-primary"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M9.16666 3.33332C5.945 3.33332 3.33332 5.945 3.33332 9.16666C3.33332 12.3883 5.945 15 9.16666 15C12.3883 15 15 12.3883 15 9.16666C15 5.945 12.3883 3.33332 9.16666 3.33332ZM1.66666 9.16666C1.66666 5.02452 5.02452 1.66666 9.16666 1.66666C13.3088 1.66666 16.6667 5.02452 16.6667 9.16666C16.6667 13.3088 13.3088 16.6667 9.16666 16.6667C5.02452 16.6667 1.66666 13.3088 1.66666 9.16666Z"
-                      fill=""
-                    />
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M13.2857 13.2857C13.6112 12.9603 14.1388 12.9603 14.4642 13.2857L18.0892 16.9107C18.4147 17.2362 18.4147 17.7638 18.0892 18.0892C17.7638 18.4147 17.2362 18.4147 16.9107 18.0892L13.2857 14.4642C12.9603 14.1388 12.9603 13.6112 13.2857 13.2857Z"
-                      fill=""
-                    />
-                  </svg>
-                </button>
+            {!isLoading && !accountData && isInstalled && (
+              <>
+                <div className="hidden flex-col items-start lg:flex">
+                  {networkIsLoading ? (
+                    <span className="text-sm">Loading...</span>
+                  ) : networkData !== targetNetwork ? (
+                    <>
+                      <span className="text-sm">Network: {networkData}</span>
+                      <span className="text-sm text-danger">
+                        Wrong network, please switch to {targetNetwork}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-sm text-primary">
+                      Network: {networkData}
+                    </span>
+                  )}
+                </div>
+              </>
+            )}
 
-                <input
-                  type="text"
-                  placeholder="Type to search..."
-                  className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
-                />
+            {!isLoading && !accountData && !isInstalled && (
+              <>
+              <div className="hidden flex-col items-start lg:flex">
+                <span className="text-sm text-danger">Metamask is not installed. Please install Metamask</span>
               </div>
-            </form>
+            </>
+            )}
           </div>
 
-          <div className="flex items-center gap-3 2xsm:gap-7">
+          <div className="ml-auto flex items-center gap-3 2xsm:gap-7">
             <ul className="flex items-center gap-2 2xsm:gap-4">
               {/* <!-- Dark Mode Toggler --> */}
               <DarkModeSwitcher />
               {/* <!-- Dark Mode Toggler --> */}
+              {!isLoading && accountData && (
+                <div className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-3 text-center font-medium text-white">
+                  Hello {isAdmin ? "Admin" : "User"}
+                </div>
+              )}
 
-              {/* <!-- Notification Menu Area --> */}
-              {/* <DropdownNotification /> */}
-              {/* <!-- Notification Menu Area --> */}
-
-              {/* <!-- Chat Notification Area --> */}
-              {/* <DropdownMessage /> */}
-              {/* <!-- Chat Notification Area --> */}
+              {!isLoading && !accountData && isInstalled && (
+                <Link
+                  href="#"
+                  className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-3 text-center font-medium text-white hover:bg-opacity-90"
+                  onClick={() => {
+                    connect();
+                  }}
+                >
+                  Connect Wallet
+                </Link>
+              )}
+              {!isLoading && !accountData && !isInstalled && (
+                <Link
+                  href="#"
+                  className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-3 text-center font-medium text-white hover:bg-opacity-90"
+                  onClick={() => {
+                    window.open("https://metamask.io/download/", "_blank");
+                  }}
+                >
+                  Install Wallet
+                </Link>
+              )}
             </ul>
-
-            {/* <!-- User Area --> */}
-            {/* <DropdownUser /> */}
-            {/* <div>
-              <h1>Hi {account.isAdmin && "Admin"}</h1>
-            </div> */}
-            <Walletbar
-              isAdmin={account.isAdmin}
-              isLoading={account.isLoading}
-              isInstalled={account.isInstalled}
-              account={account.data}
-              connect={account.connect}
-              network={network.data}
-              isSupported={network.isSupported}
-              targetNetwork={network.targetNetwork}
-              networkIsLoading={network.isLoading}
-            />
           </div>
         </div>
       </header>

@@ -11,6 +11,13 @@ import axios from "axios";
 import { useWeb3 } from "../providers/web3";
 import { toast } from "react-toastify";
 
+const CLASSESS = {
+  SUCCESS:
+    "w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
+  ERROR:
+    "w-full rounded border-[1.5px] border-danger bg-transparent px-5 py-3 text-black outline-none transition focus:border-danger active:border-danger disabled:cursor-default disabled:bg-whiter dark:border-form-danger dark:bg-form-input dark:text-white dark:focus:border-danger",
+};
+
 const ALLOW_FIELDS = [
   "project-name",
   "project-id",
@@ -31,8 +38,8 @@ const ALLOW_FIELDS = [
 
 const RegisterProjectForm: React.FC = () => {
   const { ethereum, projectContract } = useWeb3();
-  const [isFormValid, setIsFormValid] = useState(false);
   const [creditURI, setCreditURI] = useState<string>("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
   const [creditMeta, setCreditMeta] = useState<CreditMetadata>({
     "project-name": "",
     "project-id": "",
@@ -77,18 +84,7 @@ const RegisterProjectForm: React.FC = () => {
     };
 
     setCreditMeta(randomCreditMeta);
-    setIsFormValid(checkIfFormIsValid());
   };
-
-  const checkIfFormIsValid = () => {
-    return Object.values(creditMeta).every(
-      (value) => value !== "" && value !== null,
-    );
-  };
-
-  useEffect(() => {
-    setIsFormValid(checkIfFormIsValid());
-  }, [creditMeta]);
 
   const getSignedData = async () => {
     const messageToSign = await axios.get("/api/verify");
@@ -118,6 +114,12 @@ const RegisterProjectForm: React.FC = () => {
     }
 
     const file = e.target.files[0];
+
+    if (file.size > 1000000) {
+      toast.error("File size should not exceed 1 MB");
+      return; // Exit the function if file is too large
+    }
+
     const buffer = await file.arrayBuffer();
     const bytes = new Uint8Array(buffer);
 
@@ -154,30 +156,56 @@ const RegisterProjectForm: React.FC = () => {
   ) => {
     const { name, value } = e.target as HTMLInputElement | HTMLSelectElement;
     setCreditMeta({ ...creditMeta, [name]: value });
+
+    // Update field error status based on whether the input is empty
+    setFieldErrors((prev) => ({
+      ...prev,
+      [name]: !value, // Set to true if value is empty, false otherwise
+    }));
   };
 
   const uploadMetadata = async () => {
-    try {
-      const { signedData, account } = await getSignedData();
+    // Validate fields before proceeding
+    const errors: { [key: string]: boolean } = {};
+    Object.keys(creditMeta).forEach((key) => {
+      // Check if the field is allowed and if it's empty
+      if (
+        ALLOW_FIELDS.includes(key) &&
+        !creditMeta[key as keyof CreditMetadata]
+      ) {
+        errors[key] = true;
+      }
+    });
 
-      const promise = axios.post("/api/verify", {
-        address: account,
-        signature: signedData,
-        credit: creditMeta,
-      });
+    // Update state to reflect which fields are in error
+    setFieldErrors(errors);
 
-      const res = await toast.promise(promise, {
-        pending: "Uploading metadata...",
-        success: "Metadata uploaded successfully",
-        error: "Failed to upload metadata",
-      });
+    // Only proceed if there are no errors
+    if (Object.keys(errors).length === 0) {
+      try {
+        const { signedData, account } = await getSignedData();
 
-      const data = res.data as PinataRes;
-      setCreditURI(
-        `${process.env.NEXT_PUBLIC_PINATA_DOMAIN}/ipfs/${data.IpfsHash}`,
-      );
-    } catch (e: any) {
-      console.error(e.message);
+        const promise = axios.post("/api/verify", {
+          address: account,
+          signature: signedData,
+          credit: creditMeta,
+        });
+
+        const res = await toast.promise(promise, {
+          pending: "Uploading metadata...",
+          success: "Metadata uploaded successfully",
+          error: "Failed to upload metadata",
+        });
+
+        const data = res.data as PinataRes;
+        setCreditURI(
+          `${process.env.NEXT_PUBLIC_PINATA_DOMAIN}/ipfs/${data.IpfsHash}`,
+        );
+      } catch (e: any) {
+        console.error(e.message);
+      }
+    } else {
+      toast.error("Please fill in all required fields.");
     }
   };
 
@@ -257,7 +285,11 @@ const RegisterProjectForm: React.FC = () => {
                         onChange={handleChange}
                         type="text"
                         placeholder="Enter project ID"
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        className={
+                          fieldErrors["project-id"]
+                            ? CLASSESS.ERROR
+                            : CLASSESS.SUCCESS
+                        }
                       />
                     </div>
 
@@ -271,7 +303,11 @@ const RegisterProjectForm: React.FC = () => {
                         onChange={handleChange}
                         type="text"
                         placeholder="Enter vintage"
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        className={
+                          fieldErrors.vintage
+                            ? CLASSESS.ERROR
+                            : CLASSESS.SUCCESS
+                        }
                       />
                     </div>
                   </div>
@@ -286,7 +322,11 @@ const RegisterProjectForm: React.FC = () => {
                       onChange={handleChange}
                       type="text"
                       placeholder="Enter project name"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className={
+                        fieldErrors["project-name"]
+                          ? CLASSESS.ERROR
+                          : CLASSESS.SUCCESS
+                      }
                     />
                   </div>
 
@@ -300,7 +340,11 @@ const RegisterProjectForm: React.FC = () => {
                       onChange={handleChange}
                       type="text"
                       placeholder="Enter project developer"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className={
+                        fieldErrors["project-developer"]
+                          ? CLASSESS.ERROR
+                          : CLASSESS.SUCCESS
+                      }
                     />
                   </div>
 
@@ -314,7 +358,11 @@ const RegisterProjectForm: React.FC = () => {
                       onChange={handleChange}
                       type="text"
                       placeholder="Enter methodology"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className={
+                        fieldErrors.methodology
+                          ? CLASSESS.ERROR
+                          : CLASSESS.SUCCESS
+                      }
                     />
                   </div>
 
@@ -328,7 +376,9 @@ const RegisterProjectForm: React.FC = () => {
                       onChange={handleChange}
                       type="text"
                       placeholder="Enter region"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className={
+                        fieldErrors.region ? CLASSESS.ERROR : CLASSESS.SUCCESS
+                      }
                     />
                   </div>
 
@@ -342,13 +392,22 @@ const RegisterProjectForm: React.FC = () => {
                       onChange={handleChange}
                       type="text"
                       placeholder="Enter project type"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className={
+                        fieldErrors["project-type"]
+                          ? CLASSESS.ERROR
+                          : CLASSESS.SUCCESS
+                      }
                     />
                   </div>
 
-                  <SelectGroupStandard handleChange={handleChange} />
+                  <SelectGroupStandard
+                    handleChange={handleChange}
+                    hasError={!!fieldErrors["standard"]}
+                  />
 
-                  <CreditingPeriodStart />
+                  <CreditingPeriodStart
+                    hasError={!!fieldErrors["crediting-period-start"]}
+                  />
                   <CreditingPeriodEnd />
                   <IssuanceDate />
 
@@ -363,7 +422,11 @@ const RegisterProjectForm: React.FC = () => {
                       onChange={handleChange}
                       type="text"
                       placeholder="Enter credits serial number"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className={
+                        fieldErrors["credits-serial-number"]
+                          ? CLASSESS.ERROR
+                          : CLASSESS.SUCCESS
+                      }
                     />
                   </div>
 
@@ -378,14 +441,17 @@ const RegisterProjectForm: React.FC = () => {
                       onChange={handleChange}
                       type="text"
                       placeholder="Enter quantity of credits issued"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className={
+                        fieldErrors["quantity-issue"]
+                          ? CLASSESS.ERROR
+                          : CLASSESS.SUCCESS
+                      }
                     />
                   </div>
 
                   <div className="mb-4.5">
                     <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                      Registry reference{" "}
-                      <span className="text-meta-1">*</span>
+                      Registry reference <span className="text-meta-1">*</span>
                     </label>
                     <input
                       name="registry-reference-link"
@@ -393,7 +459,11 @@ const RegisterProjectForm: React.FC = () => {
                       onChange={handleChange}
                       type="text"
                       placeholder="Enter registry reference link"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className={
+                        fieldErrors["registry-reference-link"]
+                          ? CLASSESS.ERROR
+                          : CLASSESS.SUCCESS
+                      }
                     />
                   </div>
 
@@ -424,11 +494,8 @@ const RegisterProjectForm: React.FC = () => {
                   <button
                     type="button"
                     onClick={uploadMetadata}
-                    disabled={!isFormValid}
                     className={
-                      isFormValid
-                        ? "block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
-                        : "block w-full cursor-not-allowed rounded border border-bodydark bg-bodydark p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+                      "block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
                     }
                   >
                     Submit

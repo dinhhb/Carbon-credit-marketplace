@@ -4,10 +4,12 @@ import React, { ChangeEvent, useState } from "react";
 
 interface CreditMetaProps {
   handleChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  hasError: boolean;
 }
 
 const SelectGroupStandard: React.FC<CreditMetaProps> = ({
   handleChange,
+  hasError,
 }) => {
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
@@ -31,9 +33,9 @@ const SelectGroupStandard: React.FC<CreditMetaProps> = ({
             setSelectedOption(e.target.value);
             changeTextColor();
           }}
-          className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary ${
-            isOptionSelected ? "text-black dark:text-white" : ""
-          }`}
+          className={`relative z-20 w-full appearance-none rounded border  bg-transparent ${
+            hasError ? "border-danger dark:border-form-danger focus:border-danger active:border-danger dark:focus:border-danger" : "border-stroke dark:border-form-strokedark focus:border-primary active:border-primary dark:focus:border-primary" 
+          } px-5 py-3 outline-none transition  dark:bg-form-input`}
         >
           <option value="" disabled className="text-body dark:text-bodydark">
             Select standard
