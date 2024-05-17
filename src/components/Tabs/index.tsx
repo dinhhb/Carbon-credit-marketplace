@@ -1,8 +1,5 @@
 "use client";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import TabOne from "@/components/Tabs/TabOne";
-import TabTwo from "@/components/Tabs/TabTwo";
-import TabThree from "@/components/Tabs/TabThree";
 import MyCreditsTab from "./MyCreditsTab";
 import ManageProjectsTab from "./ManageProjectsTab";
 
@@ -19,12 +16,12 @@ const Tabs: React.FC<TabsProps> = ({ type }) => {
     case "manage-projects":
       tabComponent = <ManageProjectsTab />
       break;
-    default:
-      tabComponent = (
-        <>
-          <TabOne /> <TabTwo /> <TabThree />
-        </>
-      );
+    // default:
+    //   tabComponent = (
+    //     <>
+    //       <TabOne /> <TabTwo /> <TabThree />
+    //     </>
+    //   );
   }
 
   return (

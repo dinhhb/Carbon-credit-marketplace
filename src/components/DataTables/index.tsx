@@ -1,7 +1,5 @@
 "use client";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import DataTableOne from "@/components/DataTables/DataTableOne";
-import DataTableTwo from "@/components/DataTables/DataTableTwo";
 import React from "react";
 import MarketplaceDataTable from "./MarketplaceDataTable";
 
@@ -18,12 +16,12 @@ const DataTables: React.FC<DataTablesProps> = ({ type }) => {
         <MarketplaceDataTable />
       );
       break;
-    default:
-      dataTableComponent = (
-        <>
-          <DataTableOne /> <DataTableTwo />
-        </>
-      );
+    // default:
+    //   dataTableComponent = (
+    //     <>
+    //       <DataTableOne /> <DataTableTwo />
+    //     </>
+    //   );
   }
 
   return (
