@@ -1,4 +1,8 @@
 import { Web3Hooks, setupHooks } from "@/hooks/web3/setupHooks";
+import {
+  CarbonCreditAuditedEvent,
+  CarbonCreditCreatedEvent,
+} from "@/types/events";
 import { Web3Dependencies } from "@/types/hooks";
 import { MetaMaskInpageProvider } from "@metamask/providers";
 import { Contract, ethers, providers } from "ethers";
@@ -16,6 +20,8 @@ type Nullable<T> = {
 export type Web3State = {
   isLoading: boolean; // true while loading web3State
   hooks: Web3Hooks;
+  // createdEvents: CarbonCreditCreatedEvent[];
+  // auditedEvents: CarbonCreditAuditedEvent[];
 } & Nullable<Web3Dependencies>;
 
 export const createDefaultState = () => {
@@ -26,7 +32,9 @@ export const createDefaultState = () => {
     projectContract: null,
     marketContract: null,
     isLoading: true,
-    hooks: setupHooks({isLoading: true} as any),
+    hooks: setupHooks({ isLoading: true } as any),
+    // createdEvents: [],
+    // auditedEvents: [],
   };
 };
 
@@ -37,7 +45,14 @@ export const createWeb3State = ({
   projectContract,
   marketContract,
   isLoading,
-}: Web3Dependencies) => {
+  // createdEvents,
+  // auditedEvents,
+}: Web3Dependencies
+//  & {
+  // createdEvents: CarbonCreditCreatedEvent[];
+  // auditedEvents: CarbonCreditAuditedEvent[];
+// }
+) => {
   return {
     ethereum,
     provider,
@@ -45,6 +60,7 @@ export const createWeb3State = ({
     projectContract,
     marketContract,
     isLoading,
+    // createdEvents,
     hooks: setupHooks({
       ethereum,
       provider,
@@ -52,7 +68,9 @@ export const createWeb3State = ({
       projectContract,
       marketContract,
       isLoading,
+      // createdEvents,
     }),
+    // auditedEvents,
   };
 };
 

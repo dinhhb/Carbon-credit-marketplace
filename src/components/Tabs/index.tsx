@@ -1,10 +1,12 @@
 "use client";
+
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import MyCreditsTab from "./MyCreditsTab";
 import ManageProjectsTab from "./ManageProjectsTab";
+import ActivitiesTab from "./ActivitiesTab";
 
 interface TabsProps {
-  type: "my-credits" | "manage-projects";
+  type: "my-credits" | "manage-projects" | "activities";
 }
 
 const Tabs: React.FC<TabsProps> = ({ type }) => {
@@ -14,19 +16,16 @@ const Tabs: React.FC<TabsProps> = ({ type }) => {
       tabComponent = <MyCreditsTab />;
       break;
     case "manage-projects":
-      tabComponent = <ManageProjectsTab />
+      tabComponent = <ManageProjectsTab />;
       break;
-    // default:
-    //   tabComponent = (
-    //     <>
-    //       <TabOne /> <TabTwo /> <TabThree />
-    //     </>
-    //   );
+    case "activities":
+      tabComponent = <ActivitiesTab />;
+      break;
   }
 
   return (
     <>
-      <Breadcrumb pageName={type === "my-credits" ? "My credits" : "Manage Projects"} />
+      <Breadcrumb pageName={type === "my-credits" ? "My Credits" : type === "manage-projects" ? "Manage Projects" : "Activities"} />
       <div className="flex flex-col gap-9">
         {tabComponent}
       </div>

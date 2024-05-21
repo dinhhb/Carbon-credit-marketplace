@@ -47,9 +47,9 @@ contract CarbonMarket is CarbonBase {
         emit CarbonCreditListed(
             tokenId,
             credit.initialOwner,
-            ApprovalStatus.Approved,
+            _token.getTokenSupply(tokenId),
             price,
-            true
+            block.timestamp
         );
     }
 
@@ -108,7 +108,13 @@ contract CarbonMarket is CarbonBase {
             _listedTokens--;
         }
 
-        emit TokenTransferred(tokenId, credit.initialOwner, msg.sender, amount);
+        emit CarbonCreditPurchased(
+            tokenId,
+            credit.initialOwner,
+            msg.sender,
+            amount,
+            block.timestamp
+        );
     }
 
     function retireCredits(uint256 tokenId, uint256 amount) public {
@@ -123,6 +129,8 @@ contract CarbonMarket is CarbonBase {
         );
 
         _token.burn(msg.sender, tokenId, amount);
+
+        emit CarbonCreditRetired(tokenId, msg.sender, amount, block.timestamp);
     }
 
     function getTokenAddress() public view returns (address) {

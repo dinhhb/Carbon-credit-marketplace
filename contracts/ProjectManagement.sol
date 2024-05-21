@@ -27,9 +27,8 @@ contract ProjectManagement is Ownable, CarbonBase {
         emit CarbonCreditCreated(
             currentId,
             msg.sender,
-            ApprovalStatus.Pending,
-            0,
-            false
+            tokenSupply,
+            block.timestamp
         );
     }
 
@@ -42,6 +41,13 @@ contract ProjectManagement is Ownable, CarbonBase {
         );
 
         _token.updateStatus(tokenId, ApprovalStatus.Approved);
+        emit CarbonCreditAudited(
+            tokenId,
+            msg.sender,
+            credit.initialOwner,
+            ApprovalStatus.Approved,
+            block.timestamp
+        );
     }
 
     function declineProject(uint256 tokenId) public onlyOwner {
@@ -52,6 +58,13 @@ contract ProjectManagement is Ownable, CarbonBase {
             "Project cannot be declined"
         );
         _token.updateStatus(tokenId, ApprovalStatus.Declined);
+        emit CarbonCreditAudited(
+            tokenId,
+            msg.sender,
+            credit.initialOwner,
+            ApprovalStatus.Declined,
+            block.timestamp
+        );
     }
 
     function getTokenAddress() public view returns (address) {

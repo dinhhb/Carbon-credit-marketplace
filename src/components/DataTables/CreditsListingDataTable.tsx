@@ -8,45 +8,43 @@ import {
   usePagination,
   Column,
 } from "react-table";
-import ResubmitProjectModal from "../Modals/ResubmitProjectModal";
-import ListModal from "../Modals/ListModal";
 import { Credit } from "@/types/credit";
-import MyCreditInfoModal from "../Modals/MyCreditInfoModal";
-import { renderStatusButton } from "../common/StatusButton";
+import { CarbonCreditListedEvent } from "@/types/events";
 
 // table header
-const columns: Column<Credit>[] = [
+const columns: Column<CarbonCreditListedEvent>[] = [
   {
     Header: "Credit ID",
     accessor: "tokenId",
   },
   {
-    Header: "Project name",
-    accessor: (data) => data.metadata["project-name"],
-    Cell: ({ value }: { value: string }) =>
-      value.length > 25 ? `${value.substring(0, 25)}...` : value,
+    Header: "Credit Owner",
+    accessor: "initialOwner",
   },
   {
-    Header: "Quantity Issued",
-    accessor: "quantity",
+    Header: "Amount",
+    accessor: "amount",
   },
   {
-    Header: "Status",
-    accessor: "approvalStatus",
-    Cell: ({ value }) => renderStatusButton(value),
+    Header: "Price",
+    accessor: "pricePerCredit",
+  },
+  {
+    Header: "Time",
+    accessor: "time",
+    Cell: ({ value }: { value: number }) =>
+      new Date(value * 1000).toLocaleString(), // Convert Unix timestamp to a readable date
   },
 ];
 
 type CreditListProps = {
-  credits: Credit[];
-  listCredit: (tokenId: number, price: number) => Promise<void>;
+  events: CarbonCreditListedEvent[];
 };
 
-const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({
-  listCredit,
-  credits,
+const CreditsListingDataTable: FunctionComponent<CreditListProps> = ({
+  events
 }) => {
-  const data = useMemo(() => credits, [credits]);
+  const data = useMemo(() => events, [events]);
 
   const tableInstance = useTable(
     {
@@ -157,15 +155,13 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({
                   </div>
                 </th>
               ))}
-              <th key={`extra-${headerGroupIndex}`}></th>
+              {/* <th key={`extra-${headerGroupIndex}`}></th> */}
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
           {page.map((row, rowIndex) => {
             prepareRow(row);
-            const status = row.original.approvalStatus;
-
             return (
               <tr {...row.getRowProps()} key={`row-${rowIndex}`}>
                 {row.cells.map((cell) => {
@@ -178,20 +174,19 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({
                     </td>
                   );
                 })}
-                <td key={`modal-${rowIndex}`}>
-                  <div className="flex">
-                    <div>
-                      <MyCreditInfoModal credit={row.original} />
-                    </div>
-                    {/* Conditionally render based on the status */}
-                    <div>
-                      {status === "2" && <ResubmitProjectModal />}
-                      {status === "1" && (
-                        <ListModal listCredit={listCredit} credit={row.original} />
-                      )}
-                    </div>
+                {/* <td key={`modal-${rowIndex}`}>
+                  <div className="flex space-x-2">
+                    <MyCreditInfoModal credit={row.original} />
+                    <ApproveProjectModal
+                      approveProject={approveProject}
+                      credit={row.original}
+                    />
+                    <DeclineProjectModal
+                      declineProject={declineProject}
+                      credit={row.original}
+                    />
                   </div>
-                </td>
+                </td> */}
               </tr>
             );
           })}
@@ -262,4 +257,4 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({
   );
 };
 
-export default MyUnlistedCreditsDataTable;
+export default CreditsListingDataTable;

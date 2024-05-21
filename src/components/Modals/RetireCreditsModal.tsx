@@ -130,7 +130,7 @@ const RetireCreditsModal: React.FC<CreditProps> = ({ retireCredits, credit }) =>
                 disabled={!amountRetire}
                 className={
                   amountRetire
-                    ? "block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+                    ? "block w-full rounded border border-danger bg-danger p-3 text-center font-medium text-white transition hover:bg-opacity-90"
                     : "block w-full cursor-not-allowed rounded border border-bodydark bg-bodydark p-3 text-center font-medium text-white transition hover:bg-opacity-90"
                 }
               >

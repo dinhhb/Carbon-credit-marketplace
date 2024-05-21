@@ -1,7 +1,9 @@
 "use client";
-import React, { useState, ReactNode } from "react";
+import React, { useState, ReactNode, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
+import { useWeb3 } from "../providers/web3";
+import { BigNumber } from "ethers";
 
 export default function DefaultLayout({
   children,

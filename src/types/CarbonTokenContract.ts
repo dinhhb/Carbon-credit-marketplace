@@ -56,19 +56,23 @@ export interface ContractCallOverrides {
 }
 export type CarbonTokenContractEvents =
   | 'ApprovalForAll'
+  | 'CarbonCreditAudited'
   | 'CarbonCreditCreated'
   | 'CarbonCreditListed'
+  | 'CarbonCreditPurchased'
+  | 'CarbonCreditRetired'
   | 'OwnershipTransferred'
-  | 'TokenTransferred'
   | 'TransferBatch'
   | 'TransferSingle'
   | 'URI';
 export interface CarbonTokenContractEventsContext {
   ApprovalForAll(...parameters: any): EventFilter;
+  CarbonCreditAudited(...parameters: any): EventFilter;
   CarbonCreditCreated(...parameters: any): EventFilter;
   CarbonCreditListed(...parameters: any): EventFilter;
+  CarbonCreditPurchased(...parameters: any): EventFilter;
+  CarbonCreditRetired(...parameters: any): EventFilter;
   OwnershipTransferred(...parameters: any): EventFilter;
-  TokenTransferred(...parameters: any): EventFilter;
   TransferBatch(...parameters: any): EventFilter;
   TransferSingle(...parameters: any): EventFilter;
   URI(...parameters: any): EventFilter;
@@ -110,29 +114,42 @@ export interface ApprovalForAllEventEmittedResponse {
   operator: string;
   approved: boolean;
 }
+export interface CarbonCreditAuditedEventEmittedResponse {
+  tokenId: BigNumberish;
+  auditor: string;
+  projectOwner: string;
+  status: BigNumberish;
+  time: BigNumberish;
+}
 export interface CarbonCreditCreatedEventEmittedResponse {
   tokenId: BigNumberish;
   initialOwner: string;
-  status: BigNumberish;
-  pricePerCredit: BigNumberish;
-  isListed: boolean;
+  amount: BigNumberish;
+  creationTime: BigNumberish;
 }
 export interface CarbonCreditListedEventEmittedResponse {
   tokenId: BigNumberish;
   initialOwner: string;
-  status: BigNumberish;
+  amount: BigNumberish;
   pricePerCredit: BigNumberish;
-  isListed: boolean;
+  time: BigNumberish;
 }
-export interface OwnershipTransferredEventEmittedResponse {
-  previousOwner: string;
-  newOwner: string;
-}
-export interface TokenTransferredEventEmittedResponse {
+export interface CarbonCreditPurchasedEventEmittedResponse {
   tokenId: BigNumberish;
   from: string;
   to: string;
   amount: BigNumberish;
+  time: BigNumberish;
+}
+export interface CarbonCreditRetiredEventEmittedResponse {
+  tokenId: BigNumberish;
+  owner: string;
+  amount: BigNumberish;
+  time: BigNumberish;
+}
+export interface OwnershipTransferredEventEmittedResponse {
+  previousOwner: string;
+  newOwner: string;
 }
 export interface TransferBatchEventEmittedResponse {
   operator: string;

@@ -23,24 +23,39 @@ contract CarbonBase is ERC1155URIStorage, ERC1155Burnable, Ownable {
     event CarbonCreditCreated(
         uint256 tokenId,
         address initialOwner,
+        uint256 amount,
+        uint256 creationTime
+    );
+
+    event CarbonCreditAudited(
+        uint256 tokenId,
+        address auditor,
+        address projectOwner,
         ApprovalStatus status,
-        uint256 pricePerCredit,
-        bool isListed
+        uint256 time
     );
 
     event CarbonCreditListed(
         uint256 tokenId,
         address initialOwner,
-        ApprovalStatus status,
+        uint256 amount,
         uint256 pricePerCredit,
-        bool isListed
+        uint256 time
     );
 
-    event TokenTransferred(
-        uint256 indexed tokenId,
-        address indexed from,
-        address indexed to,
-        uint256 amount
+    event CarbonCreditPurchased(
+        uint256 tokenId,
+        address from,
+        address to,
+        uint256 amount,
+        uint256 time
+    );
+
+    event CarbonCreditRetired(
+        uint256 tokenId,
+        address owner,
+        uint256 amount,
+        uint256 time
     );
 
     constructor() ERC1155("") {}
