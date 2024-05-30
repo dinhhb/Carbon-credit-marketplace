@@ -1,16 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import "./ProjectManagement.sol";
+import "./AccountManagement.sol";
 import "./CarbonToken.sol";
 import "./CarbonBase.sol";
 
 contract CarbonMarket is CarbonBase {
     CarbonToken private _token;
+    AccountManagement private _account;
     uint256 private _listedTokens; // number of listed credits
 
-    constructor(address _tokenAddress) {
+    event Log(string message, uint256 value);
+
+    constructor(address _tokenAddress, address _accountAddress) {
         _token = CarbonToken(_tokenAddress);
+        _account = AccountManagement(_accountAddress);
     }
 
     function getListedTokensCount() public view returns (uint256) {
@@ -22,22 +26,15 @@ contract CarbonMarket is CarbonBase {
         CarbonCredit memory credit = _token.getCarbonCredit(tokenId);
 
         require(
-            _token.balanceOf(msg.sender, tokenId) > 0,
-            "You must own the token to list it."
+            _token.balanceOf(credit.initialOwner, tokenId) > 0,
+            "Invalid token balance"
         );
-        require(
-            msg.sender == credit.initialOwner,
-            "Only the initial owner can list the credits for sale."
-        );
-        require(
-            credit.status == ApprovalStatus.Approved,
-            "Credits must be approved before listing."
-        );
+        require(credit.status == ApprovalStatus.Approved, "Invalid status");
         require(!credit.isListed, "Already listed.");
-        require(price > 0, "Price must be greater than zero.");
+        require(price > 0, "Invalid price");
         require(
-            _token.isApprovedForAll(msg.sender, address(this)),
-            "Marketplace not authorized to manage this token."
+            _token.isApprovedForAll(credit.initialOwner, address(this)),
+            "Marketplace not yet authorized"
         );
 
         _token.updateListed(tokenId, true);
@@ -74,20 +71,21 @@ contract CarbonMarket is CarbonBase {
         CarbonCredit memory credit = _token.getCarbonCredit(tokenId);
 
         require(
-            credit.isListed,
-            "Token must be listed for sale before it can be purchased."
+            _account.checkAccountRegistered(msg.sender),
+            "Account not registered."
         );
+        require(credit.isListed, "Invalid isListed status.");
         require(
             _token.balanceOf(credit.initialOwner, tokenId) >= amount,
-            "Insufficient balance to purchase."
+            "Insufficient balance."
         );
         require(
             msg.value >= credit.pricePerCredit * amount,
-            "Insufficient funds to purchase."
+            "Insufficient funds."
         );
         require(
             _token.isApprovedForAll(credit.initialOwner, address(this)),
-            "Marketplace not authorized by token owner."
+            "Marketplace not yet authorized."
         );
 
         _token.safeTransferFrom(
@@ -108,6 +106,16 @@ contract CarbonMarket is CarbonBase {
             _listedTokens--;
         }
 
+        // Update account total credits
+        _account.setAccountTotalCredits(
+            credit.initialOwner,
+            _account.getAccountTotalCredits(credit.initialOwner) - amount
+        );
+        _account.setAccountTotalCredits(
+            msg.sender,
+            _account.getAccountTotalCredits(msg.sender) + amount
+        );
+
         emit CarbonCreditPurchased(
             tokenId,
             credit.initialOwner,
@@ -120,20 +128,37 @@ contract CarbonMarket is CarbonBase {
     function retireCredits(uint256 tokenId, uint256 amount) public {
         require(amount > 0, "Amount must be greater than zero.");
         require(
+            _account.checkAccountRegistered(msg.sender),
+            "Account not registered."
+        );
+
+        require(
             _token.balanceOf(msg.sender, tokenId) >= amount,
-            "Insufficient token balance to retire."
+            "Insufficient balance."
         );
         require(
             _token.isApprovedForAll(msg.sender, address(this)),
-            "Marketplace not authorized by token owner."
+            "Marketplace not yet authorized."
         );
 
         _token.burn(msg.sender, tokenId, amount);
 
-        emit CarbonCreditRetired(tokenId, msg.sender, amount, block.timestamp);
-    }
+        uint256 currentTotalCredits = _account.getAccountTotalCredits(
+            msg.sender
+        );
+        uint256 currentTotalRetire = _account.getAccountTotalRetire(msg.sender);
 
-    function getTokenAddress() public view returns (address) {
-        return address(_token);
+        emit Log("Current Total Credits", currentTotalCredits);
+        emit Log("Current Total Retire", currentTotalRetire);
+
+        require(currentTotalCredits >= amount, "Underflow detected.");
+
+        _account.setAccountTotalCredits(
+            msg.sender,
+            currentTotalCredits - amount
+        );
+        _account.setAccountTotalRetire(msg.sender, currentTotalRetire + amount);
+
+        emit CarbonCreditRetired(tokenId, msg.sender, amount, block.timestamp);
     }
 }

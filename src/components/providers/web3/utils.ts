@@ -1,8 +1,4 @@
 import { Web3Hooks, setupHooks } from "@/hooks/web3/setupHooks";
-import {
-  CarbonCreditAuditedEvent,
-  CarbonCreditCreatedEvent,
-} from "@/types/events";
 import { Web3Dependencies } from "@/types/hooks";
 import { MetaMaskInpageProvider } from "@metamask/providers";
 import { Contract, ethers, providers } from "ethers";
@@ -29,6 +25,7 @@ export const createDefaultState = () => {
     ethereum: null,
     provider: null,
     tokenContract: null,
+    accountContract: null,
     projectContract: null,
     marketContract: null,
     isLoading: true,
@@ -42,35 +39,29 @@ export const createWeb3State = ({
   ethereum,
   provider,
   tokenContract,
+  accountContract,
   projectContract,
   marketContract,
   isLoading,
-  // createdEvents,
-  // auditedEvents,
 }: Web3Dependencies
-//  & {
-  // createdEvents: CarbonCreditCreatedEvent[];
-  // auditedEvents: CarbonCreditAuditedEvent[];
-// }
 ) => {
   return {
     ethereum,
     provider,
     tokenContract,
+    accountContract,
     projectContract,
     marketContract,
     isLoading,
-    // createdEvents,
     hooks: setupHooks({
       ethereum,
       provider,
       tokenContract,
+      accountContract,
       projectContract,
       marketContract,
       isLoading,
-      // createdEvents,
     }),
-    // auditedEvents,
   };
 };
 

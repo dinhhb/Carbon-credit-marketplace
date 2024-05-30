@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import RegisterProjectForm from "@/components/Form";
+import RegisterProjectForm from "@/components/Form/RegisterProjectForm";
 
 export const metadata: Metadata = {
   title: "Register Project",

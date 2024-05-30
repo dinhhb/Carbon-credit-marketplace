@@ -1,27 +1,91 @@
 const CarbonToken = artifacts.require("CarbonToken");
-const ProjectManagement = artifacts.require("ProjectManagement");
+const AccountManagement = artifacts.require("AccountManagement");
 const CarbonMarket = artifacts.require("CarbonMarket");
+const ProjectManagement = artifacts.require("ProjectManagement");
 
 contract("CarbonMarket Suite", async accounts => {
   let tokenContract = null;
-  let projectContract = null;
+  let accountContract = null;
   let marketContract = null;
+  let projectContract = null;
   const tokenURI = "https://test.com";
   const admin = accounts[0];
-  const seller = accounts[1];
-  const buyer = accounts[2];
+  const auditor = accounts[1];
+  const seller = accounts[2];
+  const buyer = accounts[3];
+  const totalCredits = 150;
+  const price = web3.utils.toWei("0.001", "ether");
 
   beforeEach(async () => {
     tokenContract = await CarbonToken.new();
-    projectContract = await ProjectManagement.new(tokenContract.address);
-    marketContract = await CarbonMarket.new(tokenContract.address);
+    accountContract = await AccountManagement.new(tokenContract.address);
+    marketContract = await CarbonMarket.new(tokenContract.address, accountContract.address);
+    projectContract = await ProjectManagement.new(tokenContract.address, accountContract.address, marketContract.address);
+    await accountContract.setAuthorizedContract(marketContract.address);
+
+    await accountContract.registerAccount(seller, totalCredits, false, { from: admin });
+    await accountContract.registerAccount(auditor, 0, true, { from: admin });
+    await accountContract.registerAccount(buyer, 0, false, { from: admin });
   });
 
   describe("Deployment", async () => {
     it("should deploy all contracts", async () => {
       assert(tokenContract.address !== '');
-      assert(projectContract.address !== '');
+      assert(accountContract.address !== '');
       assert(marketContract.address !== '');
+    });
+  });
+
+  describe("Account Registration", async () => {
+    it("should register a new user account", async () => {
+      await accountContract.registerAccount(buyer, totalCredits, false, { from: admin });
+      const userAccounts = await accountContract.getAllAccounts();
+      assert.equal(userAccounts[0].addr, seller, "The seller account was not registered correctly");
+      assert.equal(userAccounts[1].addr, auditor, "The auditor account was not registered correctly");
+      assert.equal(userAccounts[2].addr, buyer, "The buyer account was not registered correctly");
+    });
+
+    it("should register user account with correct total credits", async () => {
+      await accountContract.registerAccount(seller, totalCredits, false, { from: admin });
+      const total = await accountContract.getAccountTotalCredits(seller);
+      assert.equal(total, totalCredits, "The total credits is not correct");
+    });
+
+    it("should get correct user account address", async () => {
+      await accountContract.registerAccount(buyer, totalCredits, false, { from: admin });
+      const user = await accountContract.getAccountByAddress(buyer);
+      assert.equal(user.addr, buyer, "The account address is not correct");
+    });
+
+    it("should register a new auditor", async () => {
+      const isAuditor = await accountContract.isAuditor(auditor);
+      assert.equal(isAuditor, true, "The auditor was not registered correctly");
+    });
+
+    it("should only allow the admin to register a new auditor", async () => {
+      try {
+        await accountContract.registerAccount(auditor, 0, true, { from: seller });
+        assert.fail("The transaction should have failed but didn't");
+      } catch (error) {
+        assert(error.message.includes("Ownable: caller is not the owner"), "Expected an error but got a different one");
+      }
+    });
+
+    it("should get the correct accounts", async () => {
+      await accountContract.registerAccount(accounts[4], 0, true, { from: admin });
+      const allAccounts = await accountContract.getAllAccounts();
+      assert.equal(allAccounts.length, 4, "The number of accounts is not correct");
+      assert.equal(allAccounts[0].addr, seller, "The seller account was not registered correctly");
+      assert.equal(allAccounts[1].addr, auditor, "The auditor account was not registered correctly");
+      assert.equal(allAccounts[2].addr, buyer, "The buyer account was not registered correctly");
+      assert.equal(allAccounts[3].addr, accounts[4], "The new account was not registered correctly");
+    });
+
+    it("should remove an account", async () => {
+      await accountContract.registerAccount(accounts[4], 0, true, { from: admin });
+      await accountContract.removeAccount(accounts[4], { from: admin });
+      const allAccounts = await accountContract.getAllAccounts();
+      assert.equal(allAccounts.length, 3, "The number of accounts is not correct");
     });
   });
 
@@ -29,80 +93,83 @@ contract("CarbonMarket Suite", async accounts => {
     const tokenSupply = 100;
 
     it("should register a new carbon credit project", async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
       const carbonCredit = await tokenContract.getCarbonCredit(1);
-      // console.log(carbonCredit);
 
       assert.equal(Number(carbonCredit.tokenId), 1, "Token ID is not correct");
       assert.equal(carbonCredit.initialOwner, seller, "Owner is not correct");
       assert.equal(Number(carbonCredit.status), 0, "Status is not correct");
-      assert.equal(Number(carbonCredit.pricePerCredit), 0, "Price per credit is not correct");
+      assert.equal(Number(carbonCredit.pricePerCredit), price, "Price per credit is not correct");
       assert.equal(carbonCredit.isListed, false, "Is listed is not correct");
     });
 
-    it("should mint tokens correctly", async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      const initialBalance = await tokenContract.balanceOf(seller, 1);
-      assert.equal(initialBalance.toNumber(), tokenSupply, "The initial balance is not correct");
-    });
-
     it("first token should point to the correct URI", async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
       const uri = await tokenContract.uri(1);
       assert.equal(uri, tokenURI, "The URI of the token does not match the expected value");
     }
     );
+
+    it("should revert when token supply exceeds total credits", async () => {
+      try {
+        await projectContract.registerProject(totalCredits + 1, tokenURI, price, { from: seller });
+        assert.fail("The transaction should have failed but didn't");
+      } catch (error) {
+        assert(error.message.includes("Token supply invalid"), "Expected an error but got a different one");
+      }
+    });
+
   });
 
   describe("Project Approval", async () => {
     const tokenSupply = 100;
 
-    it("should approve a carbon credit project", async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(1, { from: admin });
-      const carbonCredit = await tokenContract.getCarbonCredit(1);
-      // console.log(carbonCredit);
+    it("should mint tokens correctly", async () => {
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
+      const initialBalance = await tokenContract.balanceOf(seller, 1);
+      assert.equal(initialBalance.toNumber(), tokenSupply, "The initial balance is not correct");
+    });
 
+    it("should approve a carbon credit project", async () => {
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
+      const carbonCredit = await tokenContract.getCarbonCredit(1);
       assert.equal(Number(carbonCredit.status), 1, "Status is not correct");
     });
 
-    it("should only allow the owner to approve a project", async () => {
-      await projectContract.registerProject(tokenSupply, { from: accounts[1] });
-
+    it("should only allow the auditor to approve a project", async () => {
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
       try {
-        await projectContract.approveProject(1, { from: accounts[1] });
+        await projectContract.approveProject(1, { from: admin }); // Wrong case
         assert.fail("The transaction should have failed but didn't");
       } catch (error) {
-        assert(error.message.includes("Ownable: caller is not the owner"), "Expected an error but got a different one");
+        assert(error.message.includes("Invalid auditor"), "Expected an error but got a different one");
       }
     });
-  });
 
+    it("should list credits for sale", async () => {
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
+      const credit = await tokenContract.getCarbonCredit(1);
+
+      assert.equal(credit.isListed, true, "The credit is not listed for sale.");
+      assert.equal(Number(credit.pricePerCredit), price, "The price per credit is not correct.");
+    });
+  });
 
   describe("Project Declination", async () => {
     const tokenSupply = 100;
 
     it("should decline the project", async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.declineProject(1);
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await projectContract.declineProject(1, { from: auditor });
       const credit = await tokenContract.getCarbonCredit(1);
       assert.equal(Number(credit.status), 2, "The project status does not match the expected value");
-    });
-  });
-
-  describe("Listing Credits for Sale", async () => {
-    const tokenSupply = 100;
-    const salePrice = 10; // Define the sale price for the credit
-
-    it("should list credits for sale", async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(1, { from: admin });
-      await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
-      await marketContract.listCreditsForSale(1, salePrice, { from: seller });
-      const credit = await tokenContract.getCarbonCredit(1);
-
-      assert.equal(credit.isListed, true, "The credit is not listed for sale.");
-      assert.equal(Number(credit.pricePerCredit), salePrice, "The price per credit is not correct.");
     });
   });
 
@@ -110,8 +177,9 @@ contract("CarbonMarket Suite", async accounts => {
     const tokenSupply = 100;
 
     beforeEach(async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(1, { from: admin });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
     });
 
     it("should get one credit created", async () => {
@@ -139,10 +207,9 @@ contract("CarbonMarket Suite", async accounts => {
     const tokenSupply = 100;
 
     it("should get the correct count of listed tokens", async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(1, { from: admin });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
       await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
-      await marketContract.listCreditsForSale(1, 10, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
       const count = await marketContract.getListedTokensCount();
       assert.equal(Number(count), 1, "The count of listed tokens does not match the expected value");
     });
@@ -154,10 +221,10 @@ contract("CarbonMarket Suite", async accounts => {
     const buyAmount = 50;
 
     beforeEach(async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(1, { from: admin });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
       await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
-      await marketContract.listCreditsForSale(1, salePrice, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
+
     });
 
     it("should allow a user to buy credits", async () => {
@@ -178,7 +245,7 @@ contract("CarbonMarket Suite", async accounts => {
         await marketContract.buyCredits(1, tokenSupply + 1, { from: buyer, value: salePrice * (tokenSupply + 1) });
         assert.fail("The transaction should have failed but didn't");
       } catch (error) {
-        assert(error.message.includes("Insufficient balance to purchase."), "Expected an error but got a different one");
+        assert(error.message.includes("Insufficient balance."), "Expected an error but got a different one");
       }
     });
 
@@ -187,7 +254,7 @@ contract("CarbonMarket Suite", async accounts => {
         await marketContract.buyCredits(1, buyAmount, { from: buyer, value: salePrice * buyAmount - web3.utils.toWei("0.0001", "ether") });
         assert.fail("The transaction should have failed but didn't");
       } catch (error) {
-        assert(error.message.includes("Insufficient funds to purchase."), "Expected an error but got a different one");
+        assert(error.message.includes("Insufficient funds."), "Expected an error but got a different one");
       }
     });
 
@@ -229,18 +296,25 @@ contract("CarbonMarket Suite", async accounts => {
     it("should transfer Ether to the seller when credits are bought", async () => {
       const initialSellerEthBalance = web3.utils.toBN(await web3.eth.getBalance(seller));
       const transactionValue = web3.utils.toBN(salePrice * buyAmount);
-    
-      // Perform the purchase transaction
-      const receipt = await marketContract.buyCredits(1, buyAmount, { from: buyer, value: transactionValue });
-    
+      await marketContract.buyCredits(1, buyAmount, { from: buyer, value: transactionValue });
       const finalSellerEthBalance = web3.utils.toBN(await web3.eth.getBalance(seller));
-    
-      // Calculate expected balance after the transaction
       const expectedSellerBalance = initialSellerEthBalance.add(transactionValue);
-    
       assert.equal(finalSellerEthBalance.toString(), expectedSellerBalance.toString(), "Ether not correctly transferred to the seller.");
     });
-    
+
+    it("should decrease total credits of seller after buying", async () => {
+      const initialTotal = await accountContract.getAccountTotalCredits(seller);
+      await marketContract.buyCredits(1, buyAmount, { from: buyer, value: salePrice * buyAmount });
+      const finalTotal = await accountContract.getAccountTotalCredits(seller);
+      assert.equal(finalTotal.toNumber(), initialTotal.toNumber() - buyAmount, "The total credits is not correct");
+    });
+
+    it("should increase total credits of buyer after buying", async () => {
+      const initialTotal = await accountContract.getAccountTotalCredits(buyer);
+      await marketContract.buyCredits(1, buyAmount, { from: buyer, value: salePrice * buyAmount });
+      const finalTotal = await accountContract.getAccountTotalCredits(buyer);
+      assert.equal(finalTotal.toNumber(), initialTotal.toNumber() + buyAmount, "The total credits is not correct");
+    });
   });
 
 
@@ -248,15 +322,15 @@ contract("CarbonMarket Suite", async accounts => {
     const tokenSupply = 100;
 
     beforeEach(async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(1, { from: admin });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
     });
 
     it("should get one credit created", async () => {
       const totalSupply = await tokenContract.getTotalTokensCount();
       assert.equal(totalSupply, 1, "The total supply does not match the expected value");
     });
-
 
     it("should get the correct credit by index", async () => {
       const creditId = await tokenContract.getTokenByIndex(0);
@@ -275,25 +349,22 @@ contract("CarbonMarket Suite", async accounts => {
 
   describe("Getting All Listed Credits", async () => {
     const tokenSupply = 100;
-    const salePrice = web3.utils.toWei("0.001", "ether");
 
     beforeEach(async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(1, { from: admin });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
       await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
-      await marketContract.listCreditsForSale(1, salePrice, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
 
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.declineProject(2, { from: admin });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await projectContract.declineProject(2, { from: auditor });
 
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(3, { from: admin });
-      // await _contract.listCreditsForSale(3, salePrice);
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await projectContract.approveProject(3, { from: auditor });
     });
 
     it("should get all listed credits", async () => {
       const listedCredits = await marketContract.getAllListedCredits();
-      assert.equal(listedCredits.length, 1, "The number of listed credits does not match the expected value");
+      assert.equal(listedCredits.length, 2, "The number of listed credits does not match the expected value");
 
       for (let i = 0; i < listedCredits.length; i++) {
         // console.log(listedCredits[i]);
@@ -305,21 +376,17 @@ contract("CarbonMarket Suite", async accounts => {
   describe("Getting Owned Credits", async () => {
     const tokenSupply = 100;
     const buyAmount = 10;
-    const salePrice = web3.utils.toWei("0.001", "ether");
 
     beforeEach(async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(1, { from: admin });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
       await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
-      await marketContract.listCreditsForSale(1, salePrice, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
 
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(2, { from: admin });
-      await marketContract.listCreditsForSale(2, salePrice, { from: seller });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await projectContract.approveProject(2, { from: auditor });
 
-      // Buyer purchases some credits
-      await marketContract.buyCredits(1, buyAmount, { from: buyer, value: salePrice * buyAmount });
-      await marketContract.buyCredits(2, buyAmount, { from: buyer, value: salePrice * buyAmount });
+      await marketContract.buyCredits(1, buyAmount, { from: buyer, value: price * buyAmount });
+      await marketContract.buyCredits(2, buyAmount, { from: buyer, value: price * buyAmount });
     });
 
     it("should get the correct owned credits for the buyer", async () => {
@@ -344,15 +411,11 @@ contract("CarbonMarket Suite", async accounts => {
 
   describe("Retiring Credits", async () => {
     const tokenSupply = 100;
-    const salePrice = web3.utils.toWei("0.001", "ether");
 
     beforeEach(async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(1, { from: admin });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
       await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
-
-      // await _contract.registerProject(tokenSupply, { from: accounts[1] });
-      // await _contract.approveProject(2, { from: accounts[0] });
+      await projectContract.approveProject(1, { from: auditor });
     });
 
     it("should allow a user to retire their credits if they have sufficient balance", async () => {
@@ -373,7 +436,7 @@ contract("CarbonMarket Suite", async accounts => {
         await marketContract.retireCredits(2, retireAmount, { from: seller });
         assert.fail("The transaction should have failed but didn't.");
       } catch (error) {
-        assert.include(error.message, "Insufficient token balance to retire", "Expected token balance error but got another error.");
+        assert.include(error.message, "Insufficient balance", "Expected token balance error but got another error.");
       }
     });
 
@@ -385,14 +448,14 @@ contract("CarbonMarket Suite", async accounts => {
         await marketContract.retireCredits(2, retireAmount, { from: buyer });
         assert.fail("The transaction should have failed but didn't.");
       } catch (error) {
-        assert.include(error.message, "Insufficient token balance to retire", "Expected token balance error but got another error.");
+        assert.include(error.message, "Insufficient balance", "Expected token balance error but got another error.");
       }
     });
 
     it("should allow buyer to retire their credits", async () => {
       const retireAmount = 10;
-      await marketContract.listCreditsForSale(1, salePrice, { from: seller });
-      await marketContract.buyCredits(1, retireAmount, { from: buyer, value: salePrice * retireAmount });
+
+      await marketContract.buyCredits(1, retireAmount, { from: buyer, value: price * retireAmount });
       const balanceBefore = await tokenContract.balanceOf(buyer, 1);
 
       await tokenContract.setApprovalForAll(marketContract.address, true, { from: buyer });
@@ -401,6 +464,26 @@ contract("CarbonMarket Suite", async accounts => {
       const balanceAfter = await tokenContract.balanceOf(buyer, 1);
       assert.equal(balanceAfter.toNumber(), balanceBefore.toNumber() - retireAmount, "The tokens were not retired correctly.");
     });
+
+    it("should decrease the total credits of the buyer after retiring", async () => {
+      const retireAmount = 10;
+      await marketContract.buyCredits(1, retireAmount, { from: buyer, value: price * retireAmount });
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: buyer });
+      const totalCreditsBefore = await accountContract.getAccountTotalCredits(buyer);
+      await marketContract.retireCredits(1, retireAmount, { from: buyer });
+      const totalCreditsAfter = await accountContract.getAccountTotalCredits(buyer);
+      assert.equal(totalCreditsAfter.toNumber(), totalCreditsBefore.toNumber() - retireAmount, "The total credits of the buyer were not updated correctly.");
+    });
+
+    it("should increase the total retired credits of the seller after retiring", async () => {
+      const retireAmount = 10;
+      await marketContract.buyCredits(1, retireAmount, { from: buyer, value: price * retireAmount });
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: buyer });
+      const totalRetiredBefore = await accountContract.getAccountTotalRetire(seller);
+      await marketContract.retireCredits(1, retireAmount, { from: seller });
+      const totalRetiredAfter = await accountContract.getAccountTotalRetire(seller);
+      assert.equal(totalRetiredAfter.toNumber(), totalRetiredBefore.toNumber() + retireAmount, "The total retired credits of the seller were not updated correctly.");
+    });
   });
 
   describe("All Tokens Enumeration Removal", async () => {
@@ -408,10 +491,9 @@ contract("CarbonMarket Suite", async accounts => {
     const retireAmount = 100;
 
     beforeEach(async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(1, { from: admin });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
       await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
-
+      await projectContract.approveProject(1, { from: auditor });
     });
 
     it("should remove the token from all tokens enumeration when all units are burned", async () => {
@@ -430,10 +512,9 @@ contract("CarbonMarket Suite", async accounts => {
     const tokenId = 1;
 
     beforeEach(async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(tokenId, { from: admin });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
       await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
-
+      await projectContract.approveProject(tokenId, { from: auditor });
     });
 
     it("should return the correct initial token supply", async () => {
@@ -452,7 +533,7 @@ contract("CarbonMarket Suite", async accounts => {
         await marketContract.retireCredits(tokenId, tokenSupply + 1, { from: seller });
         assert.fail("The transaction should have failed but didn't.");
       } catch (error) {
-        assert.include(error.message, "Insufficient token balance to retire", "Expected token balance error but got another error.");
+        assert.include(error.message, "Insufficient balance", "Expected token balance error but got another error.");
       }
     });
   });
@@ -460,12 +541,11 @@ contract("CarbonMarket Suite", async accounts => {
   describe("Token Ownership Tracking", async () => {
     const tokenSupply = 100;
     const buyAmount = 10;
-    const salePrice = web3.utils.toWei("0.001", "ether");
 
     beforeEach(async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(1, { from: admin });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
       await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
     });
 
     it("should track new owner upon minting", async () => {
@@ -475,16 +555,14 @@ contract("CarbonMarket Suite", async accounts => {
     });
 
     it("should add a new owner upon transfer", async () => {
-      await marketContract.listCreditsForSale(1, salePrice, { from: seller });
-      await marketContract.buyCredits(1, buyAmount, { from: buyer, value: salePrice * buyAmount });
+      await marketContract.buyCredits(1, buyAmount, { from: buyer, value: price * buyAmount });
       let owners = await tokenContract.getTokenOwners(1);
       assert.equal(owners.includes(buyer), true, "Account 1 should be listed as an owner after transfer");
       assert.equal(await tokenContract.getOwnerCount(1), 2, "Owner count should be 2");
     });
 
     it("should remove owner when all their tokens are transferred", async () => {
-      await marketContract.listCreditsForSale(1, salePrice, { from: seller });
-      await marketContract.buyCredits(1, tokenSupply, { from: buyer, value: salePrice * tokenSupply });
+      await marketContract.buyCredits(1, tokenSupply, { from: buyer, value: price * tokenSupply });
       let owners = await tokenContract.getTokenOwners(1);
       // console.log(owners);
       assert.equal(owners.includes(seller), false, "Account 0 should no longer be listed as an owner after transferring all tokens");
@@ -509,21 +587,18 @@ contract("CarbonMarket Suite", async accounts => {
   describe("Token balance after buying", async () => {
     const tokenSupply = 100;
     const buyAmount = 10;
-    const salePrice = web3.utils.toWei("0.001", "ether");
 
     beforeEach(async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, { from: seller });
-      await projectContract.approveProject(1, { from: admin });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
       await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
-      await marketContract.listCreditsForSale(1, salePrice, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
     });
 
     it("should return the correct balance of the buyer after buying", async () => {
       const initialBalance = await tokenContract.balanceOf(buyer, 1);
-      await marketContract.buyCredits(1, buyAmount, { from: buyer, value: salePrice * buyAmount });
+      await marketContract.buyCredits(1, buyAmount, { from: buyer, value: price * buyAmount });
       const finalBalance = await tokenContract.balanceOf(buyer, 1);
       assert.equal(finalBalance.toNumber(), initialBalance.toNumber() + buyAmount, "The balance of the buyer is not correct after buying");
     });
-  }
-  );
+  });
 });

@@ -32,6 +32,14 @@ contract CarbonToken is CarbonBase {
         _setURI(tokenId, newURI);
     }
 
+    function setTokenSupply(uint256 tokenId, uint256 supply) public {
+        _idToTokenSupply[tokenId] = supply;
+    }
+
+    function getTokenSupply(uint256 tokenId) public view returns (uint256) {
+        return _idToTokenSupply[tokenId];
+    }
+
     function getTokenSold(uint256 tokenId) public view returns (uint256) {
         return _tokenSold[tokenId];
     }
@@ -84,12 +92,12 @@ contract CarbonToken is CarbonBase {
         _idToCarbonCredit[tokenId].isListed = isListed;
     }
 
-    function getTokenSupply(uint256 tokenId) public view returns (uint256) {
-        return _idToTokenSupply[tokenId];
-    }
-
     function getOwnedTokensCount(address owner) public view returns (uint256) {
         return _ownerToTokenIds[owner].length;
+    }
+
+    function getAddTokenToAllTokensEnumeration(uint256 tokenId) public {
+        _addTokenToAllTokensEnumeration(tokenId);
     }
 
     function getOwnerTokenByIndex(
@@ -147,11 +155,11 @@ contract CarbonToken is CarbonBase {
 
         for (uint256 i = 0; i < ids.length; i++) {
             uint256 tokenId = ids[i];
-            if (from == address(0)) {
-                // This implies the token is being minted
-                _addTokenToAllTokensEnumeration(tokenId);
-                _idToTokenSupply[tokenId] = amounts[i];
-            }
+            // if (from == address(0)) {
+            //     // This implies the token is being minted
+            //     _addTokenToAllTokensEnumeration(tokenId);
+            //     _idToTokenSupply[tokenId] = amounts[i];
+            // }
             if (from != address(0) && balanceOf(from, tokenId) == amounts[i]) {
                 // checking before transfer
                 // This implies the sender is transferring all their units of this token type

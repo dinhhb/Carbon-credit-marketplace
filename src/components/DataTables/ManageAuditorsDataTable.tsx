@@ -8,36 +8,34 @@ import {
   usePagination,
   Column,
 } from "react-table";
-import OwnersModal from "../Modals/OwnersModal";
-import { Credit } from "@/types/credit";
 import MyCreditInfoModal from "../Modals/MyCreditInfoModal";
+import { Account } from "@/types/account";
+import ConfirmRemoveAccountModal from "../Modals/ConfirmRemoveAccountModal";
 
 // table header
-const columns: Column<Credit>[] = [
+const columns: Column<Account>[] = [
   {
-    Header: "Credit ID",
-    accessor: "tokenId",
+    Header: "Address",
+    accessor: "address",
   },
   {
-    Header: "Project name",
-    accessor: (data) => data.metadata.projectName,
-    Cell: ({ value }: { value: string }) =>
-      value.length > 25 ? `${value.substring(0, 25)}...` : value,
-  },
-  {
-    Header: "Quantity",
-    accessor: "quantity",
+    Header: "Registered At",
+    accessor: "registerdAt",
+    Cell: ({ value }: { value: number }) =>
+      new Date(value * 1000).toLocaleString(), // Convert Unix timestamp to a readable date
   },
 ];
 
-type CreditListProps = {
-  credits: Credit[];
+type AccountListProps = {
+  accounts: Account[];
+  removeAccount: (address: string) => Promise<void>;
 };
 
-const ManageDeclinedProjectsDataTable: FunctionComponent<CreditListProps> = ({
-  credits,
+const ManageAuditorsDataTable: FunctionComponent<AccountListProps> = ({
+  accounts,
+  removeAccount,
 }) => {
-  const data = useMemo(() => credits, [credits]);
+  const data = useMemo(() => accounts, [accounts]);
 
   const tableInstance = useTable(
     {
@@ -170,7 +168,7 @@ const ManageDeclinedProjectsDataTable: FunctionComponent<CreditListProps> = ({
                 <td key={`modal-${rowIndex}`}>
                   <div className="flex">
                     <div>
-                      <MyCreditInfoModal credit={row.original} />
+                      <ConfirmRemoveAccountModal account={row.original} removeAccount={removeAccount}/>
                     </div>
                   </div>
                 </td>
@@ -244,4 +242,4 @@ const ManageDeclinedProjectsDataTable: FunctionComponent<CreditListProps> = ({
   );
 };
 
-export default ManageDeclinedProjectsDataTable;
+export default ManageAuditorsDataTable;

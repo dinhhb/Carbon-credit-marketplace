@@ -14,6 +14,7 @@ import {
 import { ethers } from "ethers";
 import { MetaMaskInpageProvider } from "@metamask/providers";
 import { CarbonTokenContract } from "@/types/CarbonTokenContract";
+import { AccountManagementContract } from "@/types/AccountManagementContract";
 import { ProjectManagementContract } from "@/types/ProjectManagementContract";
 import { CarbonMarketContract } from "@/types/CarbonMarketContract";
 
@@ -55,8 +56,9 @@ const Web3Provider: FunctionComponent<Props> = ({ children }) => {
         );
         const signer = provider.getSigner();
         const tokenContract = await loadContract("CarbonToken", provider);
-        const projectContract = await loadContract("ProjectManagement", provider);
+        const accountContract = await loadContract("AccountManagement", provider);
         const marketContract = await loadContract("CarbonMarket", provider);
+        const projectContract = await loadContract("ProjectManagement", provider);
 
         setGlobalListener(window.ethereum);
         setWeb3Api(
@@ -64,6 +66,7 @@ const Web3Provider: FunctionComponent<Props> = ({ children }) => {
             ethereum: window.ethereum,
             provider,
             tokenContract: tokenContract.connect(signer) as unknown as CarbonTokenContract,
+            accountContract: accountContract.connect(signer) as unknown as AccountManagementContract,
             projectContract: projectContract.connect(signer) as unknown as ProjectManagementContract,
             marketContract: marketContract.connect(signer) as unknown as CarbonMarketContract,
             isLoading: false,

@@ -1,5 +1,4 @@
 "use client";
-import { CreditMetadata } from "@/types/credit";
 import React, { ChangeEvent, useState } from "react";
 
 interface CreditMetaProps {
@@ -43,12 +42,7 @@ const SelectGroupStandard: React.FC<CreditMetaProps> = ({
           <option value="VCS" className="text-body dark:text-bodydark">
             Verified Carbon Standard (VCS)
           </option>
-          <option value="GS" className="text-body dark:text-bodydark">
-            Gold Standard (GS)
-          </option>
-          {/* <option value="Canada" className="text-body dark:text-bodydark">
-            Canada
-          </option> */}
+
         </select>
 
         <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">

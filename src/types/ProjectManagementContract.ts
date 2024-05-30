@@ -94,8 +94,7 @@ export type ProjectManagementContractMethodNames =
   | 'uri'
   | 'registerProject'
   | 'approveProject'
-  | 'declineProject'
-  | 'getTokenAddress';
+  | 'declineProject';
 export interface ApprovalForAllEventEmittedResponse {
   account: string;
   operator: string;
@@ -163,9 +162,13 @@ export interface ProjectManagementContract {
    * StateMutability: nonpayable
    * Type: constructor
    * @param _tokenAddress Type: address, Indexed: false
+   * @param _accountAddress Type: address, Indexed: false
+   * @param _marketAddress Type: address, Indexed: false
    */
   'new'(
     _tokenAddress: string,
+    _accountAddress: string,
+    _marketAddress: string,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
   /**
@@ -344,10 +347,12 @@ export interface ProjectManagementContract {
    * Type: function
    * @param tokenSupply Type: uint256, Indexed: false
    * @param tokenURI Type: string, Indexed: false
+   * @param price Type: uint256, Indexed: false
    */
   registerProject(
     tokenSupply: BigNumberish,
     tokenURI: string,
+    price: BigNumberish,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
   /**
@@ -372,11 +377,4 @@ export interface ProjectManagementContract {
     tokenId: BigNumberish,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   */
-  getTokenAddress(overrides?: ContractCallOverrides): Promise<string>;
 }

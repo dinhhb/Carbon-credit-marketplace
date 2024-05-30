@@ -4,16 +4,16 @@ import { SWRResponse } from "swr";
 import { CarbonMarketContract } from "./CarbonMarketContract";
 import { CarbonTokenContract } from "./CarbonTokenContract";
 import { ProjectManagementContract } from "./ProjectManagementContract";
-import { CarbonCreditCreatedEvent } from "./events";
+import { AccountManagementContract } from "./AccountManagementContract";
 
 export type Web3Dependencies = {
   provider: providers.Web3Provider;
   tokenContract: CarbonTokenContract;
+  accountContract: AccountManagementContract;
   projectContract: ProjectManagementContract;
   marketContract: CarbonMarketContract;
   ethereum: MetaMaskInpageProvider;
   isLoading: boolean;
-  // createdEvents: CarbonCreditCreatedEvent[];
 };
 
 export type CryptoHookFactory<Data = any, Response = any, Params = any> = {

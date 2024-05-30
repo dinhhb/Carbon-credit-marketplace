@@ -15,6 +15,7 @@ import CreditsApprovalDataTable from "../DataTables/CreditsApprovalDataTable";
 import CreditsListingDataTable from "../DataTables/CreditsListingDataTable";
 import CreditsPurchaseDataTable from "../DataTables/CreditsPurchaseDataTable";
 import CreditsRetirementDataTable from "../DataTables/CreditsRetirementDataTable";
+import CheckUserRegistration from "../common/CheckUserRegistration";
 
 const ActivitiesTab: React.FC = () => {
   const [openTab, setOpenTab] = useState(1);
@@ -35,7 +36,11 @@ const ActivitiesTab: React.FC = () => {
     const _projectContract = projectContract as any;
     const _marketContract = marketContract as any;
 
-    const fetchEvent = async (contract: any, filter: any, parser: (event: any) => any) => {
+    const fetchEvent = async (
+      contract: any,
+      filter: any,
+      parser: (event: any) => any,
+    ) => {
       const results: any = await contract.queryFilter(filter, -10000);
       return results.map(parser).reverse(); // Reverse the order to have latest events first
     };
@@ -48,7 +53,7 @@ const ActivitiesTab: React.FC = () => {
         initialOwner: event.args.initialOwner,
         amount: BigNumber.from(event.args.amount).toString(),
         creationTime: BigNumber.from(event.args.creationTime).toString(),
-      })
+      }),
     );
 
     const auditedEvents = await fetchEvent(
@@ -60,7 +65,7 @@ const ActivitiesTab: React.FC = () => {
         projectOwner: event.args.projectOwner,
         status: event.args.status,
         time: BigNumber.from(event.args.time).toString(),
-      })
+      }),
     );
 
     const listedEvents = await fetchEvent(
@@ -70,9 +75,11 @@ const ActivitiesTab: React.FC = () => {
         tokenId: BigNumber.from(event.args.tokenId).toString(),
         initialOwner: event.args.initialOwner,
         amount: BigNumber.from(event.args.amount).toString(),
-        pricePerCredit: ethers.utils.formatEther(BigNumber.from(event.args.pricePerCredit)), // Convert wei to ether
+        pricePerCredit: ethers.utils.formatEther(
+          BigNumber.from(event.args.pricePerCredit),
+        ), // Convert wei to ether
         time: BigNumber.from(event.args.time).toString(),
-      })
+      }),
     );
 
     const purchasedEvents = await fetchEvent(
@@ -84,7 +91,7 @@ const ActivitiesTab: React.FC = () => {
         to: event.args.to,
         amount: BigNumber.from(event.args.amount).toString(),
         time: BigNumber.from(event.args.time).toString(),
-      })
+      }),
     );
 
     const retiredEvents = await fetchEvent(
@@ -95,7 +102,7 @@ const ActivitiesTab: React.FC = () => {
         owner: event.args.owner,
         amount: BigNumber.from(event.args.amount).toString(),
         time: BigNumber.from(event.args.time).toString(),
-      })
+      }),
     );
 
     setEventsData({
@@ -139,25 +146,27 @@ const ActivitiesTab: React.FC = () => {
   ];
 
   return (
-    <div className="rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
-      <div className="mb-7.5 flex flex-wrap gap-3 rounded-lg border border-stroke px-4 py-3 dark:border-strokedark">
-        {tabLinks.map((tab) => (
-          <Link
-            key={tab.id}
-            href="#"
-            className={`rounded-md px-4 py-3 text-sm font-medium hover:bg-primary hover:text-white dark:hover:bg-primary md:text-base lg:px-6 ${
-              openTab === tab.id ? "bg-primary text-white" : "bg-gray dark:bg-meta-4 text-black dark:text-white"
-            }`}
-            onClick={() => setOpenTab(tab.id)}
-          >
-            {tab.label}
-          </Link>
-        ))}
+    <CheckUserRegistration>
+      <div className="rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div className="mb-7.5 flex flex-wrap gap-3 rounded-lg border border-stroke px-4 py-3 dark:border-strokedark">
+          {tabLinks.map((tab) => (
+            <Link
+              key={tab.id}
+              href="#"
+              className={`rounded-md px-4 py-3 text-sm font-medium hover:bg-primary hover:text-white dark:hover:bg-primary md:text-base lg:px-6 ${
+                openTab === tab.id
+                  ? "bg-primary text-white"
+                  : "bg-gray text-black dark:bg-meta-4 dark:text-white"
+              }`}
+              onClick={() => setOpenTab(tab.id)}
+            >
+              {tab.label}
+            </Link>
+          ))}
+        </div>
+        <div>{isLoading ? <MySpinner /> : renderDataTable()}</div>
       </div>
-      <div>
-        {isLoading ? <MySpinner /> : renderDataTable()}
-      </div>
-    </div>
+    </CheckUserRegistration>
   );
 };
 

@@ -1,35 +1,54 @@
 "use client";
 
 import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
 import { useEffect } from "react";
 
-const CreditingPeriodEnd = () => {
+interface CreditMetaProps {
+  hasError: boolean;
+  value: string;
+  onChange: (date: string) => void;
+}
+
+const VintageFrom: React.FC<CreditMetaProps> = ({ hasError, value, onChange }) => {
   useEffect(() => {
-    // Init flatpickr
-    flatpickr(".form-datepicker", {
-      mode: "single",
+    flatpickr(".form-datepicker-from", {
+      enableTime: false, // Disable time selection
+      dateFormat: "j/n/Y", // Date format in day/month/year
+      defaultDate: value,
+      onChange: (selectedDates) => {
+        if (selectedDates.length > 0) {
+          const date = selectedDates[0];
+          const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+          onChange(formattedDate);
+        }
+      },
       static: true,
       monthSelectorType: "static",
-      dateFormat: "M j, Y",
       prevArrow:
         '<svg className="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
       nextArrow:
         '<svg className="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
     });
-  }, []);
+  }, [onChange, value]);
 
   return (
     <div className="mb-4.5">
       <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-        Crediting Period End <span className="text-meta-1">*</span>
+        Vintage from <span className="text-meta-1">*</span>
       </label>
       <div className="relative">
         <input
-          className="form-datepicker w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          placeholder="mm/dd/yyyy"
+          className={`form-datepicker-from w-full rounded border-[1.5px] bg-transparent px-5 py-3 font-normal outline-none transition dark:bg-form-input ${
+            hasError
+              ? "border-danger focus:border-danger active:border-danger dark:border-form-danger dark:focus:border-danger"
+              : "border-stroke focus:border-primary active:border-primary dark:border-form-strokedark dark:focus:border-primary"
+          }`}
+          placeholder="dd/mm/yyyy"
           data-class="flatpickr-right"
+          value={value}
+          readOnly
         />
-
         <div className="pointer-events-none absolute inset-0 left-auto right-5 flex items-center">
           <svg
             width="18"
@@ -49,4 +68,4 @@ const CreditingPeriodEnd = () => {
   );
 };
 
-export default CreditingPeriodEnd;
+export default VintageFrom;

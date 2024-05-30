@@ -2,6 +2,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import React from "react";
 import MarketplaceDataTable from "./MarketplaceDataTable";
+import { CheckAccount } from "../common/checkAccount";
 
 interface DataTablesProps {
   type: "marketplace";
@@ -12,9 +13,7 @@ const DataTables: React.FC<DataTablesProps> = ({ type }) => {
 
   switch (type) {
     case "marketplace":
-      dataTableComponent = (
-        <MarketplaceDataTable />
-      );
+      dataTableComponent = <MarketplaceDataTable />;
       break;
     // default:
     //   dataTableComponent = (
@@ -26,6 +25,7 @@ const DataTables: React.FC<DataTablesProps> = ({ type }) => {
 
   return (
     <>
+      <CheckAccount />
       <Breadcrumb
         pageName={type === "marketplace" ? "Marketplace" : "Data Tables"}
       />

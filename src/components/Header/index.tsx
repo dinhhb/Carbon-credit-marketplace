@@ -9,6 +9,7 @@ const Header = (props: {
   const { account } = useAccount();
   const { network } = useNetwork();
   const isAdmin = account.isAdmin;
+  const isAuditor = account.isAuditor;
   const isLoading = account.isLoading;
   const isInstalled = account.isInstalled;
   const accountData = account.data;
@@ -112,10 +113,12 @@ const Header = (props: {
 
             {!isLoading && !accountData && !isInstalled && (
               <>
-              <div className="hidden flex-col items-start lg:flex">
-                <span className="text-sm text-danger">Metamask is not installed. Please install Metamask</span>
-              </div>
-            </>
+                <div className="hidden flex-col items-start lg:flex">
+                  <span className="text-sm text-danger">
+                    Metamask is not installed. Please install Metamask
+                  </span>
+                </div>
+              </>
             )}
           </div>
 
@@ -126,7 +129,7 @@ const Header = (props: {
               {/* <!-- Dark Mode Toggler --> */}
               {!isLoading && accountData && (
                 <div className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-3 text-center font-medium text-white">
-                  Hello {isAdmin ? "Admin" : "User"}
+                  Hello {isAdmin ? "Admin" : isAuditor ? "Auditor" : "User"}
                 </div>
               )}
 

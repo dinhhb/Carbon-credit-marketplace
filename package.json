@@ -10,7 +10,8 @@
     "genContractType:CarbonMarket": "abi-types-generator './public/contracts/CarbonMarket.json' --output='./src/types' --name=CarbonMarketContract --provider=ethers_v5",
     "genContractType:CarbonToken": "abi-types-generator './public/contracts/CarbonToken.json' --output='./src/types' --name=CarbonTokenContract --provider=ethers_v5",
     "genContractType:ProjectManagement": "abi-types-generator './public/contracts/ProjectManagement.json' --output='./src/types' --name=ProjectManagementContract --provider=ethers_v5",
-    "genContractTypes": "npm run genContractType:CarbonMarket && npm run genContractType:CarbonToken && npm run genContractType:ProjectManagement"
+    "genContractType:AccountManagement": "abi-types-generator './public/contracts/AccountManagement.json' --output='./src/types' --name=AccountManagementContract --provider=ethers_v5",
+    "genContractTypes": "npm run genContractType:CarbonMarket && npm run genContractType:CarbonToken && npm run genContractType:ProjectManagement && npm run genContractType:AccountManagement"
   },
   "dependencies": {
     "@metamask/providers": "^16.0.0",

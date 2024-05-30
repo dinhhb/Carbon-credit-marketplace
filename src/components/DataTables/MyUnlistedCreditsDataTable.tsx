@@ -9,7 +9,7 @@ import {
   Column,
 } from "react-table";
 import ResubmitProjectModal from "../Modals/ResubmitProjectModal";
-import ListModal from "../Modals/ListModal";
+// import ListModal from "../Modals/ListModal";
 import { Credit } from "@/types/credit";
 import MyCreditInfoModal from "../Modals/MyCreditInfoModal";
 import { renderStatusButton } from "../common/StatusButton";
@@ -22,7 +22,7 @@ const columns: Column<Credit>[] = [
   },
   {
     Header: "Project name",
-    accessor: (data) => data.metadata["project-name"],
+    accessor: (data) => data.metadata.projectName,
     Cell: ({ value }: { value: string }) =>
       value.length > 25 ? `${value.substring(0, 25)}...` : value,
   },
@@ -39,11 +39,11 @@ const columns: Column<Credit>[] = [
 
 type CreditListProps = {
   credits: Credit[];
-  listCredit: (tokenId: number, price: number) => Promise<void>;
+  // listCredit: (tokenId: number, price: number) => Promise<void>;
 };
 
 const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({
-  listCredit,
+  // listCredit,
   credits,
 }) => {
   const data = useMemo(() => credits, [credits]);
@@ -157,7 +157,7 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({
                   </div>
                 </th>
               ))}
-              <th key={`extra-${headerGroupIndex}`}></th>
+              {/* <th key={`extra-${headerGroupIndex}`}></th> */}
             </tr>
           ))}
         </thead>
@@ -178,20 +178,20 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({
                     </td>
                   );
                 })}
-                <td key={`modal-${rowIndex}`}>
+                {/* <td key={`modal-${rowIndex}`}>
                   <div className="flex">
                     <div>
                       <MyCreditInfoModal credit={row.original} />
                     </div>
                     {/* Conditionally render based on the status */}
-                    <div>
+                    {/* <div>
                       {status === "2" && <ResubmitProjectModal />}
                       {status === "1" && (
-                        <ListModal listCredit={listCredit} credit={row.original} />
+                        <ListModal credit={row.original} />
                       )}
                     </div>
                   </div>
-                </td>
+                </td> */} 
               </tr>
             );
           })}

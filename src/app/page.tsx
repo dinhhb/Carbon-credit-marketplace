@@ -1,9 +1,9 @@
-import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import DataTables from "@/components/DataTables";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Carbon credit marketplace",
+  title: "Carbon market",
 };
 
 export default function Home() {

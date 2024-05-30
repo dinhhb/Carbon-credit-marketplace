@@ -2,45 +2,74 @@
 pragma solidity ^0.8.13;
 
 import "./CarbonToken.sol";
+import "./CarbonMarket.sol";
 import "./CarbonBase.sol";
+import "./AccountManagement.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract ProjectManagement is Ownable, CarbonBase {
     CarbonToken private _token;
+    CarbonMarket private _market;
+    AccountManagement private _account;
     uint256 private _tokenIds;
 
-    constructor(address _tokenAddress) {
+    constructor(
+        address _tokenAddress,
+        address _accountAddress,
+        address _marketAddress
+    ) {
         _token = CarbonToken(_tokenAddress);
+        _account = AccountManagement(_accountAddress);
+        _market = CarbonMarket(_marketAddress);
     }
 
-    function registerProject(uint256 tokenSupply, string memory tokenURI) public {
+    modifier onlyAuditor() {
+        require(_account.isAuditor(msg.sender), "Invalid auditor");
+        _;
+    }
+
+    function registerProject(
+        uint256 tokenSupply,
+        string memory tokenURI,
+        uint256 price
+    ) public {
+        require(
+            tokenSupply <= _account.getAccountTotalCredits(msg.sender),
+            "Token supply invalid"
+        );
+        require(price > 0, "Invalid price");
         uint256 currentId = ++_tokenIds; // tokenID starts from 1
-         _token.setCarbonCredit(
+        _token.setCarbonCredit(
             currentId,
             msg.sender,
             ApprovalStatus.Pending,
-            0,
+            price,
             false
         );
-        _token.mint(msg.sender, currentId, tokenSupply, "");
+        _token.setTokenSupply(currentId, tokenSupply);
         _token.setURI(currentId, tokenURI);
-        emit CarbonCreditCreated(
-            currentId,
-            msg.sender,
-            tokenSupply,
-            block.timestamp
-        );
+        _token.getAddTokenToAllTokensEnumeration(currentId);
     }
 
-    function approveProject(uint256 tokenId) public payable onlyOwner {
+    function approveProject(uint256 tokenId) public payable onlyAuditor {
         CarbonCredit memory credit = _token.getCarbonCredit(tokenId);
 
-        require(
-            credit.status == ApprovalStatus.Pending,
-            "Project cannot be approved"
-        );
+        require(credit.status == ApprovalStatus.Pending, "Invalid status");
 
         _token.updateStatus(tokenId, ApprovalStatus.Approved);
+        _token.mint(
+            credit.initialOwner,
+            tokenId,
+            _token.getTokenSupply(tokenId),
+            ""
+        );
+
+        emit CarbonCreditCreated(
+            tokenId,
+            msg.sender,
+            _token.getTokenSupply(tokenId),
+            block.timestamp
+        );
         emit CarbonCreditAudited(
             tokenId,
             msg.sender,
@@ -48,15 +77,14 @@ contract ProjectManagement is Ownable, CarbonBase {
             ApprovalStatus.Approved,
             block.timestamp
         );
+
+        _market.listCreditsForSale(tokenId, credit.pricePerCredit);
     }
 
-    function declineProject(uint256 tokenId) public onlyOwner {
+    function declineProject(uint256 tokenId) public onlyAuditor {
         CarbonCredit memory credit = _token.getCarbonCredit(tokenId);
 
-        require(
-            credit.status == ApprovalStatus.Pending,
-            "Project cannot be declined"
-        );
+        require(credit.status == ApprovalStatus.Pending, "Invalid status");
         _token.updateStatus(tokenId, ApprovalStatus.Declined);
         emit CarbonCreditAudited(
             tokenId,
@@ -65,9 +93,5 @@ contract ProjectManagement is Ownable, CarbonBase {
             ApprovalStatus.Declined,
             block.timestamp
         );
-    }
-
-    function getTokenAddress() public view returns (address) {
-        return address(_token);
     }
 }

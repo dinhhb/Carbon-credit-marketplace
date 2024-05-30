@@ -7,7 +7,7 @@ import { useCallback } from "react";
 import { toast } from "react-toastify";
 
 type UseOwnedCreditsResponse = {
-  listCredit: (tokenId: number, price: number) => Promise<void>;
+  // listCredit: (tokenId: number, price: number) => Promise<void>;
   retireCredits: (tokenId: number, amount: number) => Promise<void>;
 };
 
@@ -73,28 +73,28 @@ export const hookFactory: OwnedCreditsHookFactory =
     const _tokenContract = tokenContract;
     const _marketContract = marketContract;
 
-    const listCredit = useCallback(async (tokenId: number, price: number) => {
-      // console.log(marketContractAddress);
-      try {
-        const result1 = await _tokenContract!.setApprovalForAll(
-          marketContractAddress || "",
-          true,
-        );
-        await result1?.wait();
-        alert("Approval granted");
-        const result2 = await _marketContract!.listCreditsForSale(
-          tokenId,
-          ethers.utils.parseEther(price.toString()),
-        );
-        await toast.promise(result2!.wait(), {
-          pending: "Listing credit...",
-          success: "Credit listed successfully!",
-          error: "Failed to list credit",
-        });
-      } catch (e: any) {
-        console.log(e.message);
-      }
-    }, [marketContractAddress, _tokenContract, _marketContract]);
+    // const listCredit = useCallback(async (tokenId: number, price: number) => {
+    //   // console.log(marketContractAddress);
+    //   try {
+    //     const result1 = await _tokenContract!.setApprovalForAll(
+    //       marketContractAddress || "",
+    //       true,
+    //     );
+    //     await result1?.wait();
+    //     alert("Approval granted");
+    //     const result2 = await _marketContract!.listCreditsForSale(
+    //       tokenId,
+    //       ethers.utils.parseEther(price.toString()),
+    //     );
+    //     await toast.promise(result2!.wait(), {
+    //       pending: "Listing credit...",
+    //       success: "Credit listed successfully!",
+    //       error: "Failed to list credit",
+    //     });
+    //   } catch (e: any) {
+    //     console.log(e.message);
+    //   }
+    // }, [marketContractAddress, _tokenContract, _marketContract]);
 
     const retireCredits = useCallback(async (tokenId: number, amount: number) => {
       try {
@@ -122,7 +122,7 @@ export const hookFactory: OwnedCreditsHookFactory =
       data: data || EMPTY_ARRAY,
       ...swrRes,
       isLoading: !data,
-      listCredit,
+      // listCredit,
       retireCredits,
     };
   };

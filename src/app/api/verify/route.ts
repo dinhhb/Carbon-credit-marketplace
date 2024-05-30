@@ -9,7 +9,7 @@ import {
 } from "../utils";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { CreditMetadata } from "@/types/credit";
+import { CreditMeta } from "@/types/credit";
 import axios from "axios";
 
 // export default withSession(
@@ -52,24 +52,23 @@ export async function POST(request: NextRequest) {
       credit,
       signature,
       address,
-    }: { credit: CreditMetadata; signature: string; address: string } =
+    }: { credit: CreditMeta; signature: string; address: string } =
       await request.json();
 
-    const requiredFields: Array<keyof CreditMetadata> = [
-      "project-id",
-      "project-name",
-      "project-type",
-      "quantity-issue",
-      "region",
+    const requiredFields: Array<keyof CreditMeta> = [
+      "projectId",
+      "projectName",
+      "projectType",
+      "vintageFrom",
+      "vintageTo",
+      "origin",
+      "quantity",
+      "price",
+      "registryLink",
+      "registryAccountName",
+      "registryAccountNo",
+      "document",
       "standard",
-      "vintage",
-      "crediting-period-end",
-      "crediting-period-start",
-      "credits-serial-number",
-      "issuance-date",
-      "methodology",
-      "project-developer",
-      "registry-reference-link",
     ];
 
     for (let field of requiredFields) {

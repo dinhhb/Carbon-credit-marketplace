@@ -1,17 +1,22 @@
 import { CryptoHookFactory } from "@/types/hooks";
 import { useEffect } from "react";
 import useSWR from "swr";
+import { useAccounts } from ".";
+import { Account } from "@/types/account";
 
 type UseAccountResponse = {
   connect: () => void;
   isLoading: boolean;
   isInstalled: boolean;
   isAdmin: boolean;
+  isAuditor: boolean;
 };
 
 const adminAddress: { [key: string]: boolean } = {
   "0xd24cb09d1Ab3790EA83F1E6961abA3fa26b43fD5": true,
 };
+
+const auditorAddress: { [key: string]: boolean } = {};
 
 type AccountHookFactory = CryptoHookFactory<string, UseAccountResponse>;
 
@@ -64,11 +69,21 @@ export const hookFactory: AccountHookFactory =
       }
     };
 
+    const { accounts } = useAccounts();
+    if (accounts) {
+      accounts.data?.forEach((account: Account) => {
+        if (account.isAuditor) {
+          auditorAddress[account.address] = true;
+        }
+      });
+    }
+
     return {
       ...swr,
       data,
       isValidating,
       isAdmin: !!(data && adminAddress[data]) ?? false,
+      isAuditor: !!(data && auditorAddress[data]) ?? false,
       isLoading: isLoading as boolean,
       isInstalled: ethereum?.isMetaMask || false,
       mutate,

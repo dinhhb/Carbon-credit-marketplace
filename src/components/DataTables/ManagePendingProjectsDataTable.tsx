@@ -21,7 +21,7 @@ const columns: Column<Credit>[] = [
   },
   {
     Header: "Project name",
-    accessor: (data) => data.metadata["project-name"],
+    accessor: (data) => data.metadata.projectName,
     Cell: ({ value }: { value: string }) =>
       value.length > 25 ? `${value.substring(0, 25)}...` : value,
   },

@@ -39,3 +39,11 @@ export const useAllCredits = () => {
     credits: swrRes,
   };
 }
+
+export const useAccounts = () => {
+  const hooks = useHooks();
+  const swrRes = hooks.useAccounts();
+  return {
+    accounts: swrRes,
+  };
+}

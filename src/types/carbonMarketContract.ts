@@ -61,6 +61,7 @@ export type CarbonMarketContractEvents =
   | 'CarbonCreditListed'
   | 'CarbonCreditPurchased'
   | 'CarbonCreditRetired'
+  | 'Log'
   | 'OwnershipTransferred'
   | 'TransferBatch'
   | 'TransferSingle'
@@ -72,6 +73,7 @@ export interface CarbonMarketContractEventsContext {
   CarbonCreditListed(...parameters: any): EventFilter;
   CarbonCreditPurchased(...parameters: any): EventFilter;
   CarbonCreditRetired(...parameters: any): EventFilter;
+  Log(...parameters: any): EventFilter;
   OwnershipTransferred(...parameters: any): EventFilter;
   TransferBatch(...parameters: any): EventFilter;
   TransferSingle(...parameters: any): EventFilter;
@@ -96,8 +98,7 @@ export type CarbonMarketContractMethodNames =
   | 'listCreditsForSale'
   | 'getAllListedCredits'
   | 'buyCredits'
-  | 'retireCredits'
-  | 'getTokenAddress';
+  | 'retireCredits';
 export interface ApprovalForAllEventEmittedResponse {
   account: string;
   operator: string;
@@ -135,6 +136,10 @@ export interface CarbonCreditRetiredEventEmittedResponse {
   owner: string;
   amount: BigNumberish;
   time: BigNumberish;
+}
+export interface LogEventEmittedResponse {
+  message: string;
+  value: BigNumberish;
 }
 export interface OwnershipTransferredEventEmittedResponse {
   previousOwner: string;
@@ -177,9 +182,11 @@ export interface CarbonMarketContract {
    * StateMutability: nonpayable
    * Type: constructor
    * @param _tokenAddress Type: address, Indexed: false
+   * @param _accountAddress Type: address, Indexed: false
    */
   'new'(
     _tokenAddress: string,
+    _accountAddress: string,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
   /**
@@ -406,11 +413,4 @@ export interface CarbonMarketContract {
     amount: BigNumberish,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   */
-  getTokenAddress(overrides?: ContractCallOverrides): Promise<string>;
 }

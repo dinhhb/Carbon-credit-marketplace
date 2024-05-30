@@ -8,10 +8,10 @@ import {
 import { EthersContractContextV5 } from 'ethereum-abi-types-generator';
 
 export type ContractContext = EthersContractContextV5<
-  CarbonTokenContract,
-  CarbonTokenContractMethodNames,
-  CarbonTokenContractEventsContext,
-  CarbonTokenContractEvents
+  AccountManagementContract,
+  AccountManagementContractMethodNames,
+  AccountManagementContractEventsContext,
+  AccountManagementContractEvents
 >;
 
 export declare type EventFilter = {
@@ -54,7 +54,7 @@ export interface ContractCallOverrides {
    */
   gasLimit?: number;
 }
-export type CarbonTokenContractEvents =
+export type AccountManagementContractEvents =
   | 'ApprovalForAll'
   | 'CarbonCreditAudited'
   | 'CarbonCreditCreated'
@@ -65,7 +65,7 @@ export type CarbonTokenContractEvents =
   | 'TransferBatch'
   | 'TransferSingle'
   | 'URI';
-export interface CarbonTokenContractEventsContext {
+export interface AccountManagementContractEventsContext {
   ApprovalForAll(...parameters: any): EventFilter;
   CarbonCreditAudited(...parameters: any): EventFilter;
   CarbonCreditCreated(...parameters: any): EventFilter;
@@ -77,7 +77,8 @@ export interface CarbonTokenContractEventsContext {
   TransferSingle(...parameters: any): EventFilter;
   URI(...parameters: any): EventFilter;
 }
-export type CarbonTokenContractMethodNames =
+export type AccountManagementContractMethodNames =
+  | 'new'
   | 'balanceOf'
   | 'balanceOfBatch'
   | 'burn'
@@ -91,26 +92,19 @@ export type CarbonTokenContractMethodNames =
   | 'supportsInterface'
   | 'transferOwnership'
   | 'uri'
-  | 'mint'
-  | 'setURI'
-  | 'setTokenSupply'
-  | 'getTokenSupply'
-  | 'getTokenSold'
-  | 'updateTokenSold'
-  | 'getTotalTokensCount'
-  | 'getTokenByIndex'
-  | 'getCarbonCredit'
-  | 'setCarbonCredit'
-  | 'updateStatus'
-  | 'updatePrice'
-  | 'updateListed'
-  | 'getOwnedTokensCount'
-  | 'getAddTokenToAllTokensEnumeration'
-  | 'getOwnerTokenByIndex'
-  | 'getAllCredits'
-  | 'getOwnedCredits'
-  | 'getTokenOwners'
-  | 'getOwnerCount';
+  | 'setAuthorizedContract'
+  | 'checkAccountRegistered'
+  | 'getAccountTotalCredits'
+  | 'setAccountTotalCredits'
+  | 'getAccountTotalRetire'
+  | 'setAccountTotalRetire'
+  | 'getAccountIdsCount'
+  | 'isAuditor'
+  | 'getAccountByIndex'
+  | 'getAccountByAddress'
+  | 'getAllAccounts'
+  | 'registerAccount'
+  | 'removeAccount';
 export interface ApprovalForAllEventEmittedResponse {
   account: string;
   operator: string;
@@ -171,19 +165,30 @@ export interface URIEventEmittedResponse {
   value: string;
   id: BigNumberish;
 }
-export interface CarboncreditResponse {
-  tokenId: BigNumber;
-  0: BigNumber;
-  initialOwner: string;
-  1: string;
-  status: number;
-  2: number;
-  pricePerCredit: BigNumber;
-  3: BigNumber;
-  isListed: boolean;
-  4: boolean;
+export interface AccountResponse {
+  addr: string;
+  0: string;
+  totalCredits: BigNumber;
+  1: BigNumber;
+  totalRetire: BigNumber;
+  2: BigNumber;
+  isAuditor: boolean;
+  3: boolean;
+  registeredAt: BigNumber;
+  4: BigNumber;
 }
-export interface CarbonTokenContract {
+export interface AccountManagementContract {
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: constructor
+   * @param _tokenAddress Type: address, Indexed: false
+   */
+  'new'(
+    _tokenAddress: string,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
   /**
    * Payable: false
    * Constant: true
@@ -358,64 +363,32 @@ export interface CarbonTokenContract {
    * Constant: false
    * StateMutability: nonpayable
    * Type: function
+   * @param _authorizedContract Type: address, Indexed: false
+   */
+  setAuthorizedContract(
+    _authorizedContract: string,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
    * @param account Type: address, Indexed: false
-   * @param id Type: uint256, Indexed: false
-   * @param amount Type: uint256, Indexed: false
-   * @param data Type: bytes, Indexed: false
    */
-  mint(
+  checkAccountRegistered(
     account: string,
-    id: BigNumberish,
-    amount: BigNumberish,
-    data: Arrayish,
-    overrides?: ContractTransactionOverrides
-  ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: false
-   * StateMutability: nonpayable
-   * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   * @param newURI Type: string, Indexed: false
-   */
-  setURI(
-    tokenId: BigNumberish,
-    newURI: string,
-    overrides?: ContractTransactionOverrides
-  ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: false
-   * StateMutability: nonpayable
-   * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   * @param supply Type: uint256, Indexed: false
-   */
-  setTokenSupply(
-    tokenId: BigNumberish,
-    supply: BigNumberish,
-    overrides?: ContractTransactionOverrides
-  ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   */
-  getTokenSupply(
-    tokenId: BigNumberish,
     overrides?: ContractCallOverrides
-  ): Promise<BigNumber>;
+  ): Promise<boolean>;
   /**
    * Payable: false
    * Constant: true
    * StateMutability: view
    * Type: function
-   * @param tokenId Type: uint256, Indexed: false
+   * @param account Type: address, Indexed: false
    */
-  getTokenSold(
-    tokenId: BigNumberish,
+  getAccountTotalCredits(
+    account: string,
     overrides?: ContractCallOverrides
   ): Promise<BigNumber>;
   /**
@@ -423,12 +396,36 @@ export interface CarbonTokenContract {
    * Constant: false
    * StateMutability: nonpayable
    * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   * @param amount Type: uint256, Indexed: false
+   * @param account Type: address, Indexed: false
+   * @param totalCredits Type: uint256, Indexed: false
    */
-  updateTokenSold(
-    tokenId: BigNumberish,
-    amount: BigNumberish,
+  setAccountTotalCredits(
+    account: string,
+    totalCredits: BigNumberish,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   * @param account Type: address, Indexed: false
+   */
+  getAccountTotalRetire(
+    account: string,
+    overrides?: ContractCallOverrides
+  ): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param account Type: address, Indexed: false
+   * @param totalRetire Type: uint256, Indexed: false
+   */
+  setAccountTotalRetire(
+    account: string,
+    totalRetire: BigNumberish,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
   /**
@@ -437,7 +434,18 @@ export interface CarbonTokenContract {
    * StateMutability: view
    * Type: function
    */
-  getTotalTokensCount(overrides?: ContractCallOverrides): Promise<BigNumber>;
+  getAccountIdsCount(overrides?: ContractCallOverrides): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   * @param auditor Type: address, Indexed: false
+   */
+  isAuditor(
+    auditor: string,
+    overrides?: ContractCallOverrides
+  ): Promise<boolean>;
   /**
    * Payable: false
    * Constant: true
@@ -445,7 +453,7 @@ export interface CarbonTokenContract {
    * Type: function
    * @param index Type: uint256, Indexed: false
    */
-  getTokenByIndex(
+  getAccountByIndex(
     index: BigNumberish,
     overrides?: ContractCallOverrides
   ): Promise<BigNumber>;
@@ -454,29 +462,32 @@ export interface CarbonTokenContract {
    * Constant: true
    * StateMutability: view
    * Type: function
-   * @param tokenId Type: uint256, Indexed: false
+   * @param account Type: address, Indexed: false
    */
-  getCarbonCredit(
-    tokenId: BigNumberish,
+  getAccountByAddress(
+    account: string,
     overrides?: ContractCallOverrides
-  ): Promise<CarboncreditResponse>;
+  ): Promise<AccountResponse>;
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   */
+  getAllAccounts(overrides?: ContractCallOverrides): Promise<AccountResponse[]>;
   /**
    * Payable: false
    * Constant: false
    * StateMutability: nonpayable
    * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   * @param owner Type: address, Indexed: false
-   * @param status Type: uint8, Indexed: false
-   * @param pricePerCredit Type: uint256, Indexed: false
-   * @param isListed Type: bool, Indexed: false
+   * @param account Type: address, Indexed: false
+   * @param totalCredits Type: uint256, Indexed: false
+   * @param isAudit Type: bool, Indexed: false
    */
-  setCarbonCredit(
-    tokenId: BigNumberish,
-    owner: string,
-    status: BigNumberish,
-    pricePerCredit: BigNumberish,
-    isListed: boolean,
+  registerAccount(
+    account: string,
+    totalCredits: BigNumberish,
+    isAudit: boolean,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
   /**
@@ -484,113 +495,10 @@ export interface CarbonTokenContract {
    * Constant: false
    * StateMutability: nonpayable
    * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   * @param status Type: uint8, Indexed: false
+   * @param addr Type: address, Indexed: false
    */
-  updateStatus(
-    tokenId: BigNumberish,
-    status: BigNumberish,
+  removeAccount(
+    addr: string,
     overrides?: ContractTransactionOverrides
   ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: false
-   * StateMutability: nonpayable
-   * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   * @param price Type: uint256, Indexed: false
-   */
-  updatePrice(
-    tokenId: BigNumberish,
-    price: BigNumberish,
-    overrides?: ContractTransactionOverrides
-  ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: false
-   * StateMutability: nonpayable
-   * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   * @param isListed Type: bool, Indexed: false
-   */
-  updateListed(
-    tokenId: BigNumberish,
-    isListed: boolean,
-    overrides?: ContractTransactionOverrides
-  ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   * @param owner Type: address, Indexed: false
-   */
-  getOwnedTokensCount(
-    owner: string,
-    overrides?: ContractCallOverrides
-  ): Promise<BigNumber>;
-  /**
-   * Payable: false
-   * Constant: false
-   * StateMutability: nonpayable
-   * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   */
-  getAddTokenToAllTokensEnumeration(
-    tokenId: BigNumberish,
-    overrides?: ContractTransactionOverrides
-  ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   * @param owner Type: address, Indexed: false
-   * @param index Type: uint256, Indexed: false
-   */
-  getOwnerTokenByIndex(
-    owner: string,
-    index: BigNumberish,
-    overrides?: ContractCallOverrides
-  ): Promise<BigNumber>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   */
-  getAllCredits(
-    overrides?: ContractCallOverrides
-  ): Promise<CarboncreditResponse[]>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   */
-  getOwnedCredits(
-    overrides?: ContractCallOverrides
-  ): Promise<CarboncreditResponse[]>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   */
-  getTokenOwners(
-    tokenId: BigNumberish,
-    overrides?: ContractCallOverrides
-  ): Promise<string[]>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   * @param tokenId Type: uint256, Indexed: false
-   */
-  getOwnerCount(
-    tokenId: BigNumberish,
-    overrides?: ContractCallOverrides
-  ): Promise<BigNumber>;
 }
