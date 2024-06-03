@@ -17,6 +17,30 @@ contract CarbonMarket is CarbonBase {
         _account = AccountManagement(_accountAddress);
     }
 
+    function _validateCarbonCredit(
+        uint256 tokenId,
+        address owner,
+        bool checkListed,
+        bool checkDelisted
+    ) internal view {
+        CarbonCredit memory credit = _token.getCarbonCredit(tokenId);
+
+        require(_token.balanceOf(owner, tokenId) > 0, "Invalid token balance");
+        require(credit.status == ApprovalStatus.Approved, "Invalid status");
+        require(
+            _token.isApprovedForAll(owner, address(this)),
+            "Marketplace not yet authorized"
+        );
+
+        if (checkListed) {
+            require(!credit.isListed, "Already listed.");
+        }
+
+        if (checkDelisted) {
+            require(credit.isListed, "Not listed.");
+        }
+    }
+
     function getListedTokensCount() public view returns (uint256) {
         // returns the total number of listed credits
         return _listedTokens;
@@ -25,17 +49,8 @@ contract CarbonMarket is CarbonBase {
     function listCreditsForSale(uint256 tokenId, uint256 price) public {
         CarbonCredit memory credit = _token.getCarbonCredit(tokenId);
 
-        require(
-            _token.balanceOf(credit.initialOwner, tokenId) > 0,
-            "Invalid token balance"
-        );
-        require(credit.status == ApprovalStatus.Approved, "Invalid status");
-        require(!credit.isListed, "Already listed.");
+        _validateCarbonCredit(tokenId, credit.initialOwner, true, false);
         require(price > 0, "Invalid price");
-        require(
-            _token.isApprovedForAll(credit.initialOwner, address(this)),
-            "Marketplace not yet authorized"
-        );
 
         _token.updateListed(tokenId, true);
         _token.updatePrice(tokenId, price);
@@ -48,6 +63,20 @@ contract CarbonMarket is CarbonBase {
             price,
             block.timestamp
         );
+    }
+
+    function delistCredits(uint256 tokenId) public {
+        _validateCarbonCredit(tokenId, msg.sender, false, true);
+
+        _token.updateListed(tokenId, false);
+        _listedTokens -= 1;
+    }
+
+    function changePrice(uint256 tokenId, uint256 price) public {
+        _validateCarbonCredit(tokenId, msg.sender, false, true);
+        require(price > 0, "Invalid price");
+
+        _token.updatePrice(tokenId, price);
     }
 
     function getAllListedCredits() public view returns (CarbonCredit[] memory) {

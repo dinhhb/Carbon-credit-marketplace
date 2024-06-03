@@ -1,6 +1,12 @@
+import { Credit } from "@/types/credit";
 import React, { useState, useEffect, useRef } from "react";
 
-const UnlistModal: React.FC = () => {
+interface CreditProps {
+  credit: Credit;
+  delistCredits: (tokenId: number) => Promise<void>;
+}
+
+const DelistModal: React.FC<CreditProps> = ({ credit, delistCredits }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -37,9 +43,9 @@ const UnlistModal: React.FC = () => {
       <button
         ref={trigger}
         onClick={() => setModalOpen(!modalOpen)}
-        className="rounded-md bg-danger px-2 py-1 font-medium text-white mr-1"
+        className="mr-1 rounded-md bg-danger px-2 py-1 font-medium text-white"
       >
-        Unlist
+        Delist
       </button>
       <div
         className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5 ${
@@ -77,10 +83,12 @@ const UnlistModal: React.FC = () => {
             </svg>
           </span>
           <h3 className="mt-5.5 pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
-            Unlist Your Credits
+            Delist Your Credits
           </h3>
-          <p className="mb-10">
-            Are you sure you want to unlist your credits? Your listed credits will be removed from the marketplace.
+          <span className="mx-auto mb-6 inline-block h-1 w-full rounded bg-danger"></span>
+          <p className="mb-10 py-5">
+            Are you sure you want to delist your credits? Your listed credits
+            will be removed from the marketplace.
           </p>
           <div className="-mx-3 flex flex-wrap gap-y-4">
             <div className="w-full px-3 2xsm:w-1/2">
@@ -92,8 +100,17 @@ const UnlistModal: React.FC = () => {
               </button>
             </div>
             <div className="w-full px-3 2xsm:w-1/2">
-              <button className="block w-full rounded border border-meta-1 bg-meta-1 p-3 text-center font-medium text-white transition hover:bg-opacity-90">
-                Unlist
+              <button
+                onClick={() => {
+                  if (delistCredits) {
+                    delistCredits(credit.tokenId);
+                  } else if (!delistCredits) {
+                    alert("Delist credits function not available");
+                  }
+                }}
+                className="block w-full rounded border border-meta-1 bg-meta-1 p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+              >
+                Delist
               </button>
             </div>
           </div>
@@ -103,4 +120,4 @@ const UnlistModal: React.FC = () => {
   );
 };
 
-export default UnlistModal;
+export default DelistModal;

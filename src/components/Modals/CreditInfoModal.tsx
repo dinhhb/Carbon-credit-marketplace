@@ -56,7 +56,7 @@ const CreditInfoModal: React.FC<CreditProps> = ({ buyCredit, credit }) => {
         <div
           ref={modal}
           className="max-h-full w-full max-w-142.5 overflow-y-auto rounded-lg bg-white px-8 py-12 text-center dark:bg-boxdark md:px-17.5 md:py-15"
-          style={{ maxHeight: "90vh" }}
+          style={{ maxHeight: "90vh", maxWidth: "60vw" }}
         >
           <h3 className="pb-2 text-left text-xl font-bold text-black dark:text-white sm:text-2xl">
             {credit.metadata.projectName}
@@ -83,12 +83,16 @@ const CreditInfoModal: React.FC<CreditProps> = ({ buyCredit, credit }) => {
             <p className="flex-1">{credit.metadata.vintageTo.toString()}</p>
           </div>
           <div className="mb-4 flex items-start text-left">
-            <p className="flex-1">Offer quantity:</p>
+            <p className="flex-1">Quantity issued:</p>
             <p className="flex-1">{credit.metadata.quantity}</p>
           </div>
           <div className="mb-4 flex items-start text-left">
+            <p className="flex-1">Quantity sold:</p>
+            <p className="flex-1">{credit.quantitySold}</p>
+          </div>
+          <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Offer price:</p>
-            <p className="flex-1">{credit.metadata.price}</p>
+            <p className="flex-1">{credit.pricePerCredit}</p>
           </div>
           <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Registry reference:</p>
@@ -112,7 +116,7 @@ const CreditInfoModal: React.FC<CreditProps> = ({ buyCredit, credit }) => {
             <p className="flex-1">{credit.metadata.registryAccountNo}</p>
           </div> */}
           <div className="mb-4 flex items-start text-left">
-            <p className="flex-1">Certification document:</p>
+            <p className="flex-1">VCS issuance document:</p>
             <p className="flex-1">
               <a
                 href={credit.metadata.document}
@@ -122,6 +126,11 @@ const CreditInfoModal: React.FC<CreditProps> = ({ buyCredit, credit }) => {
               >
                 {credit.metadata.document}
               </a>
+            </p>
+          </div>
+          <div className="pt-6 mb-4 flex items-start text-left">
+            <p className="flex-1 font-bold text-primary dark:text-white">
+              You own {credit.quantityOwned} credits of this project
             </p>
           </div>
           <div className="-mx-3 flex flex-wrap gap-y-4">

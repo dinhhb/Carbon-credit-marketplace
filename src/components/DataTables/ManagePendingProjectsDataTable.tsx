@@ -12,6 +12,7 @@ import { Credit } from "@/types/credit";
 import MyCreditInfoModal from "../Modals/MyCreditInfoModal";
 import ApproveProjectModal from "../Modals/ApproveProjectModal";
 import DeclineProjectModal from "../Modals/DeclineProjectModal";
+import { renderProjectNameCell } from "../common/ProjectNameCell";
 
 // table header
 const columns: Column<Credit>[] = [
@@ -22,8 +23,7 @@ const columns: Column<Credit>[] = [
   {
     Header: "Project name",
     accessor: (data) => data.metadata.projectName,
-    Cell: ({ value }: { value: string }) =>
-      value.length > 25 ? `${value.substring(0, 25)}...` : value,
+    Cell: ({ value }: { value: string }) => renderProjectNameCell(value),
   },
   {
     Header: "Quantity",

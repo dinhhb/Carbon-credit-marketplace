@@ -16,6 +16,7 @@ import { Credit } from "../../types/credit";
 import { useListedCredits } from "@/hooks/web3";
 import MySpinner from "../Spinners/MySpinner";
 import CheckUserRegistration from "../common/CheckUserRegistration";
+import { renderProjectNameCell } from "../common/ProjectNameCell";
 
 // Table header
 const columns: Column<Credit>[] = [
@@ -26,8 +27,7 @@ const columns: Column<Credit>[] = [
   {
     Header: "Project name",
     accessor: (data) => data.metadata.projectName,
-    Cell: ({ value }: { value: string }) =>
-      value.length > 25 ? `${value.substring(0, 25)}...` : value,
+    Cell: ({ value }: { value: string }) => renderProjectNameCell(value),
   },
   {
     Header: "Project type",

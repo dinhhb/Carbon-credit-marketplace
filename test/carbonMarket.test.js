@@ -162,6 +162,58 @@ contract("CarbonMarket Suite", async accounts => {
     });
   });
 
+  describe("Delist Credits", async () => {
+    const tokenSupply = 100;
+
+    beforeEach(async () => {
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
+    });
+
+    it("should delist the credits", async () => {
+      await marketContract.delistCredits(1, { from: seller });
+      const credit = await tokenContract.getCarbonCredit(1);
+      assert.equal(credit.isListed, false, "The credit is not delisted.");
+    });
+  });
+
+  describe("Changing Price", async () => {
+    const tokenSupply = 100;
+
+    beforeEach(async () => {
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
+    });
+
+    it("should change the price of the credits", async () => {
+      const newPrice = web3.utils.toWei("0.002", "ether");
+      await marketContract.changePrice(1, newPrice, { from: seller });
+      const credit = await tokenContract.getCarbonCredit(1);
+      assert.equal(Number(credit.pricePerCredit), newPrice, "The price of the credit is not correct.");
+    });
+  });
+
+  describe("Listing Credits", async () => {
+    const tokenSupply = 100;
+
+    beforeEach(async () => {
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
+      await projectContract.approveProject(1,  { from: auditor });
+      await marketContract.delistCredits(1, { from: seller });
+    });
+
+    it("should list the credits again", async () => {
+      const newPrice = web3.utils.toWei("0.002", "ether");
+      await marketContract.listCreditsForSale(1, newPrice, { from: seller });
+      const credit = await tokenContract.getCarbonCredit(1);
+      assert.equal(credit.isListed, true, "The credit is not listed.");
+      assert.equal(Number(credit.pricePerCredit), newPrice, "The price of the credit is not correct.");
+    });
+  });
+
   describe("Project Declination", async () => {
     const tokenSupply = 100;
 

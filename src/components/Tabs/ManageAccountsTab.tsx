@@ -38,7 +38,7 @@ const ManageAccountsTab: React.FC = () => {
         registerAuditor={registerAuditor}
         registerUser={registerUser}
         onSuccess={handleRegistrationSuccess}
-        onBack={() => setShowRegisterForm(false)} 
+        onBack={() => setShowRegisterForm(false)}
       />
     );
   }
@@ -74,24 +74,30 @@ const ManageAccountsTab: React.FC = () => {
           Register New
         </Link>
       </div>
-      {/* {credits.isLoading ? (
+      {accounts.isLoading ? (
         <MySpinner />
-      ) : ( */}
-      <>
-        <div>
-          <div
-            className={`leading-relaxed ${openTab === 1 ? "block" : "hidden"}`}
-          >
-            <ManageAuditorsDataTable accounts={auditors} removeAccount={removeAccount}/>
+      ) : (
+        <>
+          <div>
+            <div
+              className={`leading-relaxed ${openTab === 1 ? "block" : "hidden"}`}
+            >
+              <ManageAuditorsDataTable
+                accounts={auditors}
+                removeAccount={removeAccount}
+              />
+            </div>
+            <div
+              className={`leading-relaxed ${openTab === 2 ? "block" : "hidden"}`}
+            >
+              <ManageUsersDataTable
+                accounts={users}
+                removeAccount={removeAccount}
+              />
+            </div>
           </div>
-          <div
-            className={`leading-relaxed ${openTab === 2 ? "block" : "hidden"}`}
-          >
-            <ManageUsersDataTable accounts={users} removeAccount={removeAccount}/>
-          </div>
-        </div>
-      </>
-      {/* )} */}
+        </>
+      )}
     </div>
   );
 };

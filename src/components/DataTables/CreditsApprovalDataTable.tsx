@@ -11,6 +11,7 @@ import {
 import { Credit } from "@/types/credit";
 import { CarbonCreditAuditedEvent } from "@/types/events";
 import { renderStatusButton } from "../common/StatusButton";
+import { renderTimeCell } from "../common/TimeCell";
 
 // table header
 const columns: Column<CarbonCreditAuditedEvent>[] = [
@@ -34,8 +35,7 @@ const columns: Column<CarbonCreditAuditedEvent>[] = [
   {
     Header: "Time",
     accessor: "time",
-    Cell: ({ value }: { value: number }) =>
-      new Date(value * 1000).toLocaleString(), // Convert Unix timestamp to a readable date
+    Cell: ({ value }: { value: number }) => renderTimeCell(value),
   },
 ];
 

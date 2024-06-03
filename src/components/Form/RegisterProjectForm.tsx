@@ -13,6 +13,7 @@ import CheckUserRegistration from "../common/CheckUserRegistration";
 import VintageFrom from "@/components/Form/FormElements/DatePicker/VintageFrom";
 import VintageTo from "@/components/Form/FormElements/DatePicker/VintageTo";
 import { useRouter } from "next/navigation";
+import MySpinner from "../Spinners/MySpinner";
 
 const CLASSESS = {
   SUCCESS:
@@ -539,16 +540,15 @@ const RegisterProjectForm: React.FC = () => {
                             }`}
                           />
                         </div>
-
-                        <button
-                          type="button"
-                          onClick={uploadMetadata}
-                          className={
-                            "block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
-                          }
-                        >
-                          Submit
-                        </button>
+                        <div className="mb-4.5 flex justify-center space-x-4 pt-7">
+                          <button
+                            type="button"
+                            onClick={uploadMetadata}
+                            className="w-32 rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+                          >
+                            Submit
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -561,46 +561,64 @@ const RegisterProjectForm: React.FC = () => {
                     Project Information
                   </h2>
                 </div>
-                <div className="p-15">
+                <div className="p-20">
                   {metadata ? (
                     <div>
                       <h1 className="mb-3 pb-5 text-lg font-medium text-black dark:text-white">
                         Your Project Information:
                       </h1>
                       <div className="mb-4 flex items-start text-left">
-                        <p className="flex-1">Project ID:</p>
+                        <p className="flex-1 text-sm font-medium text-black dark:text-white">
+                          Project ID:
+                        </p>
                         <p className="flex-1">{metadata.projectId}</p>
                       </div>
                       <div className="mb-4 flex items-start text-left">
-                        <p className="flex-1">Project Name:</p>
+                        <p className="flex-1 text-sm font-medium text-black dark:text-white">
+                          Project Name:
+                        </p>
                         <p className="flex-1">{metadata.projectName}</p>
                       </div>
                       <div className="mb-4 flex items-start text-left">
-                        <p className="flex-1">Project Type:</p>
+                        <p className="flex-1 text-sm font-medium text-black dark:text-white">
+                          Project Type:
+                        </p>
                         <p className="flex-1">{metadata.projectType}</p>
                       </div>
                       <div className="mb-4 flex items-start text-left">
-                        <p className="flex-1">Crediting Period Start:</p>
+                        <p className="flex-1 text-sm font-medium text-black dark:text-white">
+                          Crediting Period Start:
+                        </p>
                         <p className="flex-1">{metadata.vintageFrom}</p>
                       </div>
                       <div className="mb-4 flex items-start text-left">
-                        <p className="flex-1">Crediting Period End:</p>
+                        <p className="flex-1 text-sm font-medium text-black dark:text-white">
+                          Crediting Period End:
+                        </p>
                         <p className="flex-1">{metadata.vintageTo}</p>
                       </div>
                       <div className="mb-4 flex items-start text-left">
-                        <p className="flex-1">Origin (Country):</p>
+                        <p className="flex-1 text-sm font-medium text-black dark:text-white">
+                          Origin (Country):
+                        </p>
                         <p className="flex-1">{metadata.origin}</p>
                       </div>
                       <div className="mb-4 flex items-start text-left">
-                        <p className="flex-1">Offer Quantity:</p>
+                        <p className="flex-1 text-sm font-medium text-black dark:text-white">
+                          Offer Quantity:
+                        </p>
                         <p className="flex-1">{metadata.quantity}</p>
                       </div>
                       <div className="mb-4 flex items-start text-left">
-                        <p className="flex-1">Offer Price:</p>
+                        <p className="flex-1 text-sm font-medium text-black dark:text-white">
+                          Offer Price:
+                        </p>
                         <p className="flex-1">{metadata.price}</p>
                       </div>
                       <div className="mb-4 flex items-start text-left">
-                        <p className="flex-1">Registry Reference:</p>
+                        <p className="flex-1 text-sm font-medium text-black dark:text-white">
+                          Registry Reference:
+                        </p>
                         <p className="flex-1">
                           <a
                             href={metadata.registryLink}
@@ -613,19 +631,21 @@ const RegisterProjectForm: React.FC = () => {
                         </p>
                       </div>
                       <div className="mb-4 flex items-start text-left">
-                        <p className="flex-1">
+                        <p className="flex-1 text-sm font-medium text-black dark:text-white">
                           Seller&apos;s Verra Registry Account Name:
                         </p>
                         <p className="flex-1">{metadata.registryAccountName}</p>
                       </div>
                       <div className="mb-4 flex items-start text-left">
-                        <p className="flex-1">
+                        <p className="flex-1 text-sm font-medium text-black dark:text-white">
                           Seller&apos;s Verra Registry Account No:
                         </p>
                         <p className="flex-1">{metadata.registryAccountNo}</p>
                       </div>
                       <div className="mb-4 flex items-start text-left">
-                        <p className="flex-1">Certification Document:</p>
+                        <p className="flex-1 text-sm font-medium text-black dark:text-white">
+                          Certification Document:
+                        </p>
                         <p className="flex-1">
                           <a
                             href={metadata.document}
@@ -639,7 +659,7 @@ const RegisterProjectForm: React.FC = () => {
                       </div>
                     </div>
                   ) : (
-                    <p>Loading metadata...</p>
+                    <MySpinner />
                   )}
                   <div className="mb-4.5 flex justify-center space-x-4 pt-7">
                     <button

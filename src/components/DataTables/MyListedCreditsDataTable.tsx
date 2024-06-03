@@ -10,9 +10,11 @@ import {
 } from "react-table";
 import CreditInfoModal from "../Modals/CreditInfoModal";
 import OwnersModal from "../Modals/OwnersModal";
-import UnlistModal from "../Modals/UnlistModal";
+import DelistModal from "../Modals/DelistModal";
 import { Credit } from "@/types/credit";
 import MyCreditInfoModal from "../Modals/MyCreditInfoModal";
+import ChangePriceModal from "../Modals/ChangePriceModal";
+import { renderProjectNameCell } from "../common/ProjectNameCell";
 
 // table header
 const columns: Column<Credit>[] = [
@@ -23,8 +25,7 @@ const columns: Column<Credit>[] = [
   {
     Header: "Project name",
     accessor: (data) => data.metadata.projectName,
-    Cell: ({ value }: { value: string }) =>
-      value.length > 25 ? `${value.substring(0, 25)}...` : value,
+    Cell: ({ value }: { value: string }) => renderProjectNameCell(value),
   },
   {
     Header: "Owners",
@@ -36,10 +37,10 @@ const columns: Column<Credit>[] = [
       />
     ),
   },
-  {
-    Header: "Quantity Listed",
-    accessor: "quantity",
-  },
+  // {
+  //   Header: "Quantity Issued",
+  //   accessor: "quantity",
+  // },
   {
     Header: "Quantity Sold",
     accessor: "quantitySold",
@@ -48,10 +49,14 @@ const columns: Column<Credit>[] = [
 
 type CreditListProps = {
   credits: Credit[];
+  changePrice: (tokenId: number, price: number) => Promise<void>;
+  delistCredits: (tokenId: number) => Promise<void>;
 };
 
 const MyListedCreditsDataTable: FunctionComponent<CreditListProps> = ({
   credits,
+  changePrice,
+  delistCredits,
 }) => {
   const data = useMemo(() => credits, [credits]);
 
@@ -189,7 +194,10 @@ const MyListedCreditsDataTable: FunctionComponent<CreditListProps> = ({
                       <MyCreditInfoModal credit={row.original} />
                     </div>
                     <div>
-                      <UnlistModal />
+                      <ChangePriceModal credit={row.original} changePrice={changePrice}/>
+                    </div>
+                    <div>
+                      <DelistModal credit={row.original} delistCredits={delistCredits}/>
                     </div>
                   </div>
                 </td>

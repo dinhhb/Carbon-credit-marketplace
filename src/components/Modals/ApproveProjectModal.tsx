@@ -6,7 +6,10 @@ interface CreditProps {
   approveProject: (tokenId: number) => Promise<void>;
 }
 
-const ApproveProjectModal: React.FC<CreditProps> = ({credit, approveProject}) => {
+const ApproveProjectModal: React.FC<CreditProps> = ({
+  credit,
+  approveProject,
+}) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -43,7 +46,7 @@ const ApproveProjectModal: React.FC<CreditProps> = ({credit, approveProject}) =>
       <button
         ref={trigger}
         onClick={() => setModalOpen(!modalOpen)}
-        className="rounded-md bg-primary px-2 py-1 font-medium text-white mr-1"
+        className="mr-1 rounded-md bg-primary px-2 py-1 font-medium text-white"
       >
         Approve
       </button>
@@ -83,7 +86,9 @@ const ApproveProjectModal: React.FC<CreditProps> = ({credit, approveProject}) =>
                     alert("Approve project function not available");
                   }
                 }}
-                className={"block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"}
+                className={
+                  "block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+                }
               >
                 Approve
               </button>

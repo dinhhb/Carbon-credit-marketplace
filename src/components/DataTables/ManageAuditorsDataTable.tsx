@@ -11,6 +11,7 @@ import {
 import MyCreditInfoModal from "../Modals/MyCreditInfoModal";
 import { Account } from "@/types/account";
 import ConfirmRemoveAccountModal from "../Modals/ConfirmRemoveAccountModal";
+import { renderTimeCell } from "../common/TimeCell";
 
 // table header
 const columns: Column<Account>[] = [
@@ -21,8 +22,7 @@ const columns: Column<Account>[] = [
   {
     Header: "Registered At",
     accessor: "registerdAt",
-    Cell: ({ value }: { value: number }) =>
-      new Date(value * 1000).toLocaleString(), // Convert Unix timestamp to a readable date
+    Cell: ({ value }: { value: number }) => renderTimeCell(value),
   },
 ];
 

@@ -10,6 +10,7 @@ import {
 } from "react-table";
 import { Credit } from "@/types/credit";
 import { CarbonCreditRetiredEvent } from "@/types/events";
+import { renderTimeCell } from "../common/TimeCell";
 
 // table header
 const columns: Column<CarbonCreditRetiredEvent>[] = [
@@ -28,8 +29,7 @@ const columns: Column<CarbonCreditRetiredEvent>[] = [
   {
     Header: "Time",
     accessor: "time",
-    Cell: ({ value }: { value: number }) =>
-      new Date(value * 1000).toLocaleString(), // Convert Unix timestamp to a readable date
+    Cell: ({ value }: { value: number }) => renderTimeCell(value),
   },
 ];
 

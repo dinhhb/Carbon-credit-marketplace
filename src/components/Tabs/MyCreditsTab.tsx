@@ -27,6 +27,10 @@ const MyCreditsTab: React.FC = () => {
     (credit) => credit.initialOwner != account.data,
   ) as Credit[];
 
+  const changePrice = credits.changePrice;
+  const delistCredits = credits.delistCredits;
+  const listCredits = credits.listCredits;
+
   return (
     <CheckUserRegistration>
       <div className="rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -68,13 +72,17 @@ const MyCreditsTab: React.FC = () => {
               <div
                 className={`leading-relaxed ${openTab === 1 ? "block" : "hidden"}`}
               >
-                <MyListedCreditsDataTable credits={listedCredits} />
+                <MyListedCreditsDataTable
+                  credits={listedCredits}
+                  delistCredits={delistCredits}
+                  changePrice={changePrice}
+                />
               </div>
               <div
                 className={`leading-relaxed ${openTab === 2 ? "block" : "hidden"}`}
               >
                 <MyUnlistedCreditsDataTable
-                  // listCredit={credits.listCredit}
+                  listCredit={listCredits}
                   credits={unlistedCredits}
                 />
               </div>

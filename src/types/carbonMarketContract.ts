@@ -96,6 +96,8 @@ export type CarbonMarketContractMethodNames =
   | 'uri'
   | 'getListedTokensCount'
   | 'listCreditsForSale'
+  | 'delistCredits'
+  | 'changePrice'
   | 'getAllListedCredits'
   | 'buyCredits'
   | 'retireCredits';
@@ -374,6 +376,30 @@ export interface CarbonMarketContract {
    * @param price Type: uint256, Indexed: false
    */
   listCreditsForSale(
+    tokenId: BigNumberish,
+    price: BigNumberish,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   */
+  delistCredits(
+    tokenId: BigNumberish,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   * @param price Type: uint256, Indexed: false
+   */
+  changePrice(
     tokenId: BigNumberish,
     price: BigNumberish,
     overrides?: ContractTransactionOverrides
