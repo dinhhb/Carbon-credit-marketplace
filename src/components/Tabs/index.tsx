@@ -7,9 +7,6 @@ import ActivitiesTab from "./ActivitiesTab";
 import ManageAccountsTab from "./ManageAccountsTab";
 import TotalCreditsDataStats from "../DataStats/TotalCreditsDataStats";
 import { useAccount, useAccounts } from "@/hooks/web3";
-import { Account } from "@/types/account";
-import { CrytoSWRResponse } from "@/types/hooks";
-import { CheckAccount } from "../common/checkAccount";
 
 interface TabsProps {
   type: "my-credits" | "manage-projects" | "manage-accounts" | "activities";
@@ -48,7 +45,6 @@ const Tabs: React.FC<TabsProps> = ({ type }) => {
 
   return (
     <>
-      <CheckAccount />
       <Breadcrumb
         pageName={
           type === "my-credits"

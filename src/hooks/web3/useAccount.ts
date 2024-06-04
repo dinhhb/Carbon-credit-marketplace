@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import useSWR from "swr";
 import { useAccounts } from ".";
 import { Account } from "@/types/account";
+import { useRouter } from "next/navigation";
 
 type UseAccountResponse = {
   connect: () => void;
@@ -77,6 +78,39 @@ export const hookFactory: AccountHookFactory =
         }
       });
     }
+
+    const router = useRouter();
+    const currentRoute =
+      typeof window !== "undefined" ? window.location.pathname : "";
+
+    useEffect(() => {
+      if (!data) return; // Wait until the account data is loaded
+
+      if (
+        currentRoute === "/" ||
+        currentRoute === "/activities" ||
+        currentRoute === "/my-credits" ||
+        currentRoute === "/register-project"
+      ) {
+        if (adminAddress[data]) {
+          router.push("/manage-accounts");
+        } else if (auditorAddress[data]) {
+          router.push("/manage-projects");
+        }
+      } else if (currentRoute === "/manage-accounts") {
+        if (auditorAddress[data]) {
+          router.push("/manage-projects");
+        } else if (!adminAddress[data] && !auditorAddress[data]) {
+          router.push("/");
+        }
+      } else if (currentRoute === "/manage-projects") {
+        if (adminAddress[data]) {
+          router.push("/manage-accounts");
+        } else if (!adminAddress[data] && !auditorAddress[data]) {
+          router.push("/");
+        }
+      }
+    }, [data, router, currentRoute]);
 
     return {
       ...swr,

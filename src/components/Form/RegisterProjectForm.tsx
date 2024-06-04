@@ -8,7 +8,6 @@ import axios from "axios";
 import { useWeb3 } from "../providers/web3";
 import { toast } from "react-toastify";
 import { Contract, ethers } from "ethers";
-import { CheckAccount } from "../common/checkAccount";
 import CheckUserRegistration from "../common/CheckUserRegistration";
 import VintageFrom from "@/components/Form/FormElements/DatePicker/VintageFrom";
 import VintageTo from "@/components/Form/FormElements/DatePicker/VintageTo";
@@ -291,7 +290,6 @@ const RegisterProjectForm: React.FC = () => {
 
   return (
     <>
-      <CheckAccount />
       <Breadcrumb pageName="Register Project" />
       <CheckUserRegistration>
         <div className="grid grid-cols-1 gap-16">
