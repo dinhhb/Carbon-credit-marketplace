@@ -46,7 +46,23 @@ const ListModal: React.FC<CreditProps> = ({ listCredit, credit }) => {
         onClick={() => setListModalOpen(!listModalOpen)}
         className="mr-1 rounded-md bg-primary px-2 py-1 font-medium text-white"
       >
-        List
+        <svg
+          className="text-gray-800 h-6 w-6 dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v13m0-13 4 4m-4-4-4 4"
+          />
+        </svg>
       </button>
       <div
         className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5 ${
@@ -62,10 +78,9 @@ const ListModal: React.FC<CreditProps> = ({ listCredit, credit }) => {
           <h3 className="py-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
             List Your Credits
           </h3>
-          <span className="mx-auto mb-6 inline-block h-1 w-full rounded bg-primary"></span>
-          <p className="py-2">
-            Your project has been approved. You can now list your credits in the
-            marketplace.
+          <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
+          <p className="py-2 text-left">
+            Previous price: {credit.pricePerCredit} ETH
           </p>
           <div className="flex flex-col py-6">
             <div>

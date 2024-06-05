@@ -45,7 +45,23 @@ const DelistModal: React.FC<CreditProps> = ({ credit, delistCredits }) => {
         onClick={() => setModalOpen(!modalOpen)}
         className="mr-1 rounded-md bg-danger px-2 py-1 font-medium text-white"
       >
-        Delist
+        <svg
+          className="text-gray-800 h-6 w-6 dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 19V5m0 14-4-4m4 4 4-4"
+          />
+        </svg>
       </button>
       <div
         className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5 ${
@@ -85,8 +101,8 @@ const DelistModal: React.FC<CreditProps> = ({ credit, delistCredits }) => {
           <h3 className="mt-5.5 pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
             Delist Your Credits
           </h3>
-          <span className="mx-auto mb-6 inline-block h-1 w-full rounded bg-danger"></span>
-          <p className="mb-10 py-5">
+          <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-danger"></span>
+          <p className="mb-10 ">
             Are you sure you want to delist your credits? Your listed credits
             will be removed from the marketplace.
           </p>

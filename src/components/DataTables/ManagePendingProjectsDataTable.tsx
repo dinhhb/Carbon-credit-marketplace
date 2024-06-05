@@ -173,7 +173,7 @@ const ManagePendingProjectsDataTable: FunctionComponent<CreditListProps> = ({
                   );
                 })}
                 <td key={`modal-${rowIndex}`}>
-                  <div className="flex space-x-2">
+                  <div className="flex items-center justify-center space-x-2">
                     <MyCreditInfoModal credit={row.original} />
                     <ApproveProjectModal
                       approveProject={approveProject}

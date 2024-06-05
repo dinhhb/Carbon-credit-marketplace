@@ -46,7 +46,23 @@ const CreditInfoModal: React.FC<CreditProps> = ({ credit }) => {
         onClick={() => setCreditInfoModalOpen(!creditInfoModalOpen)}
         className="mr-1 rounded-md bg-body px-2 py-1 font-medium text-white"
       >
-        Details
+        <svg
+          className="text-gray-800 h-6 w-6 dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
       </button>
       <div
         className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5 ${
@@ -131,7 +147,7 @@ const CreditInfoModal: React.FC<CreditProps> = ({ credit }) => {
             </p>
           </div>
 
-          <div className="pt-6 mb-4 flex items-start text-left">
+          <div className="mb-4 flex items-start pt-6 text-left">
             <p className="flex-1 font-bold text-primary dark:text-white">
               You own {credit.quantityOwned} credits of this project
             </p>

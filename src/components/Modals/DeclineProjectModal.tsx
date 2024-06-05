@@ -6,7 +6,10 @@ type CreditProps = {
   declineProject: (tokenId: number) => Promise<void>;
 };
 
-const DeclineProjectModal: React.FC<CreditProps> = ({credit, declineProject}) => {
+const DeclineProjectModal: React.FC<CreditProps> = ({
+  credit,
+  declineProject,
+}) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -45,7 +48,23 @@ const DeclineProjectModal: React.FC<CreditProps> = ({credit, declineProject}) =>
         onClick={() => setModalOpen(!modalOpen)}
         className="mr-1 rounded-md bg-danger px-2 py-1 font-medium text-white"
       >
-        Decline
+        <svg
+          className="text-gray-800 h-6 w-6 dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
       </button>
       <div
         className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5 ${
@@ -85,6 +104,7 @@ const DeclineProjectModal: React.FC<CreditProps> = ({credit, declineProject}) =>
           <h3 className="mt-5.5 pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
             Decline Project
           </h3>
+          <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-danger"></span>
           <p className="mb-10">
             Are you sure you want to decline this project?
           </p>
@@ -105,7 +125,6 @@ const DeclineProjectModal: React.FC<CreditProps> = ({credit, declineProject}) =>
                   } else if (!declineProject) {
                     alert("Decline project function not available");
                   }
-                
                 }}
                 className="block w-full rounded border border-meta-1 bg-meta-1 p-3 text-center font-medium text-white transition hover:bg-opacity-90"
               >

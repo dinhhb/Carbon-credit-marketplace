@@ -185,16 +185,12 @@ const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
                   );
                 })}
                 <td key={`modal-${rowIndex}`}>
-                  <div className="flex">
-                    <div>
-                      <MyCreditInfoModal credit={row.original} />
-                    </div>
-                    <div>
-                      <RetireCreditsModal
-                        credit={row.original}
-                        retireCredits={retireCredits}
-                      />
-                    </div>
+                  <div className="flex items-center justify-center">
+                    <MyCreditInfoModal credit={row.original} />
+                    <RetireCreditsModal
+                      credit={row.original}
+                      retireCredits={retireCredits}
+                    />
                   </div>
                 </td>
               </tr>

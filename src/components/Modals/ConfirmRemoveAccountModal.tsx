@@ -48,7 +48,23 @@ const ConfirmRemoveAccountModal: React.FC<AccountProps> = ({
         onClick={() => setModalOpen(!modalOpen)}
         className="mr-1 rounded-md bg-danger px-2 py-1 font-medium text-white"
       >
-        Remove
+        <svg
+          className="text-gray-800 h-6 w-6 dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+          />
+        </svg>
       </button>
       <div
         className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5 ${
@@ -88,6 +104,7 @@ const ConfirmRemoveAccountModal: React.FC<AccountProps> = ({
           <h3 className="mt-5.5 pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
             Remove Account
           </h3>
+          <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-danger"></span>
           <p className="mb-10">
             {`Are you sure you want to remove this account: ${account.address}?`}
           </p>

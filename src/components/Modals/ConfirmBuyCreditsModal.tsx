@@ -78,7 +78,7 @@ const ConfirmBuyCreditsModal: React.FC<CreditProps> = ({
           <h3 className="pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
             Buy Credits
           </h3>
-          <span className="mx-auto mb-6 inline-block h-1 w-full rounded bg-primary"></span>
+          <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
           <div className="mb-4 flex items-start text-left">
             <p className="flex-1">Max amount:</p>
             <p className="flex-1">{credit.quantity - credit.quantitySold}</p>

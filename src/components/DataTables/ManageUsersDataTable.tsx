@@ -174,10 +174,11 @@ const ManageUsersDataTable: FunctionComponent<AccountListProps> = ({
                   );
                 })}
                 <td key={`modal-${rowIndex}`}>
-                  <div className="flex">
-                    <div>
-                      <ConfirmRemoveAccountModal account={row.original} removeAccount={removeAccount}/>
-                    </div>
+                  <div className="flex items-center justify-center">
+                    <ConfirmRemoveAccountModal
+                      account={row.original}
+                      removeAccount={removeAccount}
+                    />
                   </div>
                 </td>
               </tr>

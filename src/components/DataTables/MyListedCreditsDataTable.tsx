@@ -8,7 +8,6 @@ import {
   usePagination,
   Column,
 } from "react-table";
-import CreditInfoModal from "../Modals/CreditInfoModal";
 import OwnersModal from "../Modals/OwnersModal";
 import DelistModal from "../Modals/DelistModal";
 import { Credit } from "@/types/credit";
@@ -189,16 +188,16 @@ const MyListedCreditsDataTable: FunctionComponent<CreditListProps> = ({
                   );
                 })}
                 <td key={`modal-${rowIndex}`}>
-                  <div className="flex">
-                    <div>
-                      <MyCreditInfoModal credit={row.original} />
-                    </div>
-                    <div>
-                      <ChangePriceModal credit={row.original} changePrice={changePrice}/>
-                    </div>
-                    <div>
-                      <DelistModal credit={row.original} delistCredits={delistCredits}/>
-                    </div>
+                  <div className="flex items-center justify-center">
+                    <MyCreditInfoModal credit={row.original} />
+                    <ChangePriceModal
+                      credit={row.original}
+                      changePrice={changePrice}
+                    />
+                    <DelistModal
+                      credit={row.original}
+                      delistCredits={delistCredits}
+                    />
                   </div>
                 </td>
               </tr>

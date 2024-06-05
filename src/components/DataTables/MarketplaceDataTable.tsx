@@ -204,7 +204,7 @@ const MarketplaceDataTable: FunctionComponent = () => {
                         );
                       })}
                       <td key={`modal-${rowIndex}`}>
-                        <div className="flex">
+                        <div className="flex items-center justify-center">
                           <CreditInfoModal
                             buyCredit={credits.buyCredit}
                             credit={row.original}

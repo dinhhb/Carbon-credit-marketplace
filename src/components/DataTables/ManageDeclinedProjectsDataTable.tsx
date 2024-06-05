@@ -168,10 +168,8 @@ const ManageDeclinedProjectsDataTable: FunctionComponent<CreditListProps> = ({
                   );
                 })}
                 <td key={`modal-${rowIndex}`}>
-                  <div className="flex">
-                    <div>
-                      <MyCreditInfoModal credit={row.original} />
-                    </div>
+                  <div className="flex items-center justify-center">
+                    <MyCreditInfoModal credit={row.original} />
                   </div>
                 </td>
               </tr>
