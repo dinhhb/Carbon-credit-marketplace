@@ -49,6 +49,7 @@ contract ProjectManagement is Ownable, CarbonBase {
         _token.setTokenSupply(currentId, tokenSupply);
         _token.setURI(currentId, tokenURI);
         _token.getAddTokenToAllTokensEnumeration(currentId);
+        _token.addTokenToOwnerEnumeration(msg.sender, currentId);
     }
 
     function approveProject(uint256 tokenId) public payable onlyAuditor {

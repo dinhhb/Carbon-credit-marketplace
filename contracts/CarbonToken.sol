@@ -169,7 +169,7 @@ contract CarbonToken is CarbonBase {
             if (to != address(0) && balanceOf(to, tokenId) == 0) {
                 // identify the first time tokens are transferred to a new holder.
                 // This implies the recipient did not previously own any units of this token type
-                _addTokenToOwnerEnumeration(to, tokenId);
+                addTokenToOwnerEnumeration(to, tokenId);
                 _addTokenOwner(tokenId, to);
             } else if (to == address(0)) {
                 // checking before burn
@@ -219,10 +219,11 @@ contract CarbonToken is CarbonBase {
         _allTokenIds.push(tokenId);
     }
 
-    function _addTokenToOwnerEnumeration(address to, uint256 tokenId) private {
-        if (balanceOf(to, tokenId) == 0) {
-            // Token ID is new to this owner
+    function addTokenToOwnerEnumeration(address to, uint256 tokenId) public {
+        // check if the owner already owns the token, else add it
+        if (_ownedTokensIndex[to][tokenId] == 0) {
             _ownerToTokenIds[to].push(tokenId);
+            _ownedTokensIndex[to][tokenId] = _ownerToTokenIds[to].length;
         }
     }
 
@@ -230,20 +231,16 @@ contract CarbonToken is CarbonBase {
         address owner,
         uint256 tokenId
     ) private {
-        // First, we need to find the index of this token ID in the owner's list of token IDs
         uint256 lastTokenIndex = _ownerToTokenIds[owner].length - 1;
-        uint256 tokenIndex = _ownedTokensIndex[owner][tokenId];
+        uint256 tokenIndex = _ownedTokensIndex[owner][tokenId] - 1; // Adjust for 1-based indexing
 
-        // If the token being removed is not the last token in the list,
-        // swap the last token with the token to be removed.
         if (tokenIndex != lastTokenIndex) {
             uint256 lastTokenId = _ownerToTokenIds[owner][lastTokenIndex];
 
             _ownerToTokenIds[owner][tokenIndex] = lastTokenId; // Move the last token to the slot of the to-be-removed token
-            _ownedTokensIndex[owner][lastTokenId] = tokenIndex; // Update the moved token's index
+            _ownedTokensIndex[owner][lastTokenId] = tokenIndex + 1; // Update the moved token's index to 1-based index
         }
 
-        // Remove the last token's data (since it's now either removed or moved)
         _ownerToTokenIds[owner].pop();
         delete _ownedTokensIndex[owner][tokenId]; // Remove the deleted token's index
     }

@@ -57,9 +57,9 @@ const ListModal: React.FC<CreditProps> = ({ listCredit, credit }) => {
         >
           <path
             stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M12 6v13m0-13 4 4m-4-4-4 4"
           />
         </svg>

@@ -181,7 +181,10 @@ const MyUnlistedCreditsDataTable: FunctionComponent<CreditListProps> = ({
                 <td key={`modal-${rowIndex}`}>
                   <div className="flex items-center justify-center">
                     <MyCreditInfoModal credit={row.original} />
+                    {/* {status === "2" && <div>Yo</div>} */}
+                    {status === "1" && (
                     <ListModal credit={row.original} listCredit={listCredit} />
+                  )}
                   </div>
                 </td>
               </tr>

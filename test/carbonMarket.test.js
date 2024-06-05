@@ -374,14 +374,19 @@ contract("CarbonMarket Suite", async accounts => {
     const tokenSupply = 100;
 
     beforeEach(async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });  // Project 1
       await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
       await projectContract.approveProject(1, { from: auditor });
+
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });  // Project 2
+      await projectContract.declineProject(2, { from: auditor });
+
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });  // Project 3
     });
 
-    it("should get one credit created", async () => {
+    it("should get 3 credit created", async () => {
       const totalSupply = await tokenContract.getTotalTokensCount();
-      assert.equal(totalSupply, 1, "The total supply does not match the expected value");
+      assert.equal(totalSupply, 3, "The total supply does not match the expected value");
     });
 
     it("should get the correct credit by index", async () => {
@@ -430,21 +435,29 @@ contract("CarbonMarket Suite", async accounts => {
     const buyAmount = 10;
 
     beforeEach(async () => {
-      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });  // Project 1
       await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
       await projectContract.approveProject(1, { from: auditor });
 
-      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });  // Project 2
       await projectContract.approveProject(2, { from: auditor });
 
       await marketContract.buyCredits(1, buyAmount, { from: buyer, value: price * buyAmount });
       await marketContract.buyCredits(2, buyAmount, { from: buyer, value: price * buyAmount });
+
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });  // Project 3
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });  // Project 4
+      await projectContract.declineProject(3, { from: auditor });
+    });
+
+    it("should get the correct owned credits for the seller", async () => {
+      const ownedCredits = await tokenContract.getOwnedCredits({ from: seller });
+      assert.equal(ownedCredits.length, 4, "Seller should own credits from 4 projects");
     });
 
     it("should get the correct owned credits for the buyer", async () => {
       const ownedCredits = await tokenContract.getOwnedCredits({ from: buyer });
-
-      assert.equal(ownedCredits.length, 2, "Buyer should own credits from 2 project");
+      assert.equal(ownedCredits.length, 2, "Buyer should own credits from 2 projects");
 
     });
 

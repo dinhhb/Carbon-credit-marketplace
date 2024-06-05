@@ -56,9 +56,9 @@ const DelistModal: React.FC<CreditProps> = ({ credit, delistCredits }) => {
         >
           <path
             stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M12 19V5m0 14-4-4m4 4 4-4"
           />
         </svg>

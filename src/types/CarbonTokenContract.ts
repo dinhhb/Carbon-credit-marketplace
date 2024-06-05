@@ -110,7 +110,8 @@ export type CarbonTokenContractMethodNames =
   | 'getAllCredits'
   | 'getOwnedCredits'
   | 'getTokenOwners'
-  | 'getOwnerCount';
+  | 'getOwnerCount'
+  | 'addTokenToOwnerEnumeration';
 export interface ApprovalForAllEventEmittedResponse {
   account: string;
   operator: string;
@@ -593,4 +594,17 @@ export interface CarbonTokenContract {
     tokenId: BigNumberish,
     overrides?: ContractCallOverrides
   ): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param to Type: address, Indexed: false
+   * @param tokenId Type: uint256, Indexed: false
+   */
+  addTokenToOwnerEnumeration(
+    to: string,
+    tokenId: BigNumberish,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
 }
