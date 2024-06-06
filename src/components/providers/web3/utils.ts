@@ -16,8 +16,6 @@ type Nullable<T> = {
 export type Web3State = {
   isLoading: boolean; // true while loading web3State
   hooks: Web3Hooks;
-  // createdEvents: CarbonCreditCreatedEvent[];
-  // auditedEvents: CarbonCreditAuditedEvent[];
 } & Nullable<Web3Dependencies>;
 
 export const createDefaultState = () => {
@@ -28,10 +26,9 @@ export const createDefaultState = () => {
     accountContract: null,
     projectContract: null,
     marketContract: null,
+    retireContract: null,
     isLoading: true,
     hooks: setupHooks({ isLoading: true } as any),
-    // createdEvents: [],
-    // auditedEvents: [],
   };
 };
 
@@ -42,6 +39,7 @@ export const createWeb3State = ({
   accountContract,
   projectContract,
   marketContract,
+  retireContract,
   isLoading,
 }: Web3Dependencies
 ) => {
@@ -52,6 +50,7 @@ export const createWeb3State = ({
     accountContract,
     projectContract,
     marketContract,
+    retireContract,
     isLoading,
     hooks: setupHooks({
       ethereum,
@@ -60,6 +59,7 @@ export const createWeb3State = ({
       accountContract,
       projectContract,
       marketContract,
+      retireContract,
       isLoading,
     }),
   };

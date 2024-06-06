@@ -9,8 +9,8 @@ import {
 } from "../utils";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { CreditMeta } from "@/types/credit";
 import axios from "axios";
+import { RetirementMeta } from "@/types/retirement";
 
 export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -32,30 +32,21 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const {
-      credit,
+      retirement,
       signature,
       address,
-    }: { credit: CreditMeta; signature: string; address: string } =
+    }: { retirement: RetirementMeta; signature: string; address: string } =
       await request.json();
 
-    const requiredFields: Array<keyof CreditMeta> = [
-      "projectId",
-      "projectName",
-      "projectType",
-      "vintageFrom",
-      "vintageTo",
-      "origin",
-      "quantity",
-      "price",
-      "registryLink",
-      "registryAccountName",
-      "registryAccountNo",
-      "document",
-      "standard",
+    const requiredFields: Array<keyof RetirementMeta> = [
+      "amount",
+      "beneficialOwner",
+      "retirementReason",
+      "retirementReasonDetails",
     ];
 
     for (let field of requiredFields) {
-      if (!credit[field]) {
+      if (!retirement[field]) {
         return new Response(
           JSON.stringify({
             message: "Some of the form data are missing",
@@ -76,7 +67,7 @@ export async function POST(request: NextRequest) {
         pinataMetadata: {
           name: uuid4(),
         },
-        pinataContent: credit,
+        pinataContent: retirement,
       },
       {
         headers: {

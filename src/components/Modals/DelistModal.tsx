@@ -106,6 +106,9 @@ const DelistModal: React.FC<CreditProps> = ({ credit, delistCredits }) => {
             Are you sure you want to delist your credits? Your listed credits
             will be removed from the marketplace.
           </p>
+          <p className="pb-10">
+            {credit.metadata.projectName}
+          </p>
           <div className="-mx-3 flex flex-wrap gap-y-4">
             <div className="w-full px-3 2xsm:w-1/2">
               <button

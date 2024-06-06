@@ -154,28 +154,28 @@ contract CarbonMarket is CarbonBase {
         );
     }
 
-    function retireCredits(uint256 tokenId, uint256 amount) public {
+    function retireCredits(address caller, uint256 tokenId, uint256 amount) public {
         require(amount > 0, "Amount must be greater than zero.");
         require(
-            _account.checkAccountRegistered(msg.sender),
+            _account.checkAccountRegistered(caller),
             "Account not registered."
         );
 
         require(
-            _token.balanceOf(msg.sender, tokenId) >= amount,
+            _token.balanceOf(caller, tokenId) >= amount,
             "Insufficient balance."
         );
         require(
-            _token.isApprovedForAll(msg.sender, address(this)),
+            _token.isApprovedForAll(caller, address(this)),
             "Marketplace not yet authorized."
         );
 
-        _token.burn(msg.sender, tokenId, amount);
+        _token.burn(caller, tokenId, amount);
 
         uint256 currentTotalCredits = _account.getAccountTotalCredits(
-            msg.sender
+            caller
         );
-        uint256 currentTotalRetire = _account.getAccountTotalRetire(msg.sender);
+        uint256 currentTotalRetire = _account.getAccountTotalRetire(caller);
 
         emit Log("Current Total Credits", currentTotalCredits);
         emit Log("Current Total Retire", currentTotalRetire);
@@ -183,11 +183,11 @@ contract CarbonMarket is CarbonBase {
         require(currentTotalCredits >= amount, "Underflow detected.");
 
         _account.setAccountTotalCredits(
-            msg.sender,
+            caller,
             currentTotalCredits - amount
         );
-        _account.setAccountTotalRetire(msg.sender, currentTotalRetire + amount);
+        _account.setAccountTotalRetire(caller, currentTotalRetire + amount);
 
-        emit CarbonCreditRetired(tokenId, msg.sender, amount, block.timestamp);
+        emit CarbonCreditRetired(tokenId, caller, amount, block.timestamp);
     }
 }

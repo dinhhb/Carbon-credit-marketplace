@@ -7,9 +7,10 @@ import ActivitiesTab from "./ActivitiesTab";
 import ManageAccountsTab from "./ManageAccountsTab";
 import TotalCreditsDataStats from "../DataStats/TotalCreditsDataStats";
 import { useAccount, useAccounts } from "@/hooks/web3";
+import ManageRetirementsTab from "./ManageRetirementsTab";
 
 interface TabsProps {
-  type: "my-credits" | "manage-projects" | "manage-accounts" | "activities";
+  type: "my-credits" | "manage-projects" | "manage-accounts" | "activities" | "manage-retirements";
 }
 
 const Tabs: React.FC<TabsProps> = ({ type }) => {
@@ -41,6 +42,9 @@ const Tabs: React.FC<TabsProps> = ({ type }) => {
     case "manage-accounts":
       tabComponent = <ManageAccountsTab />;
       break;
+    case "manage-retirements":
+      tabComponent = <ManageRetirementsTab />;
+      break;
   }
 
   return (
@@ -53,6 +57,8 @@ const Tabs: React.FC<TabsProps> = ({ type }) => {
               ? "Manage Projects"
               : type === "manage-accounts"
                 ? "Manage Accounts"
+                : type === "manage-retirements"
+                  ? "Manage Retirements"
                 : "Activities"
         }
       />

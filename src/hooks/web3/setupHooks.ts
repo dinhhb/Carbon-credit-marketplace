@@ -5,6 +5,7 @@ import { hookFactory as createListedCreditsHook, UseListedCreditsHook } from "./
 import { hookFactory as createOwnedCreditsHook, UseOwnedCreditsHook } from "./useOwnedCredits";
 import { hookFactory as createAllCreditsHook, UseAllCreditsHook } from "./useAllCredits";
 import { hookFactory as createAccountsHook, UseAccountsHook } from "./useAccounts";
+import { hookFactory as createAllRetiremntsHook, UseAllRetirementsHook } from "./useAllRetirements";
 
 export type Web3Hooks = {
   useAccount: UseAccountHook;
@@ -13,6 +14,7 @@ export type Web3Hooks = {
   useOwnedCredits: UseOwnedCreditsHook;
   useAllCredits: UseAllCreditsHook;
   useAccounts: UseAccountsHook;
+  useAllRetirements: UseAllRetirementsHook;
 };
 
 export type SetupHooks = {
@@ -27,5 +29,6 @@ export const setupHooks: SetupHooks = (deps) => {
     useOwnedCredits: createOwnedCreditsHook(deps),
     useAllCredits: createAllCreditsHook(deps),
     useAccounts: createAccountsHook(deps),
+    useAllRetirements: createAllRetiremntsHook(deps),
   };
 };

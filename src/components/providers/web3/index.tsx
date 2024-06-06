@@ -17,6 +17,7 @@ import { CarbonTokenContract } from "@/types/CarbonTokenContract";
 import { AccountManagementContract } from "@/types/AccountManagementContract";
 import { ProjectManagementContract } from "@/types/ProjectManagementContract";
 import { CarbonMarketContract } from "@/types/CarbonMarketContract";
+import { RetirementContract } from "@/types/RetirementContract";
 
 const pageReload = () => {
   window.location.reload();
@@ -59,6 +60,7 @@ const Web3Provider: FunctionComponent<Props> = ({ children }) => {
         const accountContract = await loadContract("AccountManagement", provider);
         const marketContract = await loadContract("CarbonMarket", provider);
         const projectContract = await loadContract("ProjectManagement", provider);
+        const retireContract = await loadContract("Retirement", provider);
 
         setGlobalListener(window.ethereum);
         setWeb3Api(
@@ -69,6 +71,7 @@ const Web3Provider: FunctionComponent<Props> = ({ children }) => {
             accountContract: accountContract.connect(signer) as unknown as AccountManagementContract,
             projectContract: projectContract.connect(signer) as unknown as ProjectManagementContract,
             marketContract: marketContract.connect(signer) as unknown as CarbonMarketContract,
+            retireContract: retireContract.connect(signer) as unknown as RetirementContract,
             isLoading: false,
           }),
         );

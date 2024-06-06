@@ -8,53 +8,43 @@ import {
   usePagination,
   Column,
 } from "react-table";
-import OwnersModal from "../Modals/OwnersModal";
-import { Credit } from "@/types/credit";
 import MyCreditInfoModal from "../Modals/MyCreditInfoModal";
-import RetireCreditsModal from "../Modals/RetireCreditsModal";
+import ApproveProjectModal from "../Modals/ApproveProjectModal";
+import DeclineProjectModal from "../Modals/DeclineProjectModal";
 import { renderProjectNameCell } from "../common/ProjectNameCell";
+import { Retirement } from "@/types/retirement";
+import { renderTimeCell } from "../common/TimeCell";
+import RetirementInfoModal from "../Modals/RetirementInfoModal";
 
 // table header
-const columns: Column<Credit>[] = [
+const columns: Column<Retirement>[] = [
   {
-    Header: "Credit ID",
-    accessor: "tokenId",
+    Header: "ID",
+    accessor: "retirementId",
   },
   {
-    Header: "Project name",
-    accessor: (data) => data.metadata.projectName,
-    Cell: ({ value }: { value: string }) => renderProjectNameCell(value),
+    Header: "Amount",
+    accessor: "amount",
   },
   {
-    Header: "Owners",
-    accessor: "ownerCount",
-    Cell: ({ row }) => (
-      <OwnersModal
-        owners={row.original.owners}
-        numberOfOwners={row.original.ownerCount}
-      />
-    ),
+    Header: "Owner",
+    accessor: "owner",
   },
   {
-    Header: "Quantity Owned",
-    accessor: (data) => data.quantityOwned,
-  },
-  {
-    Header: "Price",
-    accessor: "pricePerCredit",
+    Header: "Time",
+    accessor: "time",
+    Cell: ({ value }: { value: number }) => renderTimeCell(value),
   },
 ];
 
-type CreditListProps = {
-  credits: Credit[];
-  retireCredits: (tokenId: number, amount: number) => Promise<void>;
+type RetirementListProps = {
+  retirements: Retirement[];
 };
 
-const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
-  credits,
-  retireCredits,
+const ManagePendingProjectsDataTable: FunctionComponent<RetirementListProps> = ({
+  retirements,
 }) => {
-  const data = useMemo(() => credits, [credits]);
+  const data = useMemo(() => retirements, [retirements]);
 
   const tableInstance = useTable(
     {
@@ -185,11 +175,9 @@ const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
                   );
                 })}
                 <td key={`modal-${rowIndex}`}>
-                  <div className="flex items-center justify-center">
-                    <MyCreditInfoModal credit={row.original} />
-                    <RetireCreditsModal
-                      credit={row.original}
-                    />
+                  <div className="flex items-center justify-center space-x-2">
+                    <MyCreditInfoModal credit={row.original.metadata.credit} />
+                    <RetirementInfoModal retirement={row.original}/>
                   </div>
                 </td>
               </tr>
@@ -262,4 +250,4 @@ const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
   );
 };
 
-export default MyPurchasedCreditsDataTable;
+export default ManagePendingProjectsDataTable;

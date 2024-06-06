@@ -214,9 +214,9 @@ const RegisterProjectForm: React.FC = () => {
         });
 
         const res = await toast.promise(promise, {
-          pending: "Uploading metadata...",
-          success: "Metadata uploaded successfully",
-          error: "Failed to upload metadata",
+          pending: "Uploading project information...",
+          success: "Project information uploaded successfully",
+          error: "Failed to upload project information",
         });
 
         const data = res.data as PinataRes;

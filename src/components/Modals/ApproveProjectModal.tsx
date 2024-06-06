@@ -84,6 +84,9 @@ const ApproveProjectModal: React.FC<CreditProps> = ({
           <p className="pb-10">
             Are you sure you want to approve this project?
           </p>
+          <p className="pb-10">
+            {credit.metadata.projectName}
+          </p>
           <div className="-mx-3 flex flex-wrap gap-y-4">
             <div className="w-full px-3 2xsm:w-1/2">
               <button

@@ -10,7 +10,6 @@ type UseOwnedCreditsResponse = {
   changePrice: (tokenId: number, price: number) => Promise<void>;
   delistCredits: (tokenId: number) => Promise<void>;
   listCredits: (tokenId: number, price: number) => Promise<void>;
-  retireCredits: (tokenId: number, amount: number) => Promise<void>;
 };
 
 type OwnedCreditsHookFactory = CryptoHookFactory<
@@ -129,28 +128,6 @@ export const hookFactory: OwnedCreditsHookFactory =
       [_marketContract],
     );
 
-    const retireCredits = useCallback(
-      async (tokenId: number, amount: number) => {
-        try {
-          const result1 = await _tokenContract!.setApprovalForAll(
-            marketContractAddress || "",
-            true,
-          );
-          await result1?.wait();
-          alert("Approval granted");
-          const result2 = await _marketContract!.retireCredits(tokenId, amount);
-          await toast.promise(result2!.wait(), {
-            pending: "Retiring credit...",
-            success: "Credit retired successfully!",
-            error: "Failed to retire credit",
-          });
-        } catch (e: any) {
-          console.log(e.message);
-        }
-      },
-      [marketContractAddress, _tokenContract, _marketContract],
-    );
-
     return {
       data: data || EMPTY_ARRAY,
       ...swrRes,
@@ -158,6 +135,5 @@ export const hookFactory: OwnedCreditsHookFactory =
       changePrice,
       delistCredits,
       listCredits,
-      retireCredits,
     };
   };

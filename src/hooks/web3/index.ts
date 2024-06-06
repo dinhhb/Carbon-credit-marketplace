@@ -47,3 +47,11 @@ export const useAccounts = () => {
     accounts: swrRes,
   };
 }
+
+export const useAllRetirements = () => {
+  const hooks = useHooks();
+  const swrRes = hooks.useAllRetirements();
+  return {
+    retirements: swrRes,
+  };
+}

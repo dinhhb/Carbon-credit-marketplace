@@ -5,6 +5,7 @@ import { CarbonMarketContract } from "./CarbonMarketContract";
 import { CarbonTokenContract } from "./CarbonTokenContract";
 import { ProjectManagementContract } from "./ProjectManagementContract";
 import { AccountManagementContract } from "./AccountManagementContract";
+import { RetirementContract } from "./RetirementContract";
 
 export type Web3Dependencies = {
   provider: providers.Web3Provider;
@@ -12,6 +13,7 @@ export type Web3Dependencies = {
   accountContract: AccountManagementContract;
   projectContract: ProjectManagementContract;
   marketContract: CarbonMarketContract;
+  retireContract: RetirementContract;
   ethereum: MetaMaskInpageProvider;
   isLoading: boolean;
 };

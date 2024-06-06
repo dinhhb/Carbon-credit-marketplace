@@ -1,22 +1,3 @@
-// export type CreditMetadata = {
-//   "project-name": string;
-//   "project-id": string;
-//   vintage: string;
-//   "project-developer": string;
-//   methodology: string;
-//   region: string;
-//   "project-type": string;
-//   standard: string;
-//   "crediting-period-start": Date;
-//   "crediting-period-end": Date;
-//   "issuance-date": Date;
-//   "credits-serial-number": string;
-//   "quantity-issue": string;
-//   price: string;
-//   "registry-reference-link": string;
-//   document: string;
-// };
-
 export type CreditMeta = {
   projectId: string;
   projectName: string;

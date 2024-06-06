@@ -103,7 +103,7 @@ export const hookFactory: AccountHookFactory =
         } else if (!adminAddress[data] && !auditorAddress[data]) {
           router.push("/");
         }
-      } else if (currentRoute === "/manage-projects") {
+      } else if (currentRoute === "/manage-projects" || currentRoute === "/manage-retirements") {
         if (adminAddress[data]) {
           router.push("/manage-accounts");
         } else if (!adminAddress[data] && !auditorAddress[data]) {

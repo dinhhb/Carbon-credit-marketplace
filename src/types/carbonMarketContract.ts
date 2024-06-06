@@ -431,10 +431,12 @@ export interface CarbonMarketContract {
    * Constant: false
    * StateMutability: nonpayable
    * Type: function
+   * @param caller Type: address, Indexed: false
    * @param tokenId Type: uint256, Indexed: false
    * @param amount Type: uint256, Indexed: false
    */
   retireCredits(
+    caller: string,
     tokenId: BigNumberish,
     amount: BigNumberish,
     overrides?: ContractTransactionOverrides
