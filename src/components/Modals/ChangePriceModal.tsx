@@ -79,9 +79,14 @@ const ChangePriceModal: React.FC<CreditProps> = ({ changePrice, credit }) => {
             Change Credits Price
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
-          <p className="py-2 text-left">
-            Current Price: {credit.pricePerCredit} ETH
-          </p>
+          <div className="mb-4 flex items-start text-left">
+            <p className="w-1/3">Project name:</p>
+            <p className="w-2/3">{credit.metadata.projectName}</p>
+          </div>
+          <div className="mb-4 flex items-start text-left">
+            <p className="w-1/3">Current price:</p>
+            <p className="w-2/3">{credit.pricePerCredit} ETH</p>
+          </div>
           <div className="flex flex-col pb-10 pt-6">
             <div>
               <label className="mb-3 block text-left text-sm font-medium text-black dark:text-white">

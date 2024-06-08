@@ -55,3 +55,11 @@ export const useAllRetirements = () => {
     retirements: swrRes,
   };
 }
+
+export const useOwnedRetirements = () => {
+  const hooks = useHooks();
+  const swrRes = hooks.useOwnedRetirements();
+  return {
+    retirements: swrRes,
+  };
+}

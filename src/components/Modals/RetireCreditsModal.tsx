@@ -50,6 +50,7 @@ const RetireCreditsModal: React.FC<CreditProps> = ({ credit }) => {
     beneficialOwner: "",
     retirementReason: "",
     retirementReasonDetails: "",
+    document: "",
     credit,
   });
 

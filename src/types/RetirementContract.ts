@@ -59,7 +59,6 @@ export type RetirementContractEvents =
   | 'ApprovalForAll'
   | 'BatchMetadataUpdate'
   | 'MetadataUpdate'
-  | 'OwnershipTransferred'
   | 'RetirementItemCreated'
   | 'Transfer';
 export interface RetirementContractEventsContext {
@@ -67,7 +66,6 @@ export interface RetirementContractEventsContext {
   ApprovalForAll(...parameters: any): EventFilter;
   BatchMetadataUpdate(...parameters: any): EventFilter;
   MetadataUpdate(...parameters: any): EventFilter;
-  OwnershipTransferred(...parameters: any): EventFilter;
   RetirementItemCreated(...parameters: any): EventFilter;
   Transfer(...parameters: any): EventFilter;
 }
@@ -78,9 +76,7 @@ export type RetirementContractMethodNames =
   | 'getApproved'
   | 'isApprovedForAll'
   | 'name'
-  | 'owner'
   | 'ownerOf'
-  | 'renounceOwnership'
   | 'safeTransferFrom'
   | 'safeTransferFrom'
   | 'setApprovalForAll'
@@ -88,14 +84,14 @@ export type RetirementContractMethodNames =
   | 'symbol'
   | 'tokenURI'
   | 'transferFrom'
-  | 'transferOwnership'
   | 'retireCredits'
   | 'getRetirementItem'
   | 'getOwnedRetirements'
   | 'getAllRetirements'
   | 'tokenOfOwnerByIndex'
   | 'tokenByIndex'
-  | 'totalSupply';
+  | 'totalSupply'
+  | 'certificateRetirement';
 export interface ApprovalEventEmittedResponse {
   owner: string;
   approved: string;
@@ -112,10 +108,6 @@ export interface BatchMetadataUpdateEventEmittedResponse {
 }
 export interface MetadataUpdateEventEmittedResponse {
   _tokenId: BigNumberish;
-}
-export interface OwnershipTransferredEventEmittedResponse {
-  previousOwner: string;
-  newOwner: string;
 }
 export interface RetirementItemCreatedEventEmittedResponse {
   tokenId: BigNumberish;
@@ -138,6 +130,8 @@ export interface RetirementitemResponse {
   3: BigNumber;
   timestamp: BigNumber;
   4: BigNumber;
+  isCertificated: boolean;
+  5: boolean;
 }
 export interface RetirementContract {
   /**
@@ -211,28 +205,12 @@ export interface RetirementContract {
    * Constant: true
    * StateMutability: view
    * Type: function
-   */
-  owner(overrides?: ContractCallOverrides): Promise<string>;
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
    * @param tokenId Type: uint256, Indexed: false
    */
   ownerOf(
     tokenId: BigNumberish,
     overrides?: ContractCallOverrides
   ): Promise<string>;
-  /**
-   * Payable: false
-   * Constant: false
-   * StateMutability: nonpayable
-   * Type: function
-   */
-  renounceOwnership(
-    overrides?: ContractTransactionOverrides
-  ): Promise<ContractTransaction>;
   /**
    * Payable: false
    * Constant: false
@@ -327,17 +305,6 @@ export interface RetirementContract {
    * Constant: false
    * StateMutability: nonpayable
    * Type: function
-   * @param newOwner Type: address, Indexed: false
-   */
-  transferOwnership(
-    newOwner: string,
-    overrides?: ContractTransactionOverrides
-  ): Promise<ContractTransaction>;
-  /**
-   * Payable: false
-   * Constant: false
-   * StateMutability: nonpayable
-   * Type: function
    * @param projectId Type: uint256, Indexed: false
    * @param amount Type: uint256, Indexed: false
    * @param uri Type: string, Indexed: false
@@ -408,4 +375,17 @@ export interface RetirementContract {
    * Type: function
    */
   totalSupply(overrides?: ContractCallOverrides): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   * @param tokenUri Type: string, Indexed: false
+   */
+  certificateRetirement(
+    tokenId: BigNumberish,
+    tokenUri: string,
+    overrides?: ContractTransactionOverrides
+  ): Promise<ContractTransaction>;
 }

@@ -2,18 +2,18 @@ import { CryptoHookFactory } from "@/types/hooks";
 import useSWR from "swr";
 import { Retirement } from "@/types/retirement";
 
-type UseAllRetirementsResponse = {};
+type UseOwnedRetirementResponse = {};
 
-type AllRetirementsHookFactory = CryptoHookFactory<
+type OwnedRetirementsHookFactory = CryptoHookFactory<
   Retirement[],
-  UseAllRetirementsResponse
+  UseOwnedRetirementResponse
 >;
 
 const EMPTY_ARRAY = [] as any;
 
-export type UseAllRetirementsHook = ReturnType<AllRetirementsHookFactory>;
+export type UseOwnedRetirementsHook = ReturnType<OwnedRetirementsHookFactory>;
 
-export const hookFactory: AllRetirementsHookFactory =
+export const hookFactory: OwnedRetirementsHookFactory =
   ({ retireContract }) =>
   () => {
 
@@ -21,7 +21,7 @@ export const hookFactory: AllRetirementsHookFactory =
       retireContract ? "web3/useAllRetirements" : null,
       async () => {
         const retirements = [] as Retirement[];
-        const coreRetirements = await retireContract!.getAllRetirements();
+        const coreRetirements = await retireContract!.getOwnedRetirements();
 
         for (let i = 0; i < coreRetirements.length; i++) {
           const retirement = coreRetirements[i];

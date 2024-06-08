@@ -2,16 +2,16 @@
 pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "./CarbonMarket.sol";
 
-contract Retirement is ERC721URIStorage, Ownable {
+contract Retirement is ERC721URIStorage {
     struct RetirementItem {
         uint256 tokenId;
         uint256 amount;
         address owner;
         uint256 projectId;
         uint256 timestamp;
+        bool isCertificated;
     }
 
     event RetirementItemCreated(
@@ -104,6 +104,14 @@ contract Retirement is ERC721URIStorage, Ownable {
         return _allRetirements.length;
     }
 
+    function certificateRetirement(
+        uint256 tokenId,
+        string memory tokenUri
+    ) public {
+        _idToRetirementItem[tokenId].isCertificated = true;
+        _setTokenURI(tokenId, tokenUri);
+    }
+
     function _createRetirementItem(
         uint256 tokenId,
         uint256 projectId,
@@ -114,7 +122,8 @@ contract Retirement is ERC721URIStorage, Ownable {
             amount: amount,
             owner: msg.sender,
             projectId: projectId,
-            timestamp: block.timestamp
+            timestamp: block.timestamp,
+            isCertificated: false
         });
 
         // _addTokenToAllTokensEnumeration(tokenId);
@@ -129,7 +138,8 @@ contract Retirement is ERC721URIStorage, Ownable {
     ) internal virtual override {
         super._beforeTokenTransfer(from, to, tokenId, amount);
 
-        if (from == address(0)) {   // mint
+        if (from == address(0)) {
+            // mint
             _addTokenToAllTokensEnumeration(tokenId);
         }
 

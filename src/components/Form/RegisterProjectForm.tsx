@@ -240,7 +240,7 @@ const RegisterProjectForm: React.FC = () => {
         headers: { Accept: "text/plain" },
       });
       const content = creditRes.data;
-
+      console.log("Credit content:", content);
       Object.keys(content).forEach((key) => {
         if (!ALLOW_FIELDS.includes(key)) {
           throw new Error("Invalid JSON structure");
@@ -267,16 +267,6 @@ const RegisterProjectForm: React.FC = () => {
         error: "Failed to register project",
       });
 
-      // if (result && result.logs) {
-      //   const carbonCreditCreatedLogEvent = result.events?.find(
-      //     (ev: any) => ev.event === "CarbonCreditCreated",
-      //   );
-      //   console.log(
-      //     "Token ID: ",
-      //     carbonCreditCreatedLogEvent?.args?.tokenId.toNumber(),
-      //   );
-      // }
-      // alert("Project registered successfully");
     } catch (error: any) {
       console.error(error.message);
     }

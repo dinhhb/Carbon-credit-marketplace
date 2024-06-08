@@ -26,16 +26,6 @@ export const projectContractAddress =
 
 export const pinataJWT = process.env.PINATA_JWT as string;
 
-// export function withSession(handler: any) {
-//   return withIronSession(handler, {
-//     password: process.env.SECRET_COOKIE_PASSWORD as string,
-//     cookieName: "credit-auth-session",
-//     cookieOptions: {
-//       secure: process.env.NODE_ENV === "production" ? true : false,
-//     },
-//   });
-// }
-
 export interface SessionData {
   message: { projectContractAddress: string; id: string };
 }

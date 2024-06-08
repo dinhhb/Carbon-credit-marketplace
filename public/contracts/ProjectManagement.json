@@ -30644,12 +30644,12 @@
         }
       },
       "links": {},
-      "address": "0xFE1bd5B1a0f3841d5f1631E8699C602c93Fa7E8A",
-      "transactionHash": "0x768b5ee2337247caf201e8a1e26593ff055156d74318521cb8448147c83b9c3a"
+      "address": "0x8242669164959a2D7F3c6f37a1A90784a175c68E",
+      "transactionHash": "0x3452c26297566aa64b6e455c456ad69709e19ea6d86118d44c31853dfbdb9e84"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-06-06T17:27:03.772Z",
+  "updatedAt": "2024-06-08T14:34:52.852Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

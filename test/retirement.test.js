@@ -109,6 +109,52 @@ contract("Retirement", async accounts => {
     });
   });
 
+  describe("Certification", async () => {
+    const tokenSupply = 100;
+    const retireAmount = 50;
+    const newUri = "https://newuri.com";
+
+    beforeEach(async () => {
+      await projectContract.registerProject(tokenSupply, tokenURI, price, { from: seller });
+      await tokenContract.setApprovalForAll(marketContract.address, true, { from: seller });
+      await projectContract.approveProject(1, { from: auditor });
+      await retirementContract.retireCredits(1, retireAmount, retirementURI, { from: seller });
+    });
+
+    it("should get correct certification status", async () => {
+      let allRetirements = await retirementContract.getAllRetirements();
+      let certificationStatusBefore = allRetirements[0].isCertificated;
+      assert.equal(certificationStatusBefore, false, "Certification status is suppose to be false.");
+  
+      await retirementContract.certificateRetirement(1, newUri, { from: auditor });
+  
+      allRetirements = await retirementContract.getAllRetirements();
+      const certificationStatusAfter = allRetirements[0].isCertificated;
+      assert.equal(certificationStatusAfter, true, "Certification status is suppose to be true.");
+    });
+
+    it("should get correct certification URI", async () => {
+      let certificationUriBefore = await retirementContract.tokenURI(1);
+      assert.equal(certificationUriBefore, retirementURI, "Certification URI is suppose to be retirementURI.");
+  
+      await retirementContract.certificateRetirement(1, newUri, { from: auditor });
+  
+      const certificationUriAfter = await retirementContract.tokenURI(1);
+      assert.equal(certificationUriAfter, newUri, "Certification URI is suppose to be new URI.");
+    });
+
+    it("should return correct all retirements", async () => {
+      await retirementContract.certificateRetirement(1, newUri, { from: auditor });
+      const allRetirements = await retirementContract.getAllRetirements();
+      assert.equal(allRetirements.length, 1, "All retirements length is incorrect.");
+      assert.equal(allRetirements[0].tokenId, 1, "Retirement token ID is incorrect.");
+      assert.equal(allRetirements[0].isCertificated, true, "Certification status is incorrect.");
+
+      const certificationUri = await retirementContract.tokenURI(1);
+      assert.equal(certificationUri, newUri, "Certification URI is incorrect.");
+    });
+  });
+
   describe("Token Enumeration", async () => {
     const tokenSupply = 150;
 

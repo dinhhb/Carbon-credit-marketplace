@@ -114,7 +114,7 @@ const CreditInfoModal: React.FC<CreditProps> = ({ buyCredit, credit }) => {
             <p className="flex-1">Registry reference:</p>
             <p className="flex-1">
               <a
-                href="https://registry.verra.org/app/projectDetail/VCS/2595"
+                href={credit.metadata.registryLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary-dark overflow-hidden break-all text-primary"

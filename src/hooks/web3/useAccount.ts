@@ -90,7 +90,8 @@ export const hookFactory: AccountHookFactory =
         currentRoute === "/" ||
         currentRoute === "/activities" ||
         currentRoute === "/my-credits" ||
-        currentRoute === "/register-project"
+        currentRoute === "/register-project"||
+        currentRoute === "/retirements"
       ) {
         if (adminAddress[data]) {
           router.push("/manage-accounts");

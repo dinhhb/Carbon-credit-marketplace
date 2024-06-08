@@ -11,7 +11,7 @@ import {
 import MyCreditInfoModal from "../Modals/MyCreditInfoModal";
 import { Retirement } from "@/types/retirement";
 import { renderTimeCell } from "../common/TimeCell";
-import RetirementInfoModal from "../Modals/RetirementInfoModal";
+import CertificatedRetirementInfoModal from "../Modals/CertificatedRetirementInfoModal";
 
 // table header
 const columns: Column<Retirement>[] = [
@@ -38,7 +38,7 @@ type RetirementListProps = {
   retirements: Retirement[];
 };
 
-const ManagePendingProjectsDataTable: FunctionComponent<RetirementListProps> = ({
+const ManageCertificatedRetirementsDataTable: FunctionComponent<RetirementListProps> = ({
   retirements,
 }) => {
   const data = useMemo(() => retirements, [retirements]);
@@ -174,7 +174,7 @@ const ManagePendingProjectsDataTable: FunctionComponent<RetirementListProps> = (
                 <td key={`modal-${rowIndex}`}>
                   <div className="flex items-center justify-center space-x-2">
                     <MyCreditInfoModal credit={row.original.metadata.credit} />
-                    <RetirementInfoModal retirement={row.original}/>
+                    <CertificatedRetirementInfoModal retirement={row.original}/>
                   </div>
                 </td>
               </tr>
@@ -247,4 +247,4 @@ const ManagePendingProjectsDataTable: FunctionComponent<RetirementListProps> = (
   );
 };
 
-export default ManagePendingProjectsDataTable;
+export default ManageCertificatedRetirementsDataTable;

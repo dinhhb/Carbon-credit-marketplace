@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import MySpinner from "../Spinners/MySpinner";
-import { useAllRetirements } from "@/hooks/web3";
-import ManagePendingRetirementsDataTable from "../DataTables/ManagePendingRetirementsDataTable";
 import { Retirement } from "@/types/retirement";
-import ManageCertificatedRetirementsDataTable from "../DataTables/ManageCertificatedRetirementsDataTable";
+import { useOwnedRetirements } from "@/hooks/web3";
+import PendingRetirementsDataTable from "../DataTables/PendingRetirementsDataTable";
+import CertificatedRetirementsDataTable from "../DataTables/CertificatedRetirementsDataTable";
 
-const ManageRetirementsTab: React.FC = () => {
+const RetirementsTab: React.FC = () => {
   const [openTab, setOpenTab] = useState(1);
   const activeClasses = "bg-primary text-white";
   const inactiveClasses = "bg-gray dark:bg-meta-4 text-black dark:text-white";
 
-  const { retirements } = useAllRetirements();
+  const { retirements } = useOwnedRetirements();
   // console.log("Data:", retirements.data);
 
   const pendingCertifications = retirements.data?.filter(
@@ -53,12 +53,12 @@ const ManageRetirementsTab: React.FC = () => {
             <div
               className={`leading-relaxed ${openTab === 1 ? "block" : "hidden"}`}
             >
-              <ManagePendingRetirementsDataTable retirements={pendingCertifications}/>
+              <PendingRetirementsDataTable retirements={pendingCertifications}/>
             </div>
             <div
               className={`leading-relaxed ${openTab === 2 ? "block" : "hidden"}`}
             >
-              <ManageCertificatedRetirementsDataTable retirements={certifiedRetirements}/>
+              <CertificatedRetirementsDataTable retirements={certifiedRetirements}/>
             </div>
           </div>
         </>
@@ -67,4 +67,4 @@ const ManageRetirementsTab: React.FC = () => {
   );
 };
 
-export default ManageRetirementsTab;
+export default RetirementsTab;

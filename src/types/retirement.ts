@@ -5,6 +5,7 @@ export type RetirementMeta = {
   beneficialOwner: string;
   retirementReason: string;
   retirementReasonDetails: string;
+  document: string;
   credit: Credit;
 }
 
@@ -14,6 +15,7 @@ export type RetirementCore = {
   owner: string;
   projectId: number;
   time: number;
+  isCertificated: boolean;
 }
 
 export type Retirement = {
