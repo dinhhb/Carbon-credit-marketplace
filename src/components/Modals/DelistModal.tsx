@@ -70,8 +70,8 @@ const DelistModal: React.FC<CreditProps> = ({ credit, delistCredits }) => {
       >
         <div
           ref={modal}
-          onFocus={() => setModalOpen(true)}
-          onBlur={() => setModalOpen(false)}
+          // onFocus={() => setModalOpen(true)}
+          // onBlur={() => setModalOpen(false)}
           className="w-full max-w-142.5 rounded-lg bg-white px-8 py-12 text-center dark:bg-boxdark md:px-17.5 md:py-15"
         >
           <span className="mx-auto inline-block">
@@ -120,10 +120,15 @@ const DelistModal: React.FC<CreditProps> = ({ credit, delistCredits }) => {
             </div>
             <div className="w-full px-3 2xsm:w-1/2">
               <button
-                onClick={() => {
+                onClick={async () => {
                   if (delistCredits) {
-                    delistCredits(credit.tokenId);
-                  } else if (!delistCredits) {
+                    try {
+                      await delistCredits(credit.tokenId);
+                      setModalOpen(false);
+                    } catch (error) {
+                      alert("An error occurred while delisting the credits");
+                    }
+                  } else {
                     alert("Delist credits function not available");
                   }
                 }}

@@ -26,23 +26,26 @@ export const hookFactory: OwnedCreditsHookFactory =
   () => {
     const { account } = useAccount();
 
-    const marketContractAddress = marketContract
-      ? (marketContract as unknown as Contract).address
-      : undefined;
-
     const { data, ...swrRes } = useSWR(
       tokenContract ? "web3/useOwnedCredits" : null,
       async () => {
         const credits = [] as Credit[];
-        const coreCredits = await tokenContract!.getOwnedCredits();
 
-        for (let i = 0; i < coreCredits.length; i++) {
-          const credit = coreCredits[i];
+        const coreListedCredits = await marketContract!.getAllListedCredits();
+
+        for (let i = 0; i < coreListedCredits.length; i++) {
+        }
+
+
+        const coreOwnedCredits = await tokenContract!.getOwnedCredits();
+
+        for (let i = 0; i < coreOwnedCredits.length; i++) {
+          const credit = coreOwnedCredits[i];
           const tokenURI = await tokenContract!.uri(credit.tokenId);
           const metadataRes = await fetch(tokenURI);
           const metadata = await metadataRes.json();
-          const ownerCount = await tokenContract!.getOwnerCount(i + 1);
-          const owners = await tokenContract!.getTokenOwners(i + 1);
+          const ownerCount = await tokenContract!.getOwnerCount(credit.tokenId);
+          const owners = await tokenContract!.getTokenOwners(credit.tokenId);
           const quantity = await tokenContract!.getTokenSupply(credit.tokenId);
           const quanitySold = await tokenContract!.getTokenSold(credit.tokenId);
           const quantityOwned = await tokenContract!.balanceOf(

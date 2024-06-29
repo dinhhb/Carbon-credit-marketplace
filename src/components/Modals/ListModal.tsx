@@ -114,10 +114,15 @@ const ListModal: React.FC<CreditProps> = ({ listCredit, credit }) => {
             </div>
             <div className="w-full px-3 2xsm:w-1/2">
               <button
-                onClick={() => {
+                onClick={async () => {
                   if (price && listCredit) {
-                    listCredit(credit.tokenId, parseFloat(price));
-                  } else if (!listCredit) {
+                    try {
+                      await listCredit(credit.tokenId, parseFloat(price));
+                      setListModalOpen(false);
+                    } catch (error) {
+                      alert("An error occurred while listing the credit");
+                    }
+                  } else {
                     alert("List credit function not available");
                   }
                 }}

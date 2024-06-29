@@ -1,89 +1,97 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped
-with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Carbon Credit Marketplace DApp
 
-## Getting Started!
+## Table of Contents
 
-First, run the development server:
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Introduction
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Welcome to the Carbon Credit Marketplace DApp! This decentralized application leverages blockchain technology to create a transparent and secure marketplace for trading carbon credits. Our goal is to facilitate the exchange of carbon credits, promoting environmental sustainability and helping organizations offset their carbon footprints effectively.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and
-load Inter, a custom Google Font.
+- **Decentralized Trading:** Facilitates peer-to-peer trading of carbon credits without intermediaries.
+- **Smart Contracts:** Utilizes Ethereum smart contracts to ensure secure and transparent transactions.
+- **Immutable Records:** Ensures all transactions are recorded on the blockchain, providing a tamper-proof history.
+- **User-Friendly Interface:** Simple and intuitive interface for buying, selling, and managing carbon credits.
+- **Environmental Impact:** Promotes sustainability by making it easier for companies to participate in carbon offset programs.
 
-## Learn More
+## Installation
 
-To learn more about Next.js, take a look at the following resources:
+### Prerequisites
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Before you begin, ensure you have met the following requirements:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions
-are welcome!
+- [Node.js](https://nodejs.org/) installed on your machine
+- [npm](https://www.npmjs.com/) package manager
+- [Truffle](https://www.trufflesuite.com/truffle) for smart contract development
+- [Ganache](https://www.trufflesuite.com/ganache) for running a local blockchain
+- [MetaMask](https://metamask.io/) for interacting with the blockchain
 
-## Deploy on Vercel
+### Steps
 
-The easiest way to deploy your Next.js app is to use
-the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
-from the creators of Next.js.
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/dinhhb/Carbon-credit-marketplace.git
+   cd carbon-credit-marketplace
+2. Install the dependencies:
+   ```sh
+   npm install
+3. Start Ganache:
+- Open Ganache and create a new workspace or quick start a new blockchain.
+- Note the RPC server URL (usually http://127.0.0.1:7545).
+4. Configure Truffle to connect to Ganace:
+- Open truffle-config.js and ensure the development network is configured to use the Ganache URL.
+  ```sh
+  module.exports = {
+    ...
+    networks: {
+      development: {
+        host: "127.0.0.1",     
+        port: 7545,           
+        network_id: "*",     
+      },
+    },
+    ...
+  };
+5. Compile and migrate the smart contracts to the blockchain:
+   ```sh
+   truffle migrate --reset
+6. Run the development server:
+   ```sh
+   npm run dev
+7. Import a Ganache account into MetaMask:
+- Open Ganache and view the list of accounts.
+- Copy the private key of one of the accounts.
+- Open MetaMask and switch to the Ganache network.
+- Click on the account icon in MetaMask, then select “Import Account.”
+- Paste the private key and complete the import process.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Note: because the admin account is fixed, it must be manually adjusted in the following code in src/hooks/web3/useAccount.ts
+   ```js
+  const adminAddress: { [key: string]: boolean } = {
+    "0xd24cb09d1Ab3790EA83F1E6961abA3fa26b43fD5": true, 
+  };
+  ```
+   
+### Usage
 
-## Update Logs
+## License
 
-### Version 1.3.1 - [Feb 12, 2024]
+Distributed under the MIT License. See `LICENSE` for more information.
 
-#### Issues
+## Acknowledgements
 
-- **Issues 01:** Double scrollbar issue [Tables Six/Pro Tables].
-- **Issues 02:** Fix Misspelling issue [Default Layout/Layouts].
-
-#### Enhancements
-
-- **Enhancement 01:** Update style.css.
-- **Enhancement 02:** Update Two Step Verification input typo.
-
-
-### Version 1.3.0 - [Feb 05, 2024]
-
-#### New Features
-
-- **Feature 01:** New Dashboard variant Stocks with a DataStats slider, One Chart graph, My Stocks, Trending Stocks, and Latest Transaction Cards.
-- **Feature 02:** Pro Form Elements Range Slider & File Drop Zone.
-- **Feature 03:** Pro Form Layout Contact Form 2 & Survey Form.
-- **Feature 04:** Pro Tables.
-- **Feature 05:** Invoice Two.
-- **Feature 06:** FAQs.
-- **Feature 07:** Teams One & Two.
-- **Feature 08:** Terms & Conditions.
-- **Feature 09:** Avatars One & Two.
-- **Feature 10:** List One, Two & Three.
-- **Feature 11:** Notifications Four.
-- **Feature 12:** Spinners One & Two.
-- **Feature 13:** Coming Soon.
-- **Feature 14:** 2-Step Verification.
-- **Feature 15:** Under Maintenance.
-
-#### Enhancements
-
-- **Enhancement 01:** Update Next.js to version 14.
-- **Enhancement 02:** Integrate flatpickr in [Date Picker/Form Elements].
-- **Enhancement 03:** Change color after selecting an option [Select Element/Form Elements].
-- **Enhancement 04:** Make it functional [Multiselect Dropdown/Form Elements].
-- **Enhancement 05:** Make the best value editable [Pricing Table One/Pricing Table].
-- **Enhancement 06:** Add Default Layout Component and make App/Layout cleaner and use it on every page.
-
-### Version 0.1.0 - Initial Release - [Aug 3, 2023]
-
-- Initial release of TailAdmin Next.
+- [Next.js](https://nextjs.org/)
+- [React](https://reactjs.org/)
+- [Truffle](https://www.trufflesuite.com/truffle)
+- [Ganache](https://www.trufflesuite.com/ganache)
+- [Solidity](https://soliditylang.org/)
+- [OpenZeppelin](https://openzeppelin.com/)
+- [Ethereum](https://ethereum.org/)

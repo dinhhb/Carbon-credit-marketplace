@@ -185,8 +185,13 @@ const RetireCreditsModal: React.FC<CreditProps> = ({ credit }) => {
         marketContractAddress || "",
         true,
       );
-      await result1?.wait();
-      alert("Approval granted");
+      
+      await toast.promise(result1?.wait(), {
+        pending: "Granting approval...",
+        success: "Approval granted",
+        error: "Failed to grant approval",
+      });
+      // alert("Approval granted");
 
       const result2 = await _retireContract!.retireCredits(
         credit.tokenId,
@@ -227,6 +232,34 @@ const RetireCreditsModal: React.FC<CreditProps> = ({ credit }) => {
     }));
   };
 
+  const [retirements, setRetirements] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchRetirements = async () => {
+      try {
+        const response = await fetch("/test-data/retirements.json");
+        const data = await response.json();
+        // console.log("Retirements:", data.retirements);
+        setRetirements(data.retirements);
+      } catch (error) {
+        console.error("Error fetching retirements:", error);
+        toast.error("Failed to fetch retirements");
+      }
+    };
+    fetchRetirements();
+  }, []);
+
+  const fillRandomFields = () => {
+    const randomRetirement = retirements[Math.floor(Math.random() * retirements.length)];
+    setRetirementMeta({
+      ...retirementMeta,
+      amount: randomRetirement.amount.toString(),
+      beneficialOwner: randomRetirement.beneficialOwner,
+      retirementReason: randomRetirement.retirementReason,
+      retirementReasonDetails: randomRetirement.retirementReasonDetails,
+    });
+  };
+
   return (
     <div>
       <button
@@ -265,7 +298,7 @@ const RetireCreditsModal: React.FC<CreditProps> = ({ credit }) => {
           <h3 className="mt-5.5 pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
             Retire Your Credits
           </h3>
-          <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-danger"></span>
+          <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
           <div className="mb-4 flex items-start text-left">
             <p className="w-1/3">Max amount:</p>
             <p className="w-2/3">{credit.quantityOwned}</p>
@@ -276,6 +309,15 @@ const RetireCreditsModal: React.FC<CreditProps> = ({ credit }) => {
           </div>
           {!retirementURI ? (
             <div className="flex flex-col py-2">
+              <div className="py-5">
+                <button
+                  type="button"
+                  onClick={fillRandomFields}
+                  className="block rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+                >
+                  Random Fields
+                </button>
+              </div>
               <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                 <div className="w-full xl:w-1/2">
                   <label className="mb-3 block text-left text-sm font-medium text-black dark:text-white">
@@ -285,6 +327,7 @@ const RetireCreditsModal: React.FC<CreditProps> = ({ credit }) => {
                     name="amount"
                     type="number"
                     placeholder="Enter retire amount"
+                    value={retirementMeta.amount}
                     onChange={handleChange}
                     className={
                       fieldErrors.amount ? CLASSESS.ERROR : CLASSESS.SUCCESS
@@ -301,6 +344,7 @@ const RetireCreditsModal: React.FC<CreditProps> = ({ credit }) => {
                     name="beneficialOwner"
                     type="text"
                     placeholder="Enter beneficial owner"
+                    value={retirementMeta.beneficialOwner}
                     onChange={handleChange}
                     className={
                       fieldErrors.beneficialOwner
@@ -313,6 +357,7 @@ const RetireCreditsModal: React.FC<CreditProps> = ({ credit }) => {
               <SelectGroupRetirement
                 handleChange={handleChange}
                 hasError={!!fieldErrors.retirementReason}
+                value={retirementMeta.retirementReason}
               />
               <div className="mb-4.5">
                 <label className="mb-3 block text-left text-sm font-medium text-black dark:text-white">
@@ -323,6 +368,7 @@ const RetireCreditsModal: React.FC<CreditProps> = ({ credit }) => {
                   name="retirementReasonDetails"
                   type="text"
                   placeholder="Enter retirement reason detail"
+                  value={retirementMeta.retirementReasonDetails}
                   onChange={handleChange}
                   className={
                     fieldErrors.retirementReasonDetails

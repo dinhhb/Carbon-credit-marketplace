@@ -40428,12 +40428,12 @@
         }
       },
       "links": {},
-      "address": "0x021eC49deCA564878a4e3F2Bca7988FAf874dA8e",
-      "transactionHash": "0x68bb40c06e74013b7896a97b6f7669166fe97f817f1ccbc1ec5dbe71edd01b66"
+      "address": "0x34Df694C949d79251604Be32E7DaF61e27F1164b",
+      "transactionHash": "0x9b0f437a69c775385d11604c66d1b80c3b27d7723eff75d1e1dc6395e2c355bb"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-06-08T14:34:52.828Z",
+  "updatedAt": "2024-06-29T05:11:25.889Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

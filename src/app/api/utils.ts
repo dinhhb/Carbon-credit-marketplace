@@ -38,6 +38,12 @@ export const sessionOptions: SessionOptions = {
   },
 };
 
+// Banned addresses list
+// const bannedAddresses = [
+//   "0xBannedAddress1...",
+//   "0xBannedAddress2...",
+// ];
+
 export const addressCheckMiddleware = async (
   signature: string,
   address: string,
@@ -51,26 +57,10 @@ export const addressCheckMiddleware = async (
 
     // THE COMMENTED CODE BELOW IS FOR ADDING MORE FUNCTIONALITY (VERIFY ADDRESS CAN REGISTER CREDIT, ...)
 
-    // const provider = new ethers.providers.JsonRpcProvider({
-    //   url: "http://127.0.0.1:7545",
-    //   skipFetchSetup: true,
-    // });
-
-    // try {
-    //   const blockNumber = await provider.getBlockNumber();
-    //   console.log(
-    //     "Successfully connected to network. Current block number:",
-    //     blockNumber,
-    //   );
-    // } catch (error) {
-    //   console.error("Failed to connect to network:", error);
+    // Check if the address is banned
+    // if (bannedAddresses.includes(address)) {
+    //   return reject("This address is banned from performing this action.");
     // }
-
-    // const contract = new ethers.Contract(
-    //   projectContractAddress,
-    //   abi,
-    //   provider,
-    // ) as unknown as ProjectManagementContract;
 
     let nonce: string | Buffer =
       "\x19Ethereum Signed Message:\n" +

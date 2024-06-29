@@ -91,7 +91,6 @@ const MyCreditsTab: React.FC = () => {
               >
                 <MyPurchasedCreditsDataTable
                   credits={purchasedCredits}
-                  retireCredits={credits.retireCredits}
                 />
               </div>
             </>

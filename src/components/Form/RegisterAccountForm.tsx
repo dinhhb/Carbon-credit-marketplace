@@ -165,15 +165,16 @@ const RegisterProjectForm: React.FC<AccountProps> = ({
                           </label>
                           <input
                             name="totalRetire"
-                            value={account.totalRetire}
-                            onChange={handleChange}
+                            value={0}
+                            // onChange={handleChange}
                             type="number"
                             placeholder="Enter total retired credits"
                             className={
-                              fieldErrors.totalRetire
-                                ? CLASSESS.ERROR
-                                : CLASSESS.SUCCESS
+                              fieldErrors.totalRetire 
+                                ? `${CLASSESS.ERROR} cursor-not-allowed` 
+                                : `${CLASSESS.SUCCESS} cursor-not-allowed`
                             }
+                            readOnly
                           />
                         </div>
                       </div>

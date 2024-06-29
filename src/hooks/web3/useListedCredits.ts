@@ -34,8 +34,8 @@ export const hookFactory: ListedCreditsHookFactory =
           const tokenURI = await tokenContract!.uri(credit.tokenId);
           const metadataRes = await fetch(tokenURI);
           const metadata = await metadataRes.json();
-          const ownerCount = await tokenContract!.getOwnerCount(i + 1);
-          const owners = await tokenContract!.getTokenOwners(i + 1);
+          const ownerCount = await tokenContract!.getOwnerCount(credit.tokenId);
+          const owners = await tokenContract!.getTokenOwners(credit.tokenId);
           const quantity = await tokenContract!.getTokenSupply(credit.tokenId);
           const quanitySold = await tokenContract!.getTokenSold(credit.tokenId);
           const quantityOwned = await tokenContract!.balanceOf(
@@ -70,9 +70,12 @@ export const hookFactory: ListedCreditsHookFactory =
     const buyCredit = useCallback(
       async (tokenId: number, amount: number, value: number) => {
         try {
+          console.log("Original: ", value);
+          // Increase the value by a small buffer (e.g., 1%)
+          const bufferValue = value * 1.01;
           console.log("Spending: ", value);
           const result = await _marketContract!.buyCredits(tokenId, amount, {
-            value: ethers.utils.parseEther(value.toString()),
+            value: ethers.utils.parseEther(bufferValue.toString()),
           });
           await toast.promise(result!.wait(), {
             pending: "Buying credit...",
@@ -80,6 +83,7 @@ export const hookFactory: ListedCreditsHookFactory =
             error: "Failed to buy credit",
           });
         } catch (e: any) {
+          alert("Failed to buy credit");
           console.log(e.message);
         }
       },

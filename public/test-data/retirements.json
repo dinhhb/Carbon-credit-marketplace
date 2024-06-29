@@ -1,0 +1,604 @@
+{
+  "retirements": [
+      {
+          "amount": "98",
+          "beneficialOwner": "Green Energy Alliance",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "27",
+          "beneficialOwner": "Sustainable Future Corp",
+          "retirementReason": "Retirement for Person or Organisation",
+          "retirementReasonDetails": "Retired on behalf of an individual or organization to offset carbon emissions"
+      },
+      {
+          "amount": "2",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Compliance Requirements",
+          "retirementReasonDetails": "Retired to fulfill legal and regulatory compliance for carbon emission reduction"
+      },
+      {
+          "amount": "94",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "83",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Environmental Benefit",
+          "retirementReasonDetails": "Retired to support environmental sustainability and reduce carbon footprint"
+      },
+      {
+          "amount": "4",
+          "beneficialOwner": "Eco-Friendly Solutions",
+          "retirementReason": "Retail Programme Requirements",
+          "retirementReasonDetails": "Retired to meet specific retail program requirements for carbon neutrality"
+      },
+      {
+          "amount": "93",
+          "beneficialOwner": "Sustainable Future Corp",
+          "retirementReason": "Compliance Requirements",
+          "retirementReasonDetails": "Retired to fulfill legal and regulatory compliance for carbon emission reduction"
+      },
+      {
+          "amount": "41",
+          "beneficialOwner": "Clean Air Foundation",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "16",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "NCOS Programme",
+          "retirementReasonDetails": "Retired as part of the NCOS Programme to support national carbon offset initiatives"
+      },
+      {
+          "amount": "25",
+          "beneficialOwner": "Clean Air Foundation",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "91",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Retirement for Person or Organisation",
+          "retirementReasonDetails": "Retired on behalf of an individual or organization to offset carbon emissions"
+      },
+      {
+          "amount": "40",
+          "beneficialOwner": "Green Earth Initiative",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "34",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "14",
+          "beneficialOwner": "Planet Protectors",
+          "retirementReason": "Compliance Requirements",
+          "retirementReasonDetails": "Retired to fulfill legal and regulatory compliance for carbon emission reduction"
+      },
+      {
+          "amount": "45",
+          "beneficialOwner": "Clean Air Foundation",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "60",
+          "beneficialOwner": "Green Leaf Group",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "28",
+          "beneficialOwner": "Green Leaf Group",
+          "retirementReason": "Environmental Benefit",
+          "retirementReasonDetails": "Retired to support environmental sustainability and reduce carbon footprint"
+      },
+      {
+          "amount": "33",
+          "beneficialOwner": "Clean Air Foundation",
+          "retirementReason": "NCOS Programme",
+          "retirementReasonDetails": "Retired as part of the NCOS Programme to support national carbon offset initiatives"
+      },
+      {
+          "amount": "38",
+          "beneficialOwner": "Green Earth Initiative",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "99",
+          "beneficialOwner": "Nature Conservation Trust",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "35",
+          "beneficialOwner": "Sustainable Future Corp",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "36",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "73",
+          "beneficialOwner": "Sustainable Future Corp",
+          "retirementReason": "Retail Programme Requirements",
+          "retirementReasonDetails": "Retired to meet specific retail program requirements for carbon neutrality"
+      },
+      {
+          "amount": "63",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Retirement for Person or Organisation",
+          "retirementReasonDetails": "Retired on behalf of an individual or organization to offset carbon emissions"
+      },
+      {
+          "amount": "52",
+          "beneficialOwner": "Eco-Friendly Solutions",
+          "retirementReason": "NCOS Programme",
+          "retirementReasonDetails": "Retired as part of the NCOS Programme to support national carbon offset initiatives"
+      },
+      {
+          "amount": "68",
+          "beneficialOwner": "Clean Air Foundation",
+          "retirementReason": "Retail Programme Requirements",
+          "retirementReasonDetails": "Retired to meet specific retail program requirements for carbon neutrality"
+      },
+      {
+          "amount": "32",
+          "beneficialOwner": "Clean Air Foundation",
+          "retirementReason": "Compliance Requirements",
+          "retirementReasonDetails": "Retired to fulfill legal and regulatory compliance for carbon emission reduction"
+      },
+      {
+          "amount": "96",
+          "beneficialOwner": "Eco Warriors",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "71",
+          "beneficialOwner": "Planet Protectors",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "93",
+          "beneficialOwner": "Green Earth Initiative",
+          "retirementReason": "Compliance Requirements",
+          "retirementReasonDetails": "Retired to fulfill legal and regulatory compliance for carbon emission reduction"
+      },
+      {
+          "amount": "16",
+          "beneficialOwner": "Planet Protectors",
+          "retirementReason": "Retail Programme Requirements",
+          "retirementReasonDetails": "Retired to meet specific retail program requirements for carbon neutrality"
+      },
+      {
+          "amount": "82",
+          "beneficialOwner": "Climate Action Network",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "65",
+          "beneficialOwner": "Climate Action Network",
+          "retirementReason": "Compliance Requirements",
+          "retirementReasonDetails": "Retired to fulfill legal and regulatory compliance for carbon emission reduction"
+      },
+      {
+          "amount": "41",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "NCOS Programme",
+          "retirementReasonDetails": "Retired as part of the NCOS Programme to support national carbon offset initiatives"
+      },
+      {
+          "amount": "47",
+          "beneficialOwner": "Sustainable Future Corp",
+          "retirementReason": "NCOS Programme",
+          "retirementReasonDetails": "Retired as part of the NCOS Programme to support national carbon offset initiatives"
+      },
+      {
+          "amount": "83",
+          "beneficialOwner": "Sustainable Future Corp",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "99",
+          "beneficialOwner": "Green Leaf Group",
+          "retirementReason": "NCOS Programme",
+          "retirementReasonDetails": "Retired as part of the NCOS Programme to support national carbon offset initiatives"
+      },
+      {
+          "amount": "41",
+          "beneficialOwner": "Green Earth Initiative",
+          "retirementReason": "Retirement for Person or Organisation",
+          "retirementReasonDetails": "Retired on behalf of an individual or organization to offset carbon emissions"
+      },
+      {
+          "amount": "1",
+          "beneficialOwner": "Eco-Friendly Solutions",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "35",
+          "beneficialOwner": "Sustainable Future Corp",
+          "retirementReason": "Environmental Benefit",
+          "retirementReasonDetails": "Retired to support environmental sustainability and reduce carbon footprint"
+      },
+      {
+          "amount": "75",
+          "beneficialOwner": "Planet Protectors",
+          "retirementReason": "Retail Programme Requirements",
+          "retirementReasonDetails": "Retired to meet specific retail program requirements for carbon neutrality"
+      },
+      {
+          "amount": "36",
+          "beneficialOwner": "Green Energy Alliance",
+          "retirementReason": "Environmental Benefit",
+          "retirementReasonDetails": "Retired to support environmental sustainability and reduce carbon footprint"
+      },
+      {
+          "amount": "10",
+          "beneficialOwner": "Eco-Friendly Solutions",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "58",
+          "beneficialOwner": "Green Energy Alliance",
+          "retirementReason": "Retail Programme Requirements",
+          "retirementReasonDetails": "Retired to meet specific retail program requirements for carbon neutrality"
+      },
+      {
+          "amount": "7",
+          "beneficialOwner": "Eco Warriors",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "98",
+          "beneficialOwner": "Sustainable Future Corp",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "56",
+          "beneficialOwner": "Climate Action Network",
+          "retirementReason": "Retirement for Person or Organisation",
+          "retirementReasonDetails": "Retired on behalf of an individual or organization to offset carbon emissions"
+      },
+      {
+          "amount": "20",
+          "beneficialOwner": "Clean Air Foundation",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "94",
+          "beneficialOwner": "Carbon Clean Solutions",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "78",
+          "beneficialOwner": "Carbon Clean Solutions",
+          "retirementReason": "Compliance Requirements",
+          "retirementReasonDetails": "Retired to fulfill legal and regulatory compliance for carbon emission reduction"
+      },
+      {
+          "amount": "32",
+          "beneficialOwner": "Sustainable Future Corp",
+          "retirementReason": "Retail Programme Requirements",
+          "retirementReasonDetails": "Retired to meet specific retail program requirements for carbon neutrality"
+      },
+      {
+          "amount": "85",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "62",
+          "beneficialOwner": "Green Earth Initiative",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "30",
+          "beneficialOwner": "Climate Action Network",
+          "retirementReason": "NCOS Programme",
+          "retirementReasonDetails": "Retired as part of the NCOS Programme to support national carbon offset initiatives"
+      },
+      {
+          "amount": "82",
+          "beneficialOwner": "Green Energy Alliance",
+          "retirementReason": "Compliance Requirements",
+          "retirementReasonDetails": "Retired to fulfill legal and regulatory compliance for carbon emission reduction"
+      },
+      {
+          "amount": "83",
+          "beneficialOwner": "Sustainable Future Corp",
+          "retirementReason": "Compliance Requirements",
+          "retirementReasonDetails": "Retired to fulfill legal and regulatory compliance for carbon emission reduction"
+      },
+      {
+          "amount": "59",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "NCOS Programme",
+          "retirementReasonDetails": "Retired as part of the NCOS Programme to support national carbon offset initiatives"
+      },
+      {
+          "amount": "4",
+          "beneficialOwner": "Green Energy Alliance",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "54",
+          "beneficialOwner": "Eco Warriors",
+          "retirementReason": "Retirement for Person or Organisation",
+          "retirementReasonDetails": "Retired on behalf of an individual or organization to offset carbon emissions"
+      },
+      {
+          "amount": "12",
+          "beneficialOwner": "Green Energy Alliance",
+          "retirementReason": "Compliance Requirements",
+          "retirementReasonDetails": "Retired to fulfill legal and regulatory compliance for carbon emission reduction"
+      },
+      {
+          "amount": "34",
+          "beneficialOwner": "Sustainable Future Corp",
+          "retirementReason": "Retail Programme Requirements",
+          "retirementReasonDetails": "Retired to meet specific retail program requirements for carbon neutrality"
+      },
+      {
+          "amount": "3",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "NCOS Programme",
+          "retirementReasonDetails": "Retired as part of the NCOS Programme to support national carbon offset initiatives"
+      },
+      {
+          "amount": "13",
+          "beneficialOwner": "Eco-Friendly Solutions",
+          "retirementReason": "Environmental Benefit",
+          "retirementReasonDetails": "Retired to support environmental sustainability and reduce carbon footprint"
+      },
+      {
+          "amount": "31",
+          "beneficialOwner": "Green Earth Initiative",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "34",
+          "beneficialOwner": "Carbon Clean Solutions",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "24",
+          "beneficialOwner": "Climate Action Network",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "3",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "21",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "8",
+          "beneficialOwner": "Sustainable Future Corp",
+          "retirementReason": "Retail Programme Requirements",
+          "retirementReasonDetails": "Retired to meet specific retail program requirements for carbon neutrality"
+      },
+      {
+          "amount": "65",
+          "beneficialOwner": "Green Leaf Group",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "64",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Environmental Benefit",
+          "retirementReasonDetails": "Retired to support environmental sustainability and reduce carbon footprint"
+      },
+      {
+          "amount": "24",
+          "beneficialOwner": "Eco-Friendly Solutions",
+          "retirementReason": "NCOS Programme",
+          "retirementReasonDetails": "Retired as part of the NCOS Programme to support national carbon offset initiatives"
+      },
+      {
+          "amount": "94",
+          "beneficialOwner": "Climate Action Network",
+          "retirementReason": "NCOS Programme",
+          "retirementReasonDetails": "Retired as part of the NCOS Programme to support national carbon offset initiatives"
+      },
+      {
+          "amount": "94",
+          "beneficialOwner": "Climate Action Network",
+          "retirementReason": "Retirement for Person or Organisation",
+          "retirementReasonDetails": "Retired on behalf of an individual or organization to offset carbon emissions"
+      },
+      {
+          "amount": "68",
+          "beneficialOwner": "Green Energy Alliance",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "25",
+          "beneficialOwner": "Planet Protectors",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "92",
+          "beneficialOwner": "Green Earth Initiative",
+          "retirementReason": "Retirement for Person or Organisation",
+          "retirementReasonDetails": "Retired on behalf of an individual or organization to offset carbon emissions"
+      },
+      {
+          "amount": "34",
+          "beneficialOwner": "Eco-Friendly Solutions",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "5",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "46",
+          "beneficialOwner": "Eco-Friendly Solutions",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "55",
+          "beneficialOwner": "Eco Warriors",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "82",
+          "beneficialOwner": "Eco-Friendly Solutions",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "34",
+          "beneficialOwner": "Eco Warriors",
+          "retirementReason": "Other",
+          "retirementReasonDetails": "Retired for various other reasons related to carbon offset and sustainability"
+      },
+      {
+          "amount": "35",
+          "beneficialOwner": "Eco Warriors",
+          "retirementReason": "Compliance Requirements",
+          "retirementReasonDetails": "Retired to fulfill legal and regulatory compliance for carbon emission reduction"
+      },
+      {
+          "amount": "59",
+          "beneficialOwner": "Green Energy Alliance",
+          "retirementReason": "Retail Programme Requirements",
+          "retirementReasonDetails": "Retired to meet specific retail program requirements for carbon neutrality"
+      },
+      {
+          "amount": "51",
+          "beneficialOwner": "Carbon Clean Solutions",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "2",
+          "beneficialOwner": "Carbon Clean Solutions",
+          "retirementReason": "Retirement for Person or Organisation",
+          "retirementReasonDetails": "Retired on behalf of an individual or organization to offset carbon emissions"
+      },
+      {
+          "amount": "66",
+          "beneficialOwner": "Green Earth Initiative",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      },
+      {
+          "amount": "94",
+          "beneficialOwner": "Climate Action Network",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "47",
+          "beneficialOwner": "Green Leaf Group",
+          "retirementReason": "Environmental Benefit",
+          "retirementReasonDetails": "Retired to support environmental sustainability and reduce carbon footprint"
+      },
+      {
+          "amount": "8",
+          "beneficialOwner": "Climate Action Network",
+          "retirementReason": "Environmental Benefit",
+          "retirementReasonDetails": "Retired to support environmental sustainability and reduce carbon footprint"
+      },
+      {
+          "amount": "92",
+          "beneficialOwner": "Eco-Friendly Solutions",
+          "retirementReason": "Retail Programme Requirements",
+          "retirementReasonDetails": "Retired to meet specific retail program requirements for carbon neutrality"
+      },
+      {
+          "amount": "15",
+          "beneficialOwner": "Eco-Friendly Solutions",
+          "retirementReason": "Compliance Requirements",
+          "retirementReasonDetails": "Retired to fulfill legal and regulatory compliance for carbon emission reduction"
+      },
+      {
+          "amount": "56",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "16",
+          "beneficialOwner": "Climate Action Network",
+          "retirementReason": "Retirement for Person or Organisation",
+          "retirementReasonDetails": "Retired on behalf of an individual or organization to offset carbon emissions"
+      },
+      {
+          "amount": "15",
+          "beneficialOwner": "Zero Carbon Society",
+          "retirementReason": "Retirement for Person or Organisation",
+          "retirementReasonDetails": "Retired on behalf of an individual or organization to offset carbon emissions"
+      },
+      {
+          "amount": "55",
+          "beneficialOwner": "Planet Protectors",
+          "retirementReason": "Retail Programme Requirements",
+          "retirementReasonDetails": "Retired to meet specific retail program requirements for carbon neutrality"
+      },
+      {
+          "amount": "42",
+          "beneficialOwner": "Green Earth Initiative",
+          "retirementReason": "Section 13 of the South African Carbon Tax Act",
+          "retirementReasonDetails": "Retired under Section 13 of the South African Carbon Tax Act to comply with tax regulations"
+      },
+      {
+          "amount": "61",
+          "beneficialOwner": "Carbon Clean Solutions",
+          "retirementReason": "Retirement for Person or Organisation",
+          "retirementReasonDetails": "Retired on behalf of an individual or organization to offset carbon emissions"
+      },
+      {
+          "amount": "22",
+          "beneficialOwner": "Green Energy Alliance",
+          "retirementReason": "Green-e Climate Certification",
+          "retirementReasonDetails": "Retired for Green-e Climate certification, ensuring adherence to environmental standards"
+      }
+  ]
+}

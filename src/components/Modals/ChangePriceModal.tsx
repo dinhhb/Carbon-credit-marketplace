@@ -113,10 +113,15 @@ const ChangePriceModal: React.FC<CreditProps> = ({ changePrice, credit }) => {
             </div>
             <div className="w-full px-3 2xsm:w-1/2">
               <button
-                onClick={() => {
+                onClick={async () => {
                   if (price && changePrice) {
-                    changePrice(credit.tokenId, parseFloat(price));
-                  } else if (!changePrice) {
+                    try {
+                      await changePrice(credit.tokenId, parseFloat(price));
+                      setChangePriceModalOpen(false);
+                    } catch (error) {
+                      alert("An error occurred while changing the price");
+                    }
+                  } else {
                     alert("Change price function not available");
                   }
                 }}

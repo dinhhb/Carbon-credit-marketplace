@@ -1,0 +1,4 @@
+/* Ensure this is included in your main stylesheet or a relevant CSS file */
+.custom-toast-container {
+  z-index: 1000000 !important;
+}

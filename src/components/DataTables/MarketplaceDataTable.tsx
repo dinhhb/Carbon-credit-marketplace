@@ -32,6 +32,7 @@ const columns: Column<Credit>[] = [
   {
     Header: "Project type",
     accessor: (data) => data.metadata.projectType,
+    Cell: ({ value }: { value: string }) => renderProjectNameCell(value),
   },
   // {
   //   Header: "Standard",

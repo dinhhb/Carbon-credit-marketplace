@@ -31817,12 +31817,12 @@
         }
       },
       "links": {},
-      "address": "0x57d8f0EBbfA96D69AAd65e0D6786Bb7B201b9eBE",
-      "transactionHash": "0xbf8a3c20aa889df72ad2c4bb76a1a4ab817e59d4340925551ba651858c42adb6"
+      "address": "0x2c615E050df3aed698d94f3190442005E0108e50",
+      "transactionHash": "0xd7fb7120e6b939e9a23c060f59cad41484d2ed3b619b4d6c3c276038000f59ab"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-06-08T14:34:52.807Z",
+  "updatedAt": "2024-06-29T05:11:25.870Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

@@ -47,12 +47,10 @@ const columns: Column<Credit>[] = [
 
 type CreditListProps = {
   credits: Credit[];
-  retireCredits: (tokenId: number, amount: number) => Promise<void>;
 };
 
 const MyPurchasedCreditsDataTable: FunctionComponent<CreditListProps> = ({
   credits,
-  retireCredits,
 }) => {
   const data = useMemo(() => credits, [credits]);
 

@@ -1,21 +1,22 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, useEffect } from "react";
 
 interface CreditMetaProps {
   handleChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   hasError: boolean;
+  value: string; // Added value prop
 }
 
 const SelectGroupRetirement: React.FC<CreditMetaProps> = ({
   handleChange,
   hasError,
+  value, // Destructure the value prop
 }) => {
   const [selectedOption, setSelectedOption] = useState<string>("");
-  const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
-  const changeTextColor = () => {
-    setIsOptionSelected(true);
-  };
+  useEffect(() => {
+    setSelectedOption(value); // Update selected option when the value prop changes
+  }, [value]);
 
   return (
     <div className="mb-4.5">
@@ -30,7 +31,6 @@ const SelectGroupRetirement: React.FC<CreditMetaProps> = ({
           onChange={(e) => {
             handleChange(e); // Using the passed handleChange which needs to handle select elements
             setSelectedOption(e.target.value);
-            changeTextColor();
           }}
           className={`relative z-20 w-full appearance-none rounded border ${
             hasError
@@ -71,10 +71,7 @@ const SelectGroupRetirement: React.FC<CreditMetaProps> = ({
           >
             Green-e Climate Certification
           </option>
-          <option
-            value="NCOS Programme"
-            className="text-body dark:text-bodydark"
-          >
+          <option value="NCOS Programme" className="text-body dark:text-bodydark">
             NCOS Programme
           </option>
           <option

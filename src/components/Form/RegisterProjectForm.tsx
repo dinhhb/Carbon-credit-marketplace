@@ -145,7 +145,7 @@ const RegisterProjectForm: React.FC = () => {
     const bytes = new Uint8Array(buffer);
 
     try {
-      const { signedData, account } = await getSignedData();
+      const { signedData, account } = await getSignedData(); // get signature
 
       const promise = axios.post("/api/verify-file", {
         address: account,
@@ -240,7 +240,7 @@ const RegisterProjectForm: React.FC = () => {
         headers: { Accept: "text/plain" },
       });
       const content = creditRes.data;
-      console.log("Credit content:", content);
+      // console.log("Credit content:", content);
       Object.keys(content).forEach((key) => {
         if (!ALLOW_FIELDS.includes(key)) {
           throw new Error("Invalid JSON structure");
@@ -251,8 +251,14 @@ const RegisterProjectForm: React.FC = () => {
         marketContractAddress || "",
         true,
       );
-      await result1?.wait();
-      alert("Approval granted");
+      const promise1 = result1?.wait();
+      // alert("Approval granted");
+
+      await toast.promise(promise1!, {
+        pending: "Granting approval...",
+        success: "Approval granted",
+        error: "Failed to grant approval",
+      });
 
       const tx = await _projectContract?.registerProject(
         creditMeta["quantity"],
@@ -261,11 +267,13 @@ const RegisterProjectForm: React.FC = () => {
       );
       const promise = tx?.wait();
 
-      const result = await toast.promise(promise!, {
+      await toast.promise(promise!, {
         pending: "Registering project...",
         success: "Project registered successfully",
         error: "Failed to register project",
       });
+
+      router.push("/my-credits");
 
     } catch (error: any) {
       console.error(error.message);
@@ -276,6 +284,7 @@ const RegisterProjectForm: React.FC = () => {
     _tokenContract,
     _projectContract,
     marketContractAddress,
+    router,
   ]);
 
   return (

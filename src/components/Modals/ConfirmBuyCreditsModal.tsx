@@ -1,3 +1,4 @@
+import { useAccount } from "@/hooks/web3";
 import { Credit } from "@/types/credit";
 import React, { useState, useEffect, useRef } from "react";
 
@@ -42,12 +43,21 @@ const ConfirmBuyCreditsModal: React.FC<CreditProps> = ({
     return () => document.removeEventListener("keydown", keyHandler);
   }, [buyCreditsModalOpen]);
 
+  const { account } = useAccount();
+
   const handleBuyCredits = async () => {
     const amount = parseInt(amountBuy, 10);
+
     if (amount > credit.quantity - credit.quantitySold) {
       alert("Buy amount exceeds listed credits");
       return;
     }
+
+    if (credit.initialOwner === account.data) {
+      alert("You can't buy your own credits");
+      return;
+    }
+
     if (buyCredit) {
       console.log("Buying credits ID: ", credit.tokenId);
       await buyCredit(credit.tokenId, amount, amount * credit.pricePerCredit);

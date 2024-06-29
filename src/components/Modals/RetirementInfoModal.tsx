@@ -186,9 +186,9 @@ const RetirementInfoModal: React.FC<RetirementProps> = ({ retirement }) => {
     }
   };
 
-  useEffect(() => {
-    console.log("Updated retirementMeta:", retirementMeta);
-  }, [retirementMeta]);
+  // useEffect(() => {
+  //   console.log("Updated retirementMeta:", retirementMeta);
+  // }, [retirementMeta]);
 
   const _retireContract = retireContract;
 
@@ -199,7 +199,7 @@ const RetirementInfoModal: React.FC<RetirementProps> = ({ retirement }) => {
       });
       const content = retirementRes.data;
       console.log("Retirement URI:", retirementURI);
-      console.log("Retirement content:", content);
+      // console.log("Retirement content:", content);
       Object.keys(content).forEach((key) => {
         if (!ALLOW_FIELDS.includes(key)) {
           throw new Error("Invalid JSON structure");
@@ -211,11 +211,13 @@ const RetirementInfoModal: React.FC<RetirementProps> = ({ retirement }) => {
       );
       const promise = tx?.wait();
 
-      const result = await toast.promise(promise!, {
+      await toast.promise(promise!, {
         pending: "Updating retirement certificate...",
         success: "Retirement certificate updated successfully",
         error: "Failed to update retirement certificate",
       });
+
+      setRetirementInfoModalOpen(false);
     } catch (error: any) {
       console.error(error.message);
     }
@@ -311,9 +313,9 @@ const RetirementInfoModal: React.FC<RetirementProps> = ({ retirement }) => {
               <button
                 type="button"
                 onClick={registerRetirement}
-                className="w-32 rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+                className="w-50 rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
               >
-                Submit
+                Update retirement info
               </button>
             ) : (
               <button
@@ -321,7 +323,7 @@ const RetirementInfoModal: React.FC<RetirementProps> = ({ retirement }) => {
                 onClick={uploadMetadata}
                 className="w-32 rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
               >
-                Upload
+                Submit file
               </button>
             )}
           </div>

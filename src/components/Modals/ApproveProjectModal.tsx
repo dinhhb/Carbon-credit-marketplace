@@ -84,9 +84,7 @@ const ApproveProjectModal: React.FC<CreditProps> = ({
           <p className="pb-10">
             Are you sure you want to approve this project?
           </p>
-          <p className="pb-10">
-            {credit.metadata.projectName}
-          </p>
+          <p className="pb-10">{credit.metadata.projectName}</p>
           <div className="-mx-3 flex flex-wrap gap-y-4">
             <div className="w-full px-3 2xsm:w-1/2">
               <button
@@ -98,10 +96,15 @@ const ApproveProjectModal: React.FC<CreditProps> = ({
             </div>
             <div className="w-full px-3 2xsm:w-1/2">
               <button
-                onClick={() => {
+                onClick={async () => {
                   if (approveProject) {
-                    approveProject(credit.tokenId);
-                  } else if (!approveProject) {
+                    try {
+                      await approveProject(credit.tokenId);
+                      setModalOpen(false);
+                    } catch (error) {
+                      alert("An error occurred while approving the project");
+                    }
+                  } else {
                     alert("Approve project function not available");
                   }
                 }}
